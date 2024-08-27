@@ -6,8 +6,10 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "guzzlehttp/guzzle": "^7.9",
         "intervention/image": "^2",
         "laravel/framework": "^11.0",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
         "php-flasher/flasher-laravel": "^2.0",
@@ -26,6 +28,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+             "App\\Helpers\\": "app/Helpers/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }

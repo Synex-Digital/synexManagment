@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BlogController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -14,6 +16,9 @@ use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\ServiceCategoryController;
+use App\Http\Controllers\ServiceProjectController;
+
 
 Auth::routes();
 
@@ -28,7 +33,7 @@ Route::middleware(['auth'])->group(function () {
 //role
     Route::post('/role/assign/store', [RoleController::class, 'roleAssign_store'])->name('roleAssign.store');
     Route::get('/role/user/delete/{id}', [RoleController::class, 'userRole_delete'])->name('userRole.delete');
-//task
+//taskindex
     Route::get('/task/status/update/{id}', [TaskController::class, 'taskStatus'])->name('task.status.update');
 //search
     Route::get('/search/employee', [EmployeeController::class, 'searchEmployee'])->name('searchEmployee');
@@ -60,6 +65,11 @@ Route::middleware(['auth'])->group(function () {
         'task' => TaskController::class,
         'role' => RoleController::class,
         'social' => SocialController::class,
-
+        'blog'=>BlogController::class,
+        'category'=>CategoryController::class,
+        'service-projects' =>ServiceProjectController::class,
+        'service-categories'=> ServiceCategoryController::class
     ]);
 });
+Route::post('/service-category/toggle-status/{id}', [ServiceCategoryController::class, 'toggleStatus'])->name('service-category.toggleStatus');
+Route::post('/service-project/toggle-status/{id}', [ServiceProjectController::class, 'toggleStatus'])->name('service-project.toggleStatus');

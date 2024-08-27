@@ -36,7 +36,27 @@
                             <li><a href="{{route('expenses.index')}}"><i class="fa fa-credit-card"></i><span class="nav-text">Expenses</span></a></li>
                         @endif
                     @endif
-
+                    <li class="nav-label first text-white">Media and content</li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="fa fa-cogs"></i><span class="nav-text">Blogs</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ route('category.index') }}">Category</a></li>
+                            <li><a href="{{ route('blog.index') }}">Blog</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-label first text-white">Service Projects</li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="fa fa-cogs"></i><span class="nav-text">projects</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{{ route('service-categories.index') }}">Category</a></li>
+                            <li><a href="{{ route('service-projects.index') }}">Projects</a></li>
+                        </ul>
+                    </li>
+                    
                     @if (Auth::user()->can('user.view') || Auth::user()->can('role.view') || Auth::user()->can('app.view'))
                     <li class="nav-label first text-white">ADMINISTRATION</li>
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">

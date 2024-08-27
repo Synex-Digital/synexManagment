@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     use HasFactory;
-    public function users(){
-        return $this->belongsTo(User::class, 'user_id' );
+    
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id');
      }
     public function departments(){
         return $this->belongsTo(Department::class, 'department_id' );
@@ -20,4 +21,8 @@ class Employee extends Model
      public function socials(){
         return $this->hasMany(Social::class, 'user_id', 'user_id' );
      }
+     public function blogs()
+    {
+        return $this->hasMany(Blog::class);
+    }
 }
