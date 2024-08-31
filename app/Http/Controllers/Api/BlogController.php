@@ -69,6 +69,9 @@ class BlogController extends Controller
     {
         $fet = Blog::where('slug', $slug)->first();
         if ($fet) {
+            $fet->view_count++;
+            $fet->save();
+
             $related = BlogsResource::collection(Blog::where('category_id', $fet->category_id)->get()->take(3));
             $popular = BlogsResource::collection(Blog::orderBy('view_count', 'desc')->get()->take(5));
             $category = CategoryResource::collection(Category::all());
