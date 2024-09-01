@@ -56,23 +56,17 @@ class CategoryController extends Controller
         }
 
         $category = new Category();
-
         Photo::upload($request->image, 'uploads/blog/photo/category', 'CAT', [640, 480]);
-
         $category->name             = $request->name;
         $category->seo_title        = $request->seo_title;
         $category->seo_description  = $request->seo_description;
         $category->seo_tags         = $request->seo_tags;
         $category->image            = Photo::$name?Photo::$name:'Null';
         $category->status           = $request->status;
-        if($request->slug != null){
-            $category->slug         = $request->slug;
-        }
-        else{
-            $category->slug         = Str::slug($request->name, '-');
-        }
+        $category->slug             = $request->slug ;
         $category->save();
-        return back()->with('success', 'Category created successfully');
+        flash()->options([ 'position' => 'bottom-right', ])->success('Category created successfully');
+        return back();
     }
 
     /**
@@ -88,6 +82,7 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
+
         $category = Category::find($id);
         return view('dashboard.category.edit', [
             'category' => $category,
@@ -130,7 +125,7 @@ class CategoryController extends Controller
         $category = Category::find($id);
         Photo::delete($category->image);
         $category->delete();
-
-        return back()->with('danger', 'Category deleted!!');
+        flash()->options([ 'position' => 'bottom-right', ])->success('Category Deleted successfully');
+        return back();
     }
 }

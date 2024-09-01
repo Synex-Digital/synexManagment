@@ -22,7 +22,7 @@ class BlogController extends Controller
         $employee = Employee::all();
         return view('dashboard.blog.index', [
             'blog'          => $blog,
-            'categories'    => $category,
+            'category'    => $category,
             'employees'    =>$employee,
         ]);
     }

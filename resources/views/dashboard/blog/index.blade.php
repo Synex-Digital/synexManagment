@@ -1,4 +1,9 @@
 @extends('dashboard.layouts.app')
+@section('style')
+<link href="{{asset('dashboard_assets/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+
+
+@endsection
 @section('content')
 
 <div class="row ">
@@ -15,9 +20,66 @@
 <div class="row">
     <div class="col-lg-12">
         <button type="button" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#categoryCreateModal">
-            <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Category</button>
-        <button type="button" class="btn btn-rounded btn-info ">
+        <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Category</button>
+
+        <div id="accordion-one" class="d-inline">
+
+            <button type="button" class="btn btn-rounded btn-info "  data-toggle="collapse" data-target="#default_collapseOne">
             <span class="btn-icon-left text-primary mr-2"  style="    margin: -4px 0px -4px -10px;"  > <i class="fa fa-th-list color-info"style=" margin: 2px -3px 1px -3px;" ></i> </span>Category List</button>
+        </div>
+    </div>
+    <div class="col-lg-12 mt-5">
+        <div id="default_collapseOne" class="collapse accordion__body show " data-parent="#accordion-one">
+            <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Category Lists</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class=" display " style="min-width: 845px">
+
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($category as $categories)
+                                        <tr>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td><img src="{{ url('/'.$categories->image)}}" class="rounded-lg me-2" width="50" alt=""> </td>
+                                            <td>{{$categories->name}} </td>
+
+
+                                            <td> <span class="badge badge-light text-success">{{$categories->status}}</span> </td>
+
+
+                                            <td class="d-flex justify-content-spacebetween">
+                                                <a href="{{route('category.edit',$categories->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
+                                                <form action="{{ route('category.destroy', $categories->id) }}" method="POST">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                                </form>
+
+                                            </td>
+
+
+                                        </tr>
+                                    @endforeach
+
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -94,36 +156,6 @@
             </div>--}}
 
 
-
-
-@endsection
-
-@section('script')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var forms = document.querySelectorAll('.delete-form');
-
-            forms.forEach(function(form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault(); // Prevent form submission
-
-                    var id = this.querySelector('button[type="submit"]').getAttribute('data-id'); // Get the blog post ID
-
-                    // Show confirmation dialog
-                    if (confirm('Are you sure you want to delete this blog post?')) {
-                        // If user confirms, submit the form
-                        this.removeEventListener('submit', arguments.callee); // Remove the event listener to prevent multiple submissions
-                        this.submit();
-                    }
-                });
-            });
-        });
-    </script>
-@endsection
-
-
-
-
  <!-- Modal -->
  <div class="modal fade" id="categoryCreateModal">
     <div class="modal-dialog modal-lg" role="document">
@@ -140,12 +172,8 @@
                         <div class="form-group col-md-6">
                             <label class="col-lg-6 col-form-label">Category Name</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Enter Category Name" name="name">
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <input type="text" class="form-control"  placeholder="Enter Category Name" name="name" required value="{{old('name')}}">
+
                             </div>
                         </div>
 
@@ -155,8 +183,6 @@
                                 <input class="custom-file-input @error('image') is-invalid @enderror" type="file" id="formFile" name="image">
                                 <label class="custom-file-label">Upload Image  </label>
                             </div>
-
-
                             @error('image')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -169,7 +195,7 @@
                         <div class="form-group col-md-6">
                             <label class="col-lg-6 col-form-label">Category Slug</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" placeholder="Enter Category Slug (Must be on small letter)" name="slug">
+                                <input type="text" class="form-control" placeholder="Enter Category Slug (Must be on small letter)" name="slug"  value="{{old('slug')}}">
                             </div>
                         </div>
 
@@ -202,41 +228,27 @@
                                 <div class="form-group col-md-6">
                                     <label class="col-form-label">SEO Title</label>
                                     <div class="">
-                                        <input type="text" class="form-control @error('seo_title') is-invalid @enderror" placeholder="Enter SEO title" name="seo_title">
-                                        @error('seo_title')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                        <input type="text" class="form-control " placeholder="Enter SEO title" name="seo_title" value="{{old('seo_title')}}">
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="col-form-label">SEO Tags</label>
                                     <div class="">
-                                        <input type="text" class="form-control @error('seo_tags') is-invalid @enderror" placeholder="Enter SEO tags" name="seo_tags">
-                                        @error('seo_tags')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+                                        <input type="text" class="form-control" placeholder="Enter SEO tags" name="seo_tags" value="{{old('seo_tags')}}">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="">
                                 <label class="form-label">SEO Description</label>
-                                <textarea class="form-control @error('seo_description') is-invalid @enderror" rows="5" name="seo_description"></textarea>
-                                @error('seo_description')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <textarea class="form-control " rows="5" name="seo_description"> {{old('seo_description')}} </textarea >
+
                             </div>
                         </div>
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Add Client</button>
+                        <button type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Add Category</button>
                     </div>
 
                 </form>
@@ -245,3 +257,35 @@
         </div>
     </div>
 </div>
+
+
+@endsection
+
+@section('script')
+<script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var forms = document.querySelectorAll('.delete-form');
+
+            forms.forEach(function(form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault(); // Prevent form submission
+
+                    var id = this.querySelector('button[type="submit"]').getAttribute('data-id'); // Get the blog post ID
+
+                    // Show confirmation dialog
+                    if (confirm('Are you sure you want to delete this blog post?')) {
+                        // If user confirms, submit the form
+                        this.removeEventListener('submit', arguments.callee); // Remove the event listener to prevent multiple submissions
+                        this.submit();
+                    }
+                });
+            });
+        });
+    </script>
+@endsection
+
+
+
+
