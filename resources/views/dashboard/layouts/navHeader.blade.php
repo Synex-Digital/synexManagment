@@ -49,7 +49,7 @@
                         </div>
 
                         <ul class="navbar-nav header-right">
-                            <li class="nav-item dropdown notification_dropdown">
+                            <li class="nav-item dropdown notification_dropdown text-dark">
                                {{ Auth::user()->name }}
 
                             </li>

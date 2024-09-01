@@ -11,6 +11,39 @@
 
     @yield('style')
     @include('dashboard.layouts.headerLink')
+    <style>
+        .quixnav{
+            background-color: #fff!important;
+            /* transition: .5s all ease; */
+        }
+        #menu .mm-active{
+            background-color: #3b82f6!important;
+        }
+        #menu .mm-active .nav-text,#menu .mm-active .svg-color{
+            color: #fff!important;
+            fill : #fff!important;
+        }
+        .quixnav ul li a:hover {
+            background-color: #3b82f6!important;
+            /* transition: .5s; */
+        }
+        .quixnav ul li:hover .nav-text,.quixnav ul li:hover .svg-color{
+            color: #fff!important;
+            fill: #fff;
+        }
+        .quixnav .metismenu > li:hover > a, .quixnav .metismenu > li:focus > a, .quixnav .metismenu > li.mm-active > a {
+            background-color: #3b82f6!important;
+        }
+        .quixnav .mm-active .mm-show{
+            background-color: #fff!important;
+        }
+        .hamburger .line{
+            background-color: #3b82f6!important;
+        }
+        .ps__thumb-y {
+            background-color: transparent;
+        }
+    </style>
 </head>
 
 <body>

@@ -6,61 +6,65 @@
 <!--**********************************
             Sidebar start
         ***********************************-->
-        <div class="quixnav">
+        <div class="quixnav" >
             <div class="quixnav-scroll">
                 <ul class="metismenu" id="menu">
-                    <li class="nav-label first text-white">Main</li>
-                    <li><a href="{{route('dashboard')}}"><i class="fa fa-tachometer"></i><span class="nav-text">Dashboard</span></a>
+                    <li class="nav-label first text-dark">Main</li>
+                    <li><a href="{{route('dashboard')}}">
+                        <i class="fa fa-tachometer"></i>
+
+
+                        <span class="nav-text text-dark">Dashboard</span></a>
 
                    @if (Auth::user()->employees)
-                    <li class="nav-label first text-white">EMPLOYEES</li>
+                    <li class="nav-label first text-dark">EMPLOYEES</li>
                     <li><a href="{{route('project.index')}}"><i class="fa fa-line-chart"></i><span class="nav-text">Projects</span></a> </li>
                    @endif
                    @if (!Auth::user()->employees)
                         @if ($hasEmployeePermissions)
-                            <li class="nav-label first text-white">EMPLOYEES</li>
+                            <li class="nav-label first text-dark">EMPLOYEES</li>
                             @if (Auth::user()->can('employee.view'))
-                            <li><a href="{{route('employee.index')}}"><i class="fa fa-users"></i><span class="nav-text">Employees</span></a></li>
+                            <li><a href="{{route('employee.index')}}"><i class="fa fa-users"></i><span class="nav-text text-dark">Employees</span></a></li>
                             @endif
                             @if (Auth::user()->can('client.view'))
-                            <li><a href="{{route('client.index')}}"><i class="fa fa-user "></i><span class="nav-text">Clients</span></a></li>
+                            <li><a href="{{route('client.index')}}"><i class="fa fa-user "></i><span class="nav-text text-dark">Clients</span></a></li>
                             @endif
                             @if (Auth::user()->can('project.view'))
-                            <li><a href="{{route('project.index')}}"><i class="fa fa-line-chart"></i><span class="nav-text">Projects</span></a> </li>
+                            <li><a href="{{route('project.index')}}"><i class="fa fa-line-chart"></i><span class="nav-text text-dark">Projects</span></a> </li>
                             @endif
                             @if (Auth::user()->can('department.view'))
-                            <li><a href="{{ route('department.index') }}"><i class="fa fa-briefcase"></i><span class="nav-text">Departments</span></a> </li>
+                            <li><a href="{{ route('department.index') }}"><i class="fa fa-briefcase"></i><span class="nav-text text-dark">Departments</span></a> </li>
                             @endif
                             @if (Auth::user()->can('expenses.view'))
-                            <li class="nav-label first text-white">HR</li>
-                            <li><a href="{{route('expenses.index')}}"><i class="fa fa-credit-card"></i><span class="nav-text">Expenses</span></a></li>
+                            <li class="nav-label first text-dark">HR</li>
+                            <li><a href="{{route('expenses.index')}}"><i class="fa fa-credit-card"></i><span class="nav-text text-dark">Expenses</span></a></li>
                         @endif
                     @endif
-                    <li class="nav-label first text-white">Media and content</li>
+                    <li class="nav-label first text-dark">Media and content</li>
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="fa fa-cogs"></i><span class="nav-text">Blogs</span>
+                            <i class="icon icon-form"></i><span class="nav-text text-dark">Blogs</span>
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="{{ route('category.index') }}">Category</a></li>
                             <li><a href="{{ route('blog.index') }}">Blog</a></li>
                         </ul>
                     </li>
-                    <li class="nav-label first text-white">Service Projects</li>
+                    <li class="nav-label first text-dark">Service Projects</li>
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                            <i class="fa fa-cogs"></i><span class="nav-text">projects</span>
+                            <i class="fa fa-cogs"></i><span class="nav-text text-dark">projects</span>
                         </a>
                         <ul aria-expanded="false">
                             <li><a href="{{ route('service-categories.index') }}">Category</a></li>
                             <li><a href="{{ route('service-projects.index') }}">Projects</a></li>
                         </ul>
                     </li>
-                    
+
                     @if (Auth::user()->can('user.view') || Auth::user()->can('role.view') || Auth::user()->can('app.view'))
-                    <li class="nav-label first text-white">ADMINISTRATION</li>
+                    <li class="nav-label first text-dark">ADMINISTRATION</li>
                     <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                    <i class="fa fa-cogs"></i><span class="nav-text">Settings</span></a>
+                    <i class="fa fa-cogs"></i><span class="nav-text text-dark">Settings</span></a>
                         <ul aria-expanded="false">
                             @if (Auth::user()->can('user.view'))
                                 <li><a href="{{route('users')}}">User</a></li>
