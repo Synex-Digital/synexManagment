@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Category;
 use App\Helpers\Photo;
-
+use App\Models\Category;
 use Illuminate\Support\Str;
+
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -35,9 +36,24 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+       $validator = Validator::make($request->all(), [
             'name' => 'required',
-        ]);
+            'slug' => 'required',
+       ],[
+        'name' => 'Category name required',
+        'slug' => 'Category slug required',
+       ]);
+       if ($validator->fails()) {
+        $errors = $validator->errors();
+        foreach ($errors->messages() as  $messages) {
+            foreach ($messages as $message) {
+                flash()->options([
+                    'position' => 'bottom-right',
+                ])->error($message);
+            }
+        }
+        return back()->withErrors($validator)->withInput();
+        }
 
         $category = new Category();
 
