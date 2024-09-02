@@ -96,7 +96,6 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name'  => 'required',
-            'image' => 'required|mimes:png,jpg,webp,jpeg,svg|max:1024',
         ]);
 
         $category->name             = $request->name;
@@ -104,17 +103,20 @@ class CategoryController extends Controller
         $category->seo_description  = $request->seo_description;
         $category->seo_tags         = $request->seo_tags;
         $category->status           = $request->status;
-        $category->slug             = Str::slug($request->name, '-');
+        $category->slug             = $request->slug ;
 
 
         if ($request->has('image')) {
             Photo::delete($category->image);
             Photo::upload($request->image, 'uploads/blog/photo/category', 'CAT', [640, 480]);
-            $category->image = Photo::$name?Photo::$name:'Null';
+            $category->image = Photo::$name;
+        }else{
+            $category->image = 'Null';
         }
 
         $category           ->save();
-        return back()       ->with('success', 'Category updated successfully');
+        flash()->options([ 'position' => 'bottom-right', ])->success('Category Updated successfully');
+        return redirect(route('blog.index'));
     }
 
     /**

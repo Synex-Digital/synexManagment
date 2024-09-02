@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Helpers\Photo;
 use App\Models\Category;
 use App\Models\Employee;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use App\Helpers\Photo;
+use Illuminate\Support\Facades\Validator;
 
 class BlogController extends Controller
 {
@@ -47,7 +48,7 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'category_id'       => 'required',
             'employee_id'       => 'required',
             'title'             => 'required',
@@ -56,7 +57,28 @@ class BlogController extends Controller
             'seo_tags'          => 'required',
             'seo_description'   => 'required',
             'image'             => 'required|image|mimes:jpeg,png,jpg,webp,jfif|max:1024',
+        ],[
+            'category_id'       => 'Blog category required',
+            'employee_id'       => 'Blog employee required',
+            'title'             => 'Blog title required',
+            'content'           => 'Blog content required',
+            'seo_title'         => 'Blog seo title required',
+            'seo_tags'          => 'Blog seo tags required',
+            'seo_description'   => 'Blog seo description required',
+            'image'             => 'Blog image required',
         ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            foreach ($errors->messages() as  $messages) {
+                foreach ($messages as $message) {
+                    flash()->options([
+                        'position' => 'bottom-right',
+                    ])->error($message);
+                }
+            }
+            return back()->withErrors($validator)->withInput();
+        }
 
         $blog = new Blog();
 
@@ -79,8 +101,8 @@ class BlogController extends Controller
             $blog->slug         = Str::slug($request->title, '-');
         }
         $blog->save();
-
-        return back()->with('success', 'Blog created successfully');
+        flash()->options([ 'position' => 'bottom-right', ])->success('Blog Created successfully');
+        return back();
     }
 
     /**

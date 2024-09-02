@@ -1,11 +1,17 @@
 @extends('dashboard.layouts.app')
 @section('content')
-<ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fa-solid fa-home"></i></a></li>
-    <li class="breadcrumb-item"><a href="" class="disabled">Blogs</a></li>
-    <li class="breadcrumb-item active"><a href="{{ route('blog.create') }}">View</a></li>
-    <li class="breadcrumb-item active"><a href="javascript:void(0)">Preview</a></li>
-</ol>
+<div class="row ">
+    <div class="col-lg-6 col-md-5 col-sm-5">
+        <h3 class="display-5">Blog</h3>
+    </div>
+    <div class="col-lg-6 col-md-7 col-sm-7">
+        <ol class="breadcrumb " style="float:inline-end; background-color: transparent;">
+            <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('blog.index') }}">Blogs</a></li>
+            <li class="breadcrumb-item"><a class="text-primary">Blog Preview</a></li>
+        </ol>
+    </div>
+</div>
 {{-- H:i --}}
     <div class="container-fluid">
         <div class="row">

@@ -27,12 +27,15 @@
                         <div class="form-group col-md-6">
                             <label class="col-sm-3 col-form-label">Name</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control " name="name" value="{{ $category->name }}">
+                                <input type="text" class="form-control " name="name" value="{{ $category->name }}" required>
                             </div>
                         </div>
                         <div class="mb-3 col-md-6">
                             <label for="formFile" class="form-label">Edit Category Image</label>
-                            <input class="form-control" type="file" id="formFile" name="image">
+                            <div class="custom-file">
+                                <input class="custom-file-input @error('image') is-invalid @enderror" type="file" id="formFile" name="image">
+                                <label class="custom-file-label">Upload Image  </label>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -67,7 +70,7 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h4 class='card-title'>SEO</h4>
+                            <h4 class='card-title'>Custom SEO</h4>
                         </div>
 
                         <div class="card-body">
@@ -75,7 +78,7 @@
                                 <div class="form-group col-md-6">
                                     <label class="col-sm-3 col-form-label">SEO Title</label>
                                     <div class="col-sm-12">
-                                        <input type="text" class="form-control " name="seo_title">
+                                        <input type="text" class="form-control " name="seo_title" value="{{ $category->seo_title }}">
 
                                     </div>
                                 </div>
@@ -88,18 +91,22 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">SEO Description</label>
-                                <textarea class="from-control " rows="5" name="seo_description">{{ $category->seo_description }}</textarea>
+                            <div class="">
+                                <label class="form-label">SEO Description</label>
+                                <textarea class="form-control " rows="5" name="seo_description"> {{ $category->seo_description}} </textarea >
 
                             </div>
 
 
-                            <button type="submit" class="btn btn-primary">Submit</button>
+
                         </div>
+                    </div>
+                    <div class="">
+                        <button type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Update Category</button>
                     </div>
                 </form>
             </div>
+        </div>
     </div>
 </div>
 @endsection
