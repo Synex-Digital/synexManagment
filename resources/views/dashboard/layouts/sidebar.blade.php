@@ -42,7 +42,7 @@
                     @endif
                     <li class="nav-label first text-dark">Media and content</li>
                     <li><a href="{{route('blog.index')}}"><i class="icon icon-form"></i><span class="nav-text text-dark">Blogs</span></a></li>
-                    <li>
+                    {{-- <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="icon icon-form"></i><span class="nav-text text-dark">Blogs</span>
                         </a>
@@ -50,7 +50,7 @@
                             <li><a href="{{ route('category.index') }}">Category</a></li>
                             <li><a href="{{ route('blog.index') }}">Blog</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                     <li class="nav-label first text-dark">Service Projects</li>
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">

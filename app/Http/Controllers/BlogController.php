@@ -168,7 +168,8 @@ class BlogController extends Controller
 
 
         $blog->save();
-        return back()->with('success', 'Blog updated successfully');
+        flash()->options([ 'position' => 'bottom-right', ])->success('Blog updated successfully');
+        return back();
     }
 
     /**
@@ -179,7 +180,7 @@ class BlogController extends Controller
         $blog = Blog::find($id);
         Photo::delete($blog->image);
         $blog->delete();
-
-        return back()->with('danger', 'Blog deleted!!');
+        flash()->options([ 'position' => 'bottom-right', ])->success('Blog deleted successfully');
+        return back();
     }
 }

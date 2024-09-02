@@ -9,161 +9,145 @@
 @endsection
 
 @section('content')
-
+<div class="row ">
+    <div class="col-lg-6 col-md-5 col-sm-5">
+        <h3 class="display-5">Blog</h3>
+    </div>
+    <div class="col-lg-6 col-md-7 col-sm-7">
+        <ol class="breadcrumb " style="float:inline-end; background-color: transparent;">
+            <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('blog.index') }}">Blogs</a></li>
+            <li class="breadcrumb-item"><a class="text-primary">Blog Edit</a></li>
+        </ol>
+    </div>
+</div>
     <div class="container-fluid">
         <div class="row">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fa-solid fa-home"></i></a></li>
-                <li class="breadcrumb-item"><a href="" class="disabled">Blogs</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('blog.create') }}">View</a></li>
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Edit</a></li>
-            </ol>
             <div class="col-lg-12">
-                <form action="{{ route('blog.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
-                @method('PUT')
-                @csrf
-                    <div class="card">
-                        @if(session('success'))
-                            <div class="alert alert-success">{{ session('success') }}</div>
-                        @endif
-                        <div class="card-header">
-                            <h4 class='card-title'>Edit Blog</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-3 col-form-label">Category Name</label>
-                                    <select name="category_id" class="form-control">
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}">{{ $category->name ?? Unknown }}</option>
-                                            @endforeach
-                                            <option value="" disabled>If category is not in the list, than firstly add the category's information</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-3 col-form-label">Employee Name</label>
-                                    <select name="employee_id" class="form-control">
-                                            @foreach ($employees as $employee)
-                                                <option value="{{ $employee->id }}">{{ $employee->users->name ?? Unknown }}</option>
-                                            @endforeach
-                                            <option value="" disabled>If category is not in the list, than firstly add the category's information</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-3 col-form-label">Blog Title</label>
-                                    <div class="col-sm-12">
-                                        <input type="text" class="form-control @error('title') is-invalid @enderror" value="{{ $blog->title }}" name="title">
-                                        @error('title')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <div class="mb-3 col-md-6">
-                                    <label for="formFile" class="form-label">Image</label>
-                                    <input class="form-control" type="file" id="formFile" name="image">
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Content</label>
-                                    <textarea id="summernote" class="form-control @error('content') is-invalid @enderror" name="content">{{ $blog->content }}</textarea>
-                                    @error('content')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-3 col-form-label">Blog Slug</label>
-                                    <div class="col-sm-12">
-                                        <input type="text" class="form-control @error('slug') is-invalid @enderror" value="{{ $blog->slug }}" name="slug">
-                                        @error('slug')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-3 col-form-label">Status</label>
-                                    <div class="col-sm-9">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="status" value="active" checked>
-                                            <label class="form-check-label">
-                                                Active
-                                            </label>
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Update Blog</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="col-lg-12">
+                            <form action="{{ route('blog.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
+                            @method('PUT')
+                            @csrf
+                                    <div class="row">
+                                        <div class="form-group col-md-6">
+                                            <label class="col-form-label">Category Name</label>
+                                            <select name="category_id" class="form-control">
+                                                    @foreach ($categories as $category)
+                                                        <option value="{{ $category->id }}">{{ $category->name ?? 'Unknown' }}</option>
+                                                    @endforeach
+                                                    <option value="" disabled>If category is not in the list, than firstly add the category's information</option>
+                                            </select>
                                         </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="status" value="inactive" >
-                                            <label class="form-check-label">
-                                                Inactive
-                                            </label>
+
+                                        <div class="form-group col-md-6">
+                                            <label class=" col-form-label">Employee Name</label>
+                                            <select name="employee_id" class="form-control">
+                                                    @foreach ($employees as $employee)
+                                                        <option value="{{ $employee->id }}">{{ $employee->user->name ?? 'Unknown' }}</option>
+                                                    @endforeach
+                                                    <option value="" disabled>If category is not in the list, than firstly add the category's information</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class=" col-form-label">Blog Title</label>
+
+                                                <input type="text" class="form-control @error('title') is-invalid @enderror" value="{{ $blog->title }}" name="title">
+
+                                        </div>
+
+                                        <div class="mb-3 col-md-6">
+                                            <label for="formFile" class="form-label">Image</label>
+                                             <div class="custom-file">
+                                                <input class="custom-file-input" type="file" id="formFile" name="image" required>
+                                                <label class="custom-file-label">Upload Image  </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label class=" col-form-label">Content</label>
+                                            <textarea id="summernote" class="form-control" name="content">{{ $blog->content }}</textarea>
+
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class=" col-form-label">Blog Slug</label>
+
+                                                <input type="text" class="form-control @error('slug') is-invalid @enderror" value="{{ $blog->slug }}" name="slug">
+
+                                        </div>
+
+                                        <div class="form-group col-md-6">
+                                            <label class=" col-form-label">Status</label>
+                                            <div class="col-sm-9">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="status" value="active" checked>
+                                                    <label class="form-check-label">
+                                                        Active
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="status" value="inactive" >
+                                                    <label class="form-check-label">
+                                                        Inactive
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="card">
-                        <div class="card-header">
-                            <h4 class='card-title'>SEO</h4>
-                        </div>
 
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-3 col-form-label">SEO Title</label>
-                                    <div class="col-sm-12">
-                                        <input type="text" class="form-control @error('seo_title') is-invalid @enderror" value="{{ $blog->seo_title }}" name="seo_title">
-                                        @error('seo_title')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class='card-title'>Custom SEO</h4>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label class=" col-form-label">SEO Title</label>
+
+                                                    <input type="text" class="form-control " value="{{ $blog->seo_title }}" name="seo_title">
+
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label class=" col-form-label">SEO Tags</label>
+
+                                                    <input type="text" class="form-control " value="{{ $blog->seo_tags }}" name="seo_tags">
+
+                                            </div>
+                                        </div>
+
+                                        <div class=" ">
+                                            <label class=" col-form-label">SEO Description</label>
+                                            <textarea class="form-control" rows="5" name="seo_description">{{ $blog->seo_description }}</textarea>
+
+                                        </div>
+
+
                                     </div>
                                 </div>
-
-                                <div class="form-group col-md-6">
-                                    <label class="col-sm-3 col-form-label">SEO Tags</label>
-                                    <div class="col-sm-12">
-                                        <input type="text" class="form-control @error('seo_tags') is-invalid @enderror" value="{{ $blog->seo_tags }}" name="seo_tags">
-                                        @error('seo_tags')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
+                                <div class="">
+                                    <button type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Update Blog</button>
                                 </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">SEO Description</label>
-                                <textarea class="form-control @error('seo_description') is-invalid @enderror" rows="5" name="seo_description">{{ $blog->seo_description }}</textarea>
-                                @error('seo_description')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
 
 @endsection
 
-@section('script')
+@section('summernote')
 <script>
     $('#summernote').summernote({
       placeholder: 'Write content for your blog',

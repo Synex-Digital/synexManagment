@@ -402,24 +402,24 @@
 
     <script>
 
-            $('#addCategoryBtn').on('click',function(){
-                $(this).removeClass('btn-primary');
-                $(this).addClass('btn-info');
-                if($('#addBlogBtn').hasClass('btn-info')){
-                    $('#addBlogBtn').removeClass('btn-info');
-                    $('#addBlogBtn').addClass('btn-primary');
-                };
+            // $('#addCategoryBtn').on('click',function(){
+            //     $(this).removeClass('btn-primary');
+            //     $(this).addClass('btn-info');
+            //     if($('#addBlogBtn').hasClass('btn-info')){
+            //         $('#addBlogBtn').removeClass('btn-info');
+            //         $('#addBlogBtn').addClass('btn-primary');
+            //     };
 
-            });
-            $('#addBlogBtn').on('click',function(){
-                $(this).removeClass('btn-primary');
-                $(this).addClass('btn-info');
-                if($('#addCategoryBtn').hasClass('btn-info')){
-                    $('#addCategoryBtn').removeClass('btn-info');
-                    $('#addCategoryBtn').addClass('btn-primary');
-                };
+            // });
+            // $('#addBlogBtn').on('click',function(){
+            //     $(this).removeClass('btn-primary');
+            //     $(this).addClass('btn-info');
+            //     if($('#addCategoryBtn').hasClass('btn-info')){
+            //         $('#addCategoryBtn').removeClass('btn-info');
+            //         $('#addCategoryBtn').addClass('btn-primary');
+            //     };
 
-            });
+            // });
 
             // $('#categoryListBtn').on('click',function(){
             //    if($(this).hasClass('btn-primary')){
