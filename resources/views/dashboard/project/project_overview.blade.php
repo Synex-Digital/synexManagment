@@ -326,31 +326,7 @@
             </div>
         </div>
     </div>
-    {{-- task modal --}}
-<div class="modal fade" id="createTask">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add Task</h5>
-                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{route('task.store')}}" method="POST">
-                    @csrf
-                    <div class="">
-                        <input type="hidden" name="project_id" value="{{$project->id}}">
-                        <input type="text" name="task" class="form-control" placeholder="Task Name" required>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn  btn-outline-primary float-right" style="font-size: 11px;">Add </button>
-                    </div>
-                </form>
-            </div>
 
-        </div>
-    </div>
-</div>
     {{-- edit task modal --}}
 <div class="modal fade" id="editTask">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -471,10 +447,12 @@
         <div class="col-lg-3">
             <div class="card ">
                 <div class="card-header ">
-                   <h6 class="font-weight-bold" > <span style="border-left: 4px solid #593bdb"> </span> &nbsp; Project Task</h6>
-
-
-
+                   <h6 class="font-weight-bold" > <span style="border-left: 4px solid #593bdb"> </span> &nbsp; Project Task demo</h6>
+                    @if($project->leader_id == Auth::user()->id)
+                        <button type="button" id="add" class=" btn btn-primary " data-toggle="modal" data-target="#createTask" style="font-size: -2px !important;height: 23px;width: 39px;">
+                        <i class="fa fa-plus text-white" style="top: -5px; position: relative;"></i>
+                        </button>
+                    @endif
                 </div>
                 <div class=" mt-2 border-bottom"></div>
                 <div class="">
@@ -483,20 +461,23 @@
                         <p class="   pb-0 mb-0">EMPTY</p>
                     </div>
                     @endif
-
-                   @foreach ($project->tasks as $data )
-
-                   <div class=" hover d-flex justify-content-between  pt-3 px-3 border-bottom">
-                       {{-- <p class="text-dark copyable" data-title="{{ $data->title }}">{{ substr($data->title,0,20) .'...' }}</p> --}}
-                       <p class="text-dark fullText" data-title="{{ $data->title }}" data-serial="{{ $loop->iteration }}" >{{ substr($data->title,0,20) .'...' }}</p>
-                       <div class="d-flex justify-content-end ">
-                            <a href="{{ route('task.status.update', $data->id) }}" >
-                                <p class="text-dark  ml-2 update" style=" cursor: pointer"><i class="mt-1 fa fa-{{ $data->status == 1? 'check' : 'exclamation' }}  text-{{ $data->status == 1? 'success': 'danger' }} ">  </i></p>
-                            </a>
-                        </div>
-                   </div>
-                   @endforeach
-
+                    @if($project->leader_id == Auth::user()->id)
+                        @foreach ($project->tasks as $data )
+                            <div class=" hover d-flex justify-content-between  pt-3 px-3 border-bottom">
+                                {{-- <p class="text-dark copyable" data-title="{{ $data->title }}">{{ substr($data->title,0,20) .'...' }}</p> --}}
+                                <p class="text-dark fullText" data-title="{{ $data->title }}" data-serial="{{ $loop->iteration }}" >{{ substr($data->title,0,20) .'...' }}</p>
+                                <div class="d-flex justify-content-end ">
+                                <p class="text-dark icon edit" data-value={{ $data->id }} style="display: none; cursor: pointer"><i class="mt-1 fa fa-pencil text-primary  ">  </i></p>
+                                <form id="taskDelete" action="{{ route('task.destroy', $data->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <p class="text-dark icon ml-2 delete"style="display: none; cursor: pointer"><i class="mt-1 fa fa-trash  text-danger ">  </i></p>
+                                </form>
+                                <p class="text-dark ml-3 "><i class=" fa fa-{{ $data->status == 0? 'exclamation' : 'check' }} {{$data->status == 0? 'text-danger': ' text-success'}} ">  </i></p>
+                            </div>
+                            </div>
+                        @endforeach
+                    @endif
 
 
                 </div>
@@ -504,6 +485,11 @@
             <div class="card ">
                 <div class="card-header ">
                    <h6 class="font-weight-bold" > <span style="border-left: 4px solid #593bdb"> </span> &nbsp; Project Members</h6>
+                   @if($project->leader_id == Auth::user()->id)
+                   <button type="button" id="add" class=" btn btn-primary " data-toggle="modal" data-target="#addMember" style="font-size: -2px !important;height: 23px;width: 39px;">
+                   <i class="fa fa-plus text-white" style="top: -5px; position: relative;"></i>
+                   </button>
+               @endif
 
                 </div>
                 <div class=" mt-2 border-bottom"></div>
@@ -514,10 +500,19 @@
                     </div>
                     @forelse ($members as $data )
 
-                    <div class="d-flex justify-content-between pt-3 px-3 border-bottom">
+                    <div class="d-flex hover justify-content-between pt-3 px-3 border-bottom">
                         <p >{{$data->name}}</p>
+                        <div class="d-flex">
+                            <form class="memberDelete" action="{{ route('member_delete', $data->id) }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="project_id" value="{{$project->id}}">
 
-                        <p class="text-dark"><i class="badge badge-outline-success text-success">  {{$data->employees->designations? $data->employees->designations->designation : 'UNKNOWN'}}</i></p>
+                                <p class="text-dark icon mr-3 deleteMember"style="display: none; cursor: pointer"><i class="mt-1 fa fa-trash  text-danger ">  </i></p>
+
+                            </form>
+                            <p class="text-dark"><i class="badge badge-outline-success text-success">
+                                {{$data->employees->designations? $data->employees->designations->designation : 'UNKNOWN'}}</i></p>
+                        </div>
                     </div>
                     @empty
                     @endforelse
@@ -555,8 +550,90 @@
         </div>
     </div>
 
+    @if($project->leader_id == Auth::user()->id)
+        {{-- edit task modal --}}
+        <div class="modal fade" id="editTask">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Task</h5>
+                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="taskUpdate" action="{{route('task.update', 0)}}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <div class="">
+                                <input type="hidden" name="taskUpdate" value="true">
+                                <input type="text" name="task" id="taskTitle"  class="form-control" placeholder="Task Name" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn  btn-outline-primary float-right" style="font-size: 11px;">Update </button>
+                            </div>
+                        </form>
+                    </div>
 
+                </div>
+            </div>
+        </div>
+            {{-- member add modal --}}
+    <div class="modal fade" id="addMember">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Member</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="" action="{{route('project_member_update')}}" method="POST">
+                        @csrf
+                        <div class="">
+                            <input type="hidden" name="project_id" value="{{$project->id}}">
+                           <label for="" class="form-label">Select Member</label>
+                           <select name="updateMember[]" id="" class="multi-select" multiple="multiple" required>
+                               @foreach ($notmember as $data)
+                                   <option value="{{$data->user->id}}">{{$data->user->name}}</option>
+                               @endforeach
+                           </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn  btn-outline-primary float-right" style="font-size: 11px;">Update </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @endif
 @endif
+    {{-- task modal --}}
+    <div class="modal fade" id="createTask">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Task</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('task.store')}}" method="POST">
+                        @csrf
+                        <div class="">
+                            <input type="hidden" name="project_id" value="{{$project->id}}">
+                            <input type="text" name="task" class="form-control" placeholder="Task Name" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn  btn-outline-primary float-right" style="font-size: 11px;">Add </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
     {{-- task show modal --}}
     <div class="modal fade" id="taskShowModal">
         <div class="modal-dialog " role="document">
@@ -576,6 +653,14 @@
     </div>
 @endsection
 @section('script')
+<script src="{{asset('dashboard_assets/vendor/select2/js/select2.full.min.js')}}"></script>
+<script src="{{asset('dashboard_assets/js/plugins-init/select2-init.js')}}"></script>
+<script>
+    $(document).ready(function() {
+
+        $('.hamburger').trigger('click');
+    });
+</script>
 <script>
     function submitForm() {
         document.getElementById('loadingOverlay').style.display = 'flex';
@@ -659,6 +744,9 @@
     });
     $('body').on('click', '.delete', function () {
         $('#taskDelete').submit();
+    });
+    $('body').on('click', '.deleteMember', function () {
+        $('.memberDelete').submit();
     });
     $('body').on('click', '.update', function () {
         $('#taskUpdate').submit();

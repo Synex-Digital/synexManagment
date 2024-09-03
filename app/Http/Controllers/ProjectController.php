@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Client;
+use App\Models\Employee;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -219,6 +220,7 @@ class ProjectController extends Controller
         $project->leader_id = $request->leader;
         $memberIds = $request->member ? implode(',', $request->member):null;
         $project->member_id = $memberIds;
+
         $project->save();
         flash()->options(['position' => 'bottom-right'])-> success('Project updated successfully');
         return redirect()->route('project.show', $project->id);
@@ -282,7 +284,7 @@ class ProjectController extends Controller
         $memberIds = explode(',', $project->member_id);
         $memberCount = User::whereIn('id', $memberIds)->pluck('name')->count();
         $members = User::whereIn('id', $memberIds)->get();
-
+        $notmember = Employee::whereNotIn('user_id', $memberIds)->where('user_id','!=',Auth::user()->id) ->get();
 
         if ( (in_array(Auth::user()->id, $memberIds)) || ($project->leader? ($project->leader_id == Auth::user()->id): false)) {
             return view('dashboard.project.project_overview',[
@@ -290,14 +292,25 @@ class ProjectController extends Controller
                 'members' => $members,
                 'memberCount' => $memberCount,
                 'files' => $files,
+                'notmember' => $notmember
             ]);
 
         } else {
            return redirect(route('dashboard'));
 
         }
+    }
 
+    public function employee_udpate(Request $request){
+        $project = Project::find($request->project_id);
+        $updateMemebers = implode(',', $request->updateMember);
+        $project->member_id =  $project->member_id . ',' .$updateMemebers;
 
+        $project->save();
+        return back();
+    }
 
+    public function employee_delete(Request $request,$id){
+        dd($id);
     }
 }

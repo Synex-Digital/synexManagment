@@ -237,7 +237,12 @@
 @section('script')
 <script src="{{asset('dashboard_assets/vendor/select2/js/select2.full.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/select2-init.js')}}"></script>
+<script>
+    $(document).ready(function() {
 
+        $('.hamburger').trigger('click');
+    });
+</script>
 
 @endsection
 @section('summernote')

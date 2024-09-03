@@ -404,7 +404,20 @@
         ['table', ['table']],
         ['insert', ['link', 'picture', 'video']],
         ['view', ['fullscreen', 'codeview', 'help']]
-      ]
+      ],
+      callbacks: {
+                onPaste: function(e) {
+                    // Prevent the default paste behavior
+                    e.preventDefault();
+
+                    // Get the text content from the clipboard
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData)
+                        .getData('Text');
+
+                    // Insert plain text into the editor
+                    document.execCommand('insertText', false, bufferText);
+                }
+            }
     });
   </script>
 @endsection

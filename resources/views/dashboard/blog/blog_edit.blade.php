@@ -146,7 +146,14 @@
     </div>
 
 @endsection
+@section('script')
+<script>
+    $(document).ready(function() {
 
+        $('.hamburger').trigger('click');
+    });
+</script>
+@endsection
 @section('summernote')
 <script>
     $('#summernote').summernote({
