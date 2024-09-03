@@ -52,6 +52,7 @@
                         </ul>
                     </li> --}}
                     <li class="nav-label first text-dark">Service Projects</li>
+                    <li><a href="{{route('service-projects.index')}}"><i class="icon icon-form"></i><span class="nav-text text-dark">Projects</span></a></li>
                     <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="fa fa-cogs"></i><span class="nav-text text-dark">projects</span>

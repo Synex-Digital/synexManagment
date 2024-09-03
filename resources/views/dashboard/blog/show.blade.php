@@ -27,7 +27,7 @@
 
                         <b>Published in</b> {{ \Carbon\Carbon::parse($blog->updated_at)->format('d/m/Y') }} — by <b>{{ $blog->author }}</b>
                         <p>{!! $blog->content !!}</p>
-                        <a href="{{ route('blog.create') }}" class="btn btn-primary">Back</a>
+                        <a href="{{ route('blog.index') }}" class="btn btn-primary">Back</a>
                     </div>
                 </div>
             </div>

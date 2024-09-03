@@ -128,7 +128,7 @@ class BlogController extends Controller
         $blog = Blog::find($id);
         $category = Category::all();
         $employee = Employee::all();
-        return view('dashboard.blog.edit', [
+        return view('dashboard.blog.blog_edit', [
             'blog'          => $blog,
             'categories'    => $category,
             'employees' =>$employee,

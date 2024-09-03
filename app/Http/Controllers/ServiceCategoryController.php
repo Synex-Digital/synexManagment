@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ServiceCategory;
+use Illuminate\Support\Facades\Validator;
 
 class ServiceCategoryController extends Controller
 {
@@ -29,14 +30,26 @@ class ServiceCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|unique:service_categories',
+        $validator = Validator::make($request->all(), [
+             'name' => 'required|unique:service_categories',
             'title'=>'required',
             'slug' => 'required|unique:service_categories',
         ]);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            foreach ($errors->messages() as  $messages) {
+                foreach ($messages as $message) {
+                    flash()->options([
+                        'position' => 'bottom-right',
+                    ])->error($message);
+                }
+            }
+            return back()->withErrors($validator)->withInput();
+            }
 
         ServiceCategory::create($request->all());
-        return back()->with('success', 'Service Category created successfully.');
+        flash()->options([ 'position' => 'bottom-right', ])->success('Category Created successfully');
+        return back();
     }
 
     /**
@@ -52,7 +65,7 @@ class ServiceCategoryController extends Controller
      */
     public function edit(ServiceCategory $serviceCategory)
     {
-        return view('dashboard.service_category.edit', compact('serviceCategory'));
+        return view('dashboard.service_project.category_edit', compact('serviceCategory'));
     }
 
     /**
@@ -60,13 +73,25 @@ class ServiceCategoryController extends Controller
      */
     public function update(Request $request, ServiceCategory $serviceCategory)
     {
-        $request->validate([
-            'name' => 'required|unique:service_categories,name,' . $serviceCategory->id,
-            'slug' => 'required|unique:service_categories,slug,' . $serviceCategory->id,
-        ]);
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:service_categories',
+           'slug' => 'required|unique:service_categories',
+       ]);
+       if ($validator->fails()) {
+           $errors = $validator->errors();
+           foreach ($errors->messages() as  $messages) {
+               foreach ($messages as $message) {
+                   flash()->options([
+                       'position' => 'bottom-right',
+                   ])->error($message);
+               }
+           }
+           return back()->withErrors($validator)->withInput();
+           }
 
         $serviceCategory->update($request->all());
-        return redirect()->route('service-categories.index')->with('success', 'Service Category updated successfully.');
+        flash()->options([ 'position' => 'bottom-right', ])->success('Category Updated successfully');
+        return redirect()->route('service-projects.index');
     }
 
     /**
@@ -75,7 +100,8 @@ class ServiceCategoryController extends Controller
     public function destroy(ServiceCategory $serviceCategory)
     {
         $serviceCategory->delete();
-        return redirect()->route('dashborad.service_category.index')->with('success', 'Service Category deleted successfully.');
+        flash()->options([ 'position' => 'bottom-right', ])->success('Category Deleted successfully');
+        return  back();
     }
     public function toggleStatus($id)
     {
@@ -83,7 +109,7 @@ class ServiceCategoryController extends Controller
         $category->is_active = !$category->is_active;
         $category->save();
 
-        return response()->json(['status' => $category->is_active ? 'Yes' : 'No']);
+        return response()->json(['status' => $category->is_active ? 'active' : 'inactive']);
     }
 
 }

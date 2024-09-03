@@ -1,53 +1,325 @@
 @extends('dashboard.layouts.app')
+@section('style')
+<link href="{{asset('dashboard_assets/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
+
+
+
+@endsection
 
 @section('content')
-<div class="container">
-    <h1>Projects</h1>
-    <a href="{{ route('service-projects.create') }}" class="btn btn-primary">Add New Project</a>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Thumbnail</th>
-                <th>Company Name</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Project URL</th>
-                <th>Active</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($projects as $project)
-                <tr>
-                    <td><img src="{{ $project->thumbnail_image }}" alt="Thumbnail" width="100"></td>
-                    <td>{{ $project->company_name }}</td>
-                    <td>{{ $project->title }}</td>
-                    <td>{{ $project->short_description }}</td>
-                    <td><a href="{{ $project->project_url }}">{{ $project->project_url }}</a></td>
-                    <td id="status-{{ $project->id }}">
-                        <span onclick="toggleProjectStatus({{ $project->id }}, this)" style="cursor: pointer; text-decoration: underline;">
-                            {{ $project->is_active ? 'Yes' : 'No' }}
-                        </span>
-                    </td>
-                    <td>
-                        <a href="{{ route('service-projects.show', $project->id) }}" class="btn btn-warning">Show</a>
-                        <a href="{{ route('service-projects.edit', $project->id) }}" class="btn btn-warning">Edit</a>
-                        <form action="{{ route('service-projects.destroy', $project->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this project?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-    <div class="d-flex justify-content-center">
-        {{ $projects->links('vendor.pagination.bootstrap-4') }}
+
+<div class="row ">
+    <div class="col-lg-6 col-md-5 col-sm-5">
+        <h3 class="display-5">Category</h3>
+    </div>
+    <div class="col-lg-6 col-md-7 col-sm-7">
+        <ol class="breadcrumb " style="float:inline-end; background-color: transparent;">
+            <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a class="text-primary">Projects</a></li>
+        </ol>
     </div>
 </div>
+
+{{-- category --}}
+<div class="row">
+    <div class="col-lg-12">
+        <button type="button" id="addCategoryBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#categoryCreateModal">
+        <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Category</button>
+
+
+        <div id="accordion-one" class="d-inline">
+
+            <button type="button" id="categoryListBtn" class="btn btn-rounded btn-primary mr-3"  data-toggle="collapse" data-target="#default_collapseOne">
+            <span class="btn-icon-left text-primary mr-2"  style="    margin: -4px 0px -4px -10px;"  > <i class="fa fa-th-list color-info"style=" margin: 2px -3px 1px -3px;" ></i> </span>Category List</button>
+        </div>
+
+    </div>
+    <div class="col-lg-12 mt-5">
+        <div id="default_collapseOne" class="collapse accordion__body  " data-parent="#accordion-one">
+            <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Category Lists</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Slug</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($categories as $category)
+                                            <tr>
+                                                <td>{{ $category->name }}</td>
+                                                <td>{{ $category->slug }}</td>
+                                                <td>{{ $category->description }}</td>
+                                                <td id="status-{{ $category->id }}">
+                                                    <span id='badge' class="badge   {{$category->is_active == '0' ? 'badge-outline-danger' : 'badge-outline-success'}}  " onclick="toggleStatus({{ $category->id }}, this)" style="cursor: pointer; ">
+                                                        {{ $category->is_active ? 'active' : 'inactive' }}
+                                                    </span>
+                                                </td>
+
+
+
+                                                <td class="d-flex justify-content-spacebetween">
+                                                    <a href="{{route('service-categories.edit',$category->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
+                                                    <form action="{{  route('service-categories.destroy', $category->id) }}" method="POST">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                        <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                                    </form>
+
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+
+
+
+
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{-- project --}}
+<div class="row mb-3">
+    <div class="col-lg-6 col-md-5 col-sm-5">
+        <h3 class="display-5">Project</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <button type="button" id="addBlogBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#blogCreateModal">
+            <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Project</button>
+
+    </div>
+    <div class="col-lg-12 mt-5">
+        <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Project Lists</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="example2" class="display" style="min-width: 845px">
+
+                            <thead>
+                                <tr>
+                                    <th>Thumbnail</th>
+                                    <th>Company Name</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Project URL</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($projects as $project)
+                                    <tr>
+                                        <td><img src="{{ $project->thumbnail_image }}" alt="Thumbnail" width="100"></td>
+                                        <td>{{ $project->company_name }}</td>
+                                        <td>{{ $project->title }}</td>
+                                        <td>{{ Str::limit($project->short_description, 20) }}</td>
+                                        <td><a href="{{ $project->project_url?? '#' }}">{{ $project->project_url ?? "N/A" }}</a></td>
+                                        <td id="status-{{ $project->id }}">
+                                            <span id='badge' class="badge   {{$project->is_active == '0' ? 'badge-outline-danger' : 'badge-outline-success'}}  " onclick="toggleProjectStatus({{ $project->id }}, this)" style="cursor: pointer; ">
+                                                {{ $project->is_active ? 'active' : 'inactive' }}
+                                            </span>
+                                        </td>
+
+                                        <td class="d-flex justify-content-spacebetween">
+                                            <a href="{{ route('service-projects.show', $project->id) }}" class="btn btn-outline-primary  btn-sm  mr-1"><i class="fa fa-eye"></i></a>
+                                            <a href="{{route('service-projects.edit',$project->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
+
+                                            <form action="{{ route('service-projects.destroy', $project->id) }}" method="POST">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                            </form>
+
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <!--categroy Modal -->
+ <div class="modal fade" id="categoryCreateModal" >
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Project Category</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('service-categories.store') }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required value="{{old('name')}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="slug">Slug</label>
+                        <input type="text" class="form-control" id="slug" name="slug" required value="{{old('slug')}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea class="form-control" id="description" name="description">{{ old('description') }}}</textarea>
+                    </div>
+
+                    <button type="submit" class="btn mt-3 btn-outline-primary float-right" style="font-size: 11px;">Create Category</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+ <!--project Modal -->
+ <div class="modal fade" id="blogCreateModal" >
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Project</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('service-projects.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        <div class="form-group col-lg-6 col-md-6">
+                            <label for="service_category_id">Service Category</label>
+                            <select class="form-control" id="service_category_id" name="service_category_id" required>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-6">
+                            <label for="thumbnail_image">Thumbnail Image</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="thumbnail_image" name="thumbnail_image" accept="image/*" required >
+                                <label class="custom-file-label">Upload Image  </label>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-6">
+                            <label for="title">Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required value="{{old('title')}}">
+                        </div>
+                        <div class="form-group col-lg-6 col-md-6">
+                            <label for="company_name">Company Name</label>
+                            <input type="text" class="form-control" id="company_name" name="company_name" required value="{{old('company_name')}}">
+                        </div>
+                        <div class="form-group col-lg-6 col-md-6">
+                            <label for="slug">Slug</label>
+                        <input type="text" class="form-control" id="slug" name="slug" required>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-6">
+                            <label for="project_url">Project URL</label>
+                            <input type="text" class="form-control" id="project_url" name="project_url" value="{{old('project_url')}}">
+                        </div>
+                        <div class="form-group col-lg-12 col-md-12">
+                            <label for="short_description">Short Description</label>
+                            <textarea class="form-control" id="short_description" rows="5" name="short_description" required> {{old('short_description')}}</textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Create Project</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
 @endsection
 @section('script')
+
+<script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
+<script>
+    function toggleStatus(id, element) {
+        fetch(`/service-category/toggle-status/${id}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Toggle the text based on the new status
+            element.innerText = data.status;
+            if(data.status == 'active'){
+               if( $('#badge').hasClass('badge-outline-danger') ){
+                   $('#badge').removeClass('badge-outline-danger');
+                   $('#badge').addClass('badge-outline-success');
+               }else{
+                   $('#badge').addClass('badge-outline-success');
+               }
+            }else{
+                if( $('#badge').hasClass('badge-outline-success') ){
+                    $('#badge').removeClass('badge-outline-success');
+                    $('#badge').addClass('badge-outline-danger');
+                }else{
+                    $('#badge').addClass('badge-outline-danger');
+                }
+            }
+        });
+        .catch(error => console.error('Error:', error));
+    }
+    </script>
+
 <script>
     function toggleProjectStatus(id, element) {
         fetch(`/service-project/toggle-status/${id}`, {
@@ -64,5 +336,5 @@
         })
         .catch(error => console.error('Error:', error));
     }
-    </script>    
+    </script>
 @endsection

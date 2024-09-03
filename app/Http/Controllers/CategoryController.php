@@ -84,7 +84,7 @@ class CategoryController extends Controller
     {
 
         $category = Category::find($id);
-        return view('dashboard.category.edit', [
+        return view('dashboard.blog.category_edit', [
             'category' => $category,
         ]);
     }

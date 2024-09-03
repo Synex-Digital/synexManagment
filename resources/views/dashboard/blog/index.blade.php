@@ -61,7 +61,7 @@
                                             <td>{{$categories->name}} </td>
 
 
-                                            <td> <span class="badge badge-light text-success">{{$categories->status}}</span> </td>
+                                            <td> <span class="badge   {{$categories->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$categories->status}}</span> </td>
 
 
                                             <td class="d-flex justify-content-spacebetween">
@@ -164,7 +164,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Create Category</h5>
+                <h5 class="modal-title">Create Blog Category</h5>
                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
                 </button>
             </div>
@@ -399,6 +399,44 @@
 @section('script')
 <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
+<script>
+    //color change for category add btn
+    $('#addCategoryBtn').on('click',function(){
+        if($(this).hasClass('btn-primary')){
+            $(this).removeClass('btn-primary');
+            $(this).addClass('btn-info');
+        }
+    });
+    $(document).on('click',function(e){
+        if($(e.target).closest('#addCategoryBtn').length === 0){
+            $('#addCategoryBtn').removeClass('btn-info');
+            $('#addCategoryBtn').addClass('btn-primary');
+        }
+    });
+    //color change for blog add btn
+    $('#addBlogBtn').on('click',function(){
+        if($(this).hasClass('btn-primary')){
+            $(this).removeClass('btn-primary');
+            $(this).addClass('btn-info');
+        }
+    });
+    $(document).on('click',function(e){
+        if($(e.target).closest('#addBlogBtn').length === 0){
+            $('#addBlogBtn').removeClass('btn-info');
+            $('#addBlogBtn').addClass('btn-primary');
+        }
+    });
+    $('#categoryListBtn').on('click',function(){
+        if($(this).hasClass('btn-primary')){
+            $(this).removeClass('btn-primary');
+            $(this).addClass('btn-info');
+        } else if($(this).hasClass('btn-info')){
+            $(this).removeClass('btn-info');
+            $(this).addClass('btn-primary');
+        }
+    });
+</script>
+
 
     <script>
 
