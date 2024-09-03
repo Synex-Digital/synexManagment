@@ -108,7 +108,6 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="example2" class=" display " style="min-width: 845px">
-
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -127,31 +126,20 @@
                                         <td><img src="{{ url('/'. $blogs->image)}}" class="rounded-lg me-2" width="50" alt=""></td>
                                         <td>{{$blogs->title}} </td>
                                         <td>{{$blogs->category->name ?? 'Unknown'}} </td>
-                                        <td>{{$blogs->employee->user->name }} </td>
-
-
+                                        <td>{{$blogs->employee->user->name ??    'Unknown'}} </td>
                                         <td> <span class="badge   {{$blogs->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$blogs->status}}</span> </td>
-
-
                                         <td class="d-flex justify-content-spacebetween">
                                             <a href="{{ route('blog.show', $blogs->id) }}" class="btn btn-outline-primary  btn-sm  mr-1"><i class="fa fa-eye"></i></a>
                                             <a href="{{route('blog.edit',$blogs->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
-
                                             <form action="{{ route('blog.destroy', $blogs->id) }}" method="POST">
                                                 @method('DELETE')
                                                 @csrf
                                                 <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
                                             </form>
-
                                         </td>
-
-
                                     </tr>
                                 @endforeach
-
-
                             </tbody>
-
                         </table>
                     </div>
                 </div>
@@ -176,24 +164,17 @@
                             <label class="col-lg-6 col-form-label">Category Name</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control"  placeholder="Enter Category Name" name="name" required value="{{old('name')}}">
-
                             </div>
                         </div>
-
                         <div class="mb-3 col-md-6">
                             <label for="" class="form-label">Category Image</label>
                             <div class="custom-file">
-                                <input class="custom-file-input @error('image') is-invalid @enderror" type="file" id="formFile" name="image">
+                                <input class="custom-file-input" type="file" id="formFile" name="image">
                                 <label class="custom-file-label">Upload Image  </label>
                             </div>
-                            @error('image')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label class="col-lg-6 col-form-label">Category Slug</label>
@@ -201,7 +182,6 @@
                                 <input type="text" class="form-control" placeholder="Enter Category Slug (Must be on small letter)" name="slug"  value="{{old('slug')}}">
                             </div>
                         </div>
-
                         <div class="form-group col-md-6">
                             <label class="col-sm-3 col-form-label">Status</label>
                             <div class="col-sm-12">
@@ -220,8 +200,6 @@
                             </div>
                         </div>
                     </div>
-
-
                     <div class="card">
                         <div class="card-header">
                             <h4 class='card-title'> Custom SEO</h4>
@@ -241,7 +219,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="">
                                 <label class="form-label">SEO Description</label>
                                 <textarea class="form-control " rows="5" name="seo_description"> {{old('seo_description')}} </textarea >
@@ -249,11 +226,9 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="modal-footer">
                         <button type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Create Category</button>
                     </div>
-
                 </form>
             </div>
 
@@ -282,7 +257,6 @@
                                 <option value="" disabled>If category is not in the list, than firstly add the category's information</option>
                             </select>
                         </div>
-
                         <div class="form-group col-lg-6 col-md-6">
                             <label class=" form-label">Employee Name</label>
                             <select name="employee_id" class="form-control" required>
@@ -295,14 +269,7 @@
 
                         <div class="form-group col-lg-6 col-md-6">
                             <label class=" col-form-label">Blog Title <span class="required-tag">*</span></label>
-
-                                <input type="text" class="form-control @error('title') is-invalid @enderror" placeholder="Enter blog title" name="title" value="{{ old('title') }}" required>
-                                @error('title')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-
+                            <input type="text" class="form-control " placeholder="Enter blog title" name="title" value="{{ old('title') }}" required>
                         </div>
 
                         <div class="mb-3 col-md-6">
@@ -346,42 +313,28 @@
                             </div>
                         </div>
                     </div>
-
-
-
-
                     <div class="card">
                         <div class="card-header">
                             <h4 class='card-title'>Custom SEO</h4>
                         </div>
-
                         <div class="card-body">
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class=" col-form-label">SEO Title</label>
-
-                                        <input type="text" class="form-control " placeholder="Enter SEO title" name="seo_title" required>
-
+                                    <input type="text" class="form-control " placeholder="Enter SEO title" name="seo_title" required>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class=" col-form-label">SEO Tags</label>
-
-                                        <input type="text" class="form-control " placeholder="Enter SEO tags" name="seo_tags" required>
-
-
+                                    <input type="text" class="form-control " placeholder="Enter SEO tags" name="seo_tags" required>
                                 </div>
                             </div>
 
                             <div class="form-group ">
                                 <label class="col-form-label">SEO Description</label>
                                 <textarea class="form-control" rows="5"  name="seo_description" required></textarea>
-
                             </div>
-
-
                         </div>
                     </div>
-
                     <div class="modal-footer">
                         <button type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Create Blog</button>
                     </div>
@@ -436,51 +389,6 @@
         }
     });
 </script>
-
-
-    <script>
-
-            // $('#addCategoryBtn').on('click',function(){
-            //     $(this).removeClass('btn-primary');
-            //     $(this).addClass('btn-info');
-            //     if($('#addBlogBtn').hasClass('btn-info')){
-            //         $('#addBlogBtn').removeClass('btn-info');
-            //         $('#addBlogBtn').addClass('btn-primary');
-            //     };
-
-            // });
-            // $('#addBlogBtn').on('click',function(){
-            //     $(this).removeClass('btn-primary');
-            //     $(this).addClass('btn-info');
-            //     if($('#addCategoryBtn').hasClass('btn-info')){
-            //         $('#addCategoryBtn').removeClass('btn-info');
-            //         $('#addCategoryBtn').addClass('btn-primary');
-            //     };
-
-            // });
-
-            // $('#categoryListBtn').on('click',function(){
-            //    if($(this).hasClass('btn-primary')){
-            //        $(this).removeClass('btn-primary');
-            //        $(this).addClass('btn-info');
-            //        $('#blogListBtn').addClass('btn-primary');
-            //        $('#blogListBtn').removeClass('btn-info');
-            //         $('#default_collapseTwo').removeClass('show');
-            //    }
-            //    else{
-            //        $(this).removeClass('btn-info');
-            //        $(this).addClass('btn-primary');
-            //        $('#blogListBtn').addClass('btn-info');
-            //        $('#blogListBtn').removeClass('btn-primary');
-            //        $('#default_collapseTwo').addClass('show');
-            //    }
-
-            // });
-            // $('#blogListBtn').on('click',function(){
-
-            // });
-
-    </script>
 @endsection
 @section('summernote')
 <script>

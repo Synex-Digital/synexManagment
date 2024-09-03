@@ -40,8 +40,9 @@
                             <li><a href="{{route('expenses.index')}}"><i class="fa fa-credit-card"></i><span class="nav-text text-dark">Expenses</span></a></li>
                         @endif
                     @endif
-                    <li class="nav-label first text-dark">Media and content</li>
+                    <li class="nav-label first text-dark">Synex Databse</li>
                     <li><a href="{{route('blog.index')}}"><i class="icon icon-form"></i><span class="nav-text text-dark">Blogs</span></a></li>
+                    <li><a href="{{route('service-projects.index')}}"><i class="icon icon-form"></i><span class="nav-text text-dark">Projects</span></a></li>
                     {{-- <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="icon icon-form"></i><span class="nav-text text-dark">Blogs</span>
@@ -51,9 +52,9 @@
                             <li><a href="{{ route('blog.index') }}">Blog</a></li>
                         </ul>
                     </li> --}}
-                    <li class="nav-label first text-dark">Service Projects</li>
-                    <li><a href="{{route('service-projects.index')}}"><i class="icon icon-form"></i><span class="nav-text text-dark">Projects</span></a></li>
-                    <li>
+                    {{-- <li class="nav-label first text-dark">Service Projects</li> --}}
+
+                    {{-- <li>
                         <a class="has-arrow" href="javascript:void()" aria-expanded="false">
                             <i class="fa fa-cogs"></i><span class="nav-text text-dark">projects</span>
                         </a>
@@ -61,7 +62,7 @@
                             <li><a href="{{ route('service-categories.index') }}">Category</a></li>
                             <li><a href="{{ route('service-projects.index') }}">Projects</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
 
                     @if (Auth::user()->can('user.view') || Auth::user()->can('role.view') || Auth::user()->can('app.view'))
                     <li class="nav-label first text-dark">ADMINISTRATION</li>

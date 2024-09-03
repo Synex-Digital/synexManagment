@@ -59,8 +59,8 @@
                                                 <td>{{ $category->name }}</td>
                                                 <td>{{ $category->slug }}</td>
                                                 <td>{{ $category->description }}</td>
-                                                <td id="status-{{ $category->id }}">
-                                                    <span id='badge' class="badge   {{$category->is_active == '0' ? 'badge-outline-danger' : 'badge-outline-success'}}  " onclick="toggleStatus({{ $category->id }}, this)" style="cursor: pointer; ">
+                                                <td id="category-status-{{ $category->id }}">
+                                                    <span id='badge' class="badge   badge-outline-success" onclick="toggleStatus({{ $category->id }}, this)" style="cursor: pointer; ">
                                                         {{ $category->is_active ? 'active' : 'inactive' }}
                                                     </span>
                                                 </td>
@@ -100,7 +100,7 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <button type="button" id="addBlogBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#blogCreateModal">
+        <button type="button" id="addProjectBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#projectCreateModal">
             <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Project</button>
 
     </div>
@@ -116,10 +116,11 @@
                             <thead>
                                 <tr>
                                     <th>Thumbnail</th>
-                                    <th>Company Name</th>
+                                    <th>Category</th>
                                     <th>Title</th>
-                                    <th>Description</th>
+                                    <th>Company Name</th>
                                     <th>Project URL</th>
+                                    <th>Description</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -127,19 +128,20 @@
                             <tbody>
                                 @foreach ($projects as $project)
                                     <tr>
-                                        <td><img src="{{ $project->thumbnail_image }}" alt="Thumbnail" width="100"></td>
-                                        <td>{{ $project->company_name }}</td>
+                                        <td><img src="{{ $project->thumbnail_image }}" alt="Thumbnail" width="50"></td>
+                                        <td>{{ $project->category->name ?? 'Unknown' }}</td>
                                         <td>{{ $project->title }}</td>
+                                        <td>{{ $project->company_name }}</td>
+                                        <td><a href="{{ $project->project_url?? '#' }}">{{ Str::limit($project->project_url) ?? "N/A" }}</a></td>
                                         <td>{{ Str::limit($project->short_description, 20) }}</td>
-                                        <td><a href="{{ $project->project_url?? '#' }}">{{ $project->project_url ?? "N/A" }}</a></td>
-                                        <td id="status-{{ $project->id }}">
-                                            <span id='badge' class="badge   {{$project->is_active == '0' ? 'badge-outline-danger' : 'badge-outline-success'}}  " onclick="toggleProjectStatus({{ $project->id }}, this)" style="cursor: pointer; ">
+                                        <td id="project-status-{{ $project->id }}">
+                                            <span class="badgeBtn badge   badge-outline-success  " onclick="toggleProjectStatus({{ $project->id }}, this)" style="cursor: pointer;">
                                                 {{ $project->is_active ? 'active' : 'inactive' }}
                                             </span>
                                         </td>
 
                                         <td class="d-flex justify-content-spacebetween">
-                                            <a href="{{ route('service-projects.show', $project->id) }}" class="btn btn-outline-primary  btn-sm  mr-1"><i class="fa fa-eye"></i></a>
+                                            {{-- <a href="{{ route('service-projects.show', $project->id) }}" class="btn btn-outline-primary  btn-sm  mr-1"><i class="fa fa-eye"></i></a> --}}
                                             <a href="{{route('service-projects.edit',$project->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
 
                                             <form action="{{ route('service-projects.destroy', $project->id) }}" method="POST">
@@ -204,7 +206,7 @@
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea class="form-control" id="description" name="description">{{ old('description') }}}</textarea>
+                        <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
                     </div>
 
                     <button type="submit" class="btn mt-3 btn-outline-primary float-right" style="font-size: 11px;">Create Category</button>
@@ -215,7 +217,7 @@
     </div>
 </div>
  <!--project Modal -->
- <div class="modal fade" id="blogCreateModal" >
+ <div class="modal fade" id="projectCreateModal" >
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -289,6 +291,7 @@
 <script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
 <script>
     function toggleStatus(id, element) {
+
         fetch(`/service-category/toggle-status/${id}`, {
             method: 'POST',
             headers: {
@@ -300,22 +303,8 @@
         .then(data => {
             // Toggle the text based on the new status
             element.innerText = data.status;
-            if(data.status == 'active'){
-               if( $('#badge').hasClass('badge-outline-danger') ){
-                   $('#badge').removeClass('badge-outline-danger');
-                   $('#badge').addClass('badge-outline-success');
-               }else{
-                   $('#badge').addClass('badge-outline-success');
-               }
-            }else{
-                if( $('#badge').hasClass('badge-outline-success') ){
-                    $('#badge').removeClass('badge-outline-success');
-                    $('#badge').addClass('badge-outline-danger');
-                }else{
-                    $('#badge').addClass('badge-outline-danger');
-                }
-            }
-        });
+
+        })
         .catch(error => console.error('Error:', error));
     }
     </script>
@@ -333,8 +322,47 @@
         .then(data => {
             // Toggle the text based on the new status
             element.innerText = data.status;
+
+
         })
         .catch(error => console.error('Error:', error));
     }
+    </script>
+    <script>
+        //color change for category add btn
+        $('#addCategoryBtn').on('click',function(){
+            if($(this).hasClass('btn-primary')){
+                $(this).removeClass('btn-primary');
+                $(this).addClass('btn-info');
+            }
+        });
+        $(document).on('click',function(e){
+            if($(e.target).closest('#addCategoryBtn').length === 0){
+                $('#addCategoryBtn').removeClass('btn-info');
+                $('#addCategoryBtn').addClass('btn-primary');
+            }
+        });
+        //color change for blog add btn
+        $('#addProjectBtn').on('click',function(){
+            if($(this).hasClass('btn-primary')){
+                $(this).removeClass('btn-primary');
+                $(this).addClass('btn-info');
+            }
+        });
+        $(document).on('click',function(e){
+            if($(e.target).closest('#addProjectBtn').length === 0){
+                $('#addProjectBtn').removeClass('btn-info');
+                $('#addProjectBtn').addClass('btn-primary');
+            }
+        });
+        $('#categoryListBtn').on('click',function(){
+            if($(this).hasClass('btn-primary')){
+                $(this).removeClass('btn-primary');
+                $(this).addClass('btn-info');
+            } else if($(this).hasClass('btn-info')){
+                $(this).removeClass('btn-info');
+                $(this).addClass('btn-primary');
+            }
+        });
     </script>
 @endsection

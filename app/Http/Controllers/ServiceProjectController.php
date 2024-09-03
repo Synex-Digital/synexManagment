@@ -62,23 +62,36 @@ class ServiceProjectController extends Controller
         return view('dashboard.service_project.show', compact('project'));
     }
 
-    public function edit(ServiceProject $project)
+    public function edit(String $id)
     {
+        $project = ServiceProject::find($id);
         $categories = ServiceCategory::all();
-        return view('dashboard.service_project.edit', compact('project', 'categories'));
+        return view('dashboard.service_project.service_project_edit', compact('project', 'categories'));
     }
 
-    public function update(Request $request, ServiceProject $project)
+    public function update(Request $request, String $id)
     {
-        $request->validate([
-            'thumbnail_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        $project = ServiceProject::find($id);
+        $validator = Validator::make($request->all(), [
+             'thumbnail_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'company_name' => 'required|string',
             'title' => 'required|string',
             'short_description' => 'required|string',
-            'slug' => 'nullable|unique:service_projects,slug,' . $project->id,
+            'slug' => 'nullable|unique:service_projects,slug,'.$project->id,
             'project_url' => 'nullable|url',
             'service_category_id' => 'required|exists:service_categories,id',
         ]);
+    if ($validator->fails()) {
+            $errors = $validator->errors();
+            foreach ($errors->messages() as  $messages) {
+                foreach ($messages as $message) {
+                    flash()->options([
+                        'position' => 'bottom-right',
+                    ])->error($message);
+                }
+            }
+            return back()->withErrors($validator)->withInput();
+         }
 
         if ($request->hasFile('thumbnail_image')) {
             if ($project->thumbnail_image) {
@@ -98,16 +111,19 @@ class ServiceProjectController extends Controller
 
         // Update the existing project
         $project->update($data);
-        return back()->with('success', 'Project updated successfully.');
+        flash()->options([ 'position' => 'bottom-right', ])->success('Project Updated successfully');
+        return redirect()->route('service-projects.index');
     }
 
-    public function destroy(ServiceProject $project)
+    public function destroy(String $id)
     {
+        $project = ServiceProject::find($id);
         if ($project->thumbnail_image) {
             Photo::delete($project->thumbnail_image);
         }
         $project->delete();
-        return back()->with('success', 'Project deleted successfully.');
+        flash()->options([ 'position' => 'bottom-right', ])->success('Project Deleted successfully');
+        return back();
     }
     public function toggleStatus($id)
     {
@@ -116,6 +132,6 @@ class ServiceProjectController extends Controller
         $project->save();
 
         // Return the new status as a JSON response
-        return response()->json(['status' => $project->is_active ? 'Yes' : 'No']);
+        return response()->json(['status' => $project->is_active ? 'active' : 'inactive']);
     }
 }

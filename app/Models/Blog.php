@@ -29,8 +29,6 @@ class Blog extends Model
     }
     public function employee()
     {
-        return $this->belongsTo(Employee::class)->withDefault([
-            'user' => 'unknown'
-        ]);
+        return $this->belongsTo(Employee::class, 'employee_id');
     }
 }
