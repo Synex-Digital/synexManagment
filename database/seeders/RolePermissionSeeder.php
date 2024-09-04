@@ -146,6 +146,17 @@ class RolePermissionSeeder extends Seeder
 
                 ]
             ],
+            [
+                'group_name' => 'service_project',
+                'permissions' => [
+                    // admin Permissions
+                    'service_project.view',
+                    'service_project.create',
+                    'service_project.edit',
+                    'service_project.delete',
+
+                ]
+            ],
 
 
         ];
