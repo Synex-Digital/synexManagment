@@ -23,19 +23,31 @@ class ProjectController extends Controller
     {
 
         $projects = Project::orderBy('id', 'desc')->get();
-        if(Auth::user()->employees){
+
+
             return view('dashboard.project.projectlist',[
+                'projects' => $projects,
+            ]);
+
+
+    }
+    public function employee_project()
+    {
+        if(auth()->user()->employees && auth()->user()->can('project.view')){
+            $projects = Project::orderBy('id', 'desc')->get();
+            $user = Auth::user();
+            $projects = $user->allProjects();
+            return view('dashboard.project.employee_projectlist',[
                 'projects' => $projects,
             ]);
         }else{
-            $user = Auth::user();
-            $projects = $user->allProjects();
-            return view('dashboard.project.projectlist',[
-                'projects' => $projects,
-            ]);
+            return redirect(route('dashboard'));
         }
 
+
+
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -44,7 +56,7 @@ class ProjectController extends Controller
     {
         $employees = User::has('employees')->pluck('name', 'id')->toArray();
         $client = Client::all();
-        if(!Auth::user()->can('project.create')){
+        if(Auth::user()->can('project.create')){
             return view('dashboard.project.create',[
                 'client' => $client,
                 'employees' => $employees,

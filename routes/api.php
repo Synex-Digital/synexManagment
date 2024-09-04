@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ServiceProjectController;
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CustomerControllerApi;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -19,3 +20,5 @@ Route::get('/blogs/item', [BlogController::class, 'homeitem']);
 Route::get('/blogs/{slug}', [BlogController::class, 'view']);
 Route::get('/category/{slug}', [CategoryController::class, 'index']);
 Route::get('/sitemap/blog', [BlogController::class, 'sitemap']);
+//customer jb
+Route::post('/customer/store',[CustomerControllerApi::class, 'store']);
