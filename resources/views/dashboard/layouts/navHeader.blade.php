@@ -5,7 +5,7 @@
             Nav header start
         ***********************************-->
         <div class="nav-header">
-            <a href="index.html" class="brand-logo">
+            <a href="{{route('dashboard')}}" class="brand-logo">
                 <img class="logo-abbr" src="{{asset('uploads/logo')}}/{{$appSetting ? $appSetting->logoIcon : ''}}" alt="">
                 <img class="logo-compact" src="{{asset('uploads/logo')}}/{{$appSetting ? $appSetting->logoText : ''}}" alt="">
                 <img class="brand-title" src="{{asset('uploads/logo')}}/{{$appSetting ? $appSetting->logoText : ''}}" alt="">

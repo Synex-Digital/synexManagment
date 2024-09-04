@@ -235,23 +235,18 @@
                        {{-- <p class="text-dark copyable" data-title="{{ $data->title }}">{{ substr($data->title,0,20) .'...' }}</p> --}}
                        <p class="text-dark fullText" data-title="{{ $data->title }}" data-serial="{{ $loop->iteration }}" >{{ substr($data->title,0,20) .'...' }}</p>
                        <div class="d-flex justify-content-end ">
-
-                        @if (Auth::user()->can('project.task.edit'))
-
-                        <p class="text-dark icon edit" data-value={{ $data->id }} style="display: none; cursor: pointer"><i class="mt-1 fa fa-pencil text-primary  ">  </i></p>
-                        @endif
-                        @if (Auth::user()->can('project.task.delete'))
-
-                        <form id="taskDelete" action="{{ route('task.destroy', $data->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <p class="text-dark icon ml-2 delete"style="display: none; cursor: pointer"><i class="mt-1 fa fa-trash  text-danger ">  </i></p>
-
-                        </form>
-                        @endif
-                       <p class="text-dark ml-3 "><i class=" fa fa-{{ $data->status == 0? 'exclamation' : 'check' }} {{$data->status == 0? 'text-danger': ' text-success'}} ">  </i></p>
-
-                   </div>
+                            @if (Auth::user()->can('project.task.edit'))
+                            <p class="text-dark icon edit" data-value={{ $data->id }} style="display: none; cursor: pointer"><i class="mt-1 fa fa-pencil text-primary  ">  </i></p>
+                            @endif
+                            @if (Auth::user()->can('project.task.delete'))
+                            <form id="" action="{{ route('task.destroy', $data->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-dark icon ml-2 delete"style="display: none; cursor: pointer;border-radius: 0; border: 0; background: transparent;"><i class="mt-1 fa fa-trash  text-danger ">  </i></button>
+                            </form>
+                            @endif
+                        <p class="text-dark ml-3 "><i class=" fa fa-{{ $data->status == 0? 'exclamation' : 'check' }} {{$data->status == 0? 'text-danger': ' text-success'}} ">  </i></p>
+                        </div>
                    </div>
                    @endforeach
 
@@ -447,7 +442,7 @@
         <div class="col-lg-3">
             <div class="card ">
                 <div class="card-header ">
-                   <h6 class="font-weight-bold" > <span style="border-left: 4px solid #593bdb"> </span> &nbsp; Project Task demo</h6>
+                   <h6 class="font-weight-bold" > <span style="border-left: 4px solid #593bdb"> </span> &nbsp; Project Task </h6>
                     @if($project->leader_id == Auth::user()->id)
                         <button type="button" id="add" class=" btn btn-primary " data-toggle="modal" data-target="#createTask" style="font-size: -2px !important;height: 23px;width: 39px;">
                         <i class="fa fa-plus text-white" style="top: -5px; position: relative;"></i>
@@ -461,23 +456,26 @@
                         <p class="   pb-0 mb-0">EMPTY</p>
                     </div>
                     @endif
-                    @if($project->leader_id == Auth::user()->id)
-                        @foreach ($project->tasks as $data )
-                            <div class=" hover d-flex justify-content-between  pt-3 px-3 border-bottom">
-                                {{-- <p class="text-dark copyable" data-title="{{ $data->title }}">{{ substr($data->title,0,20) .'...' }}</p> --}}
-                                <p class="text-dark fullText" data-title="{{ $data->title }}" data-serial="{{ $loop->iteration }}" >{{ substr($data->title,0,20) .'...' }}</p>
-                                <div class="d-flex justify-content-end ">
-                                <p class="text-dark icon edit" data-value={{ $data->id }} style="display: none; cursor: pointer"><i class="mt-1 fa fa-pencil text-primary  ">  </i></p>
-                                <form id="taskDelete" action="{{ route('task.destroy', $data->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <p class="text-dark icon ml-2 delete"style="display: none; cursor: pointer"><i class="mt-1 fa fa-trash  text-danger ">  </i></p>
-                                </form>
-                                <p class="text-dark ml-3 "><i class=" fa fa-{{ $data->status == 0? 'exclamation' : 'check' }} {{$data->status == 0? 'text-danger': ' text-success'}} ">  </i></p>
-                            </div>
-                            </div>
+                    @foreach ($project->tasks as $data )
+                        <div class=" hover d-flex justify-content-between  pt-3 px-3 border-bottom">
+                        <p class="text-dark fullText" data-title="{{ $data->title }}" data-serial="{{ $loop->iteration }}" >{{ substr($data->title,0,20) .'...' }}</p>
+                        <div class="d-flex justify-content-end ">
+                            @if ($project->leader_id == Auth::user()->id)
+                            <p class="text-dark icon edit mr-3" data-value={{ $data->id }} style="display: none; cursor: pointer"><i class="mt-1 fa fa-pencil text-primary  ">  </i></p>
+                            @endif
+                            @if ($project->leader_id == Auth::user()->id)
+                            <form id="" action="{{ route('task.destroy', $data->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-dark icon mr-3 delete" style="display: none; cursor: pointer;border-radius: 0; border: 0; background: transparent;"><i class="mt-1 fa fa-trash  text-danger ">  </i></button>
+                            </form>
+                            @endif
+                             <a href="{{ route('task.status.update', $data->id) }}" >
+                                 <p class="text-dark  mr-1 update" style=" cursor: pointer"><i class="mt-1 fa fa-{{ $data->status == 1? 'check' : 'exclamation' }}  text-{{ $data->status == 1? 'success': 'danger' }} ">  </i></p>
+                             </a>
+                         </div>
+                        </div>
                         @endforeach
-                    @endif
 
 
                 </div>
@@ -503,13 +501,16 @@
                     <div class="d-flex hover justify-content-between pt-3 px-3 border-bottom">
                         <p >{{$data->name}}</p>
                         <div class="d-flex">
-                            <form class="memberDelete" action="{{ route('member_delete', $data->id) }}" method="POST">
+                            @if ($project->leader_id == Auth::user()->id)
+
+                            <form class="" action="{{ route('member_delete', $data->employees->user->id) }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="project_id" value="{{$project->id}}">
 
-                                <p class="text-dark icon mr-3 deleteMember"style="display: none; cursor: pointer"><i class="mt-1 fa fa-trash  text-danger ">  </i></p>
+                                <button type="submit" class="text-dark icon mr-3 "style="display: none; cursor: pointer;border-radius: 0; border: 0; background: transparent;"><i class="mt-1 fa fa-trash  text-danger ">  </i></button>
 
                             </form>
+                            @endif
                             <p class="text-dark"><i class="badge badge-outline-success text-success">
                                 {{$data->employees->designations? $data->employees->designations->designation : 'UNKNOWN'}}</i></p>
                         </div>
@@ -525,7 +526,19 @@
                     <h6 class="font-weight-bold mb-0">
                         <span style="border-left: 4px solid #593bdb;"></span>&nbsp; Project Documents
                     </h6>
-
+                    @if ($project->leader_id == Auth::user()->id)
+                    <div class="file-upload btn btn-primary p-2" style="border-radius: 11%; height: 23px; width: 39px; coursor: pointer;">
+                        <i class="fa fa-plus text-white" style="top: -7px; position: relative;"></i>
+                        <div class="loading-overlay" id="loadingOverlay">
+                            <div class="loading-spinner"></div>
+                        </div>
+                        <form id="fileForm" action="{{ route('project.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" name="project_id" value="{{ $project->id }}">
+                            <input type="file" name="file" id="hiddenFileInput" onchange="submitForm()">
+                        </form>
+                    </div>
+                    @endif
                 </div>
                 <div class=" mt-2 border-bottom"></div>
                 <div class="">
@@ -534,7 +547,9 @@
                         <p class=" text-dark pb-0 mb-0">{{substr($data,0,15).'...'}}</p>
                         <p class="text-dark pb-0 mb-0">
                             <a href="{{ route('download', ['filename' => $data]) }}" class="mr-2 badge badge-light"> <i class="fa fa-download text-primary "></i></a>
-
+                            @if ($project->leader_id == Auth::user()->id)
+                            <a href="{{route('projectFile.delete',['id' => $project->id, 'key' => $key])}}" class="badge badge-light"> <i class="fa fa-trash text-danger"></i></a>
+                            @endif
                         </p>
                     </div>
                     @empty

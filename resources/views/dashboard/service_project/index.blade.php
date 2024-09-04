@@ -196,16 +196,17 @@
                         <label for="name">Name</label>
                         <input type="text" class="form-control" id="name" name="name" required value="{{old('name')}}">
                     </div>
-                    <div class="form-group">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
-                    </div>
+
                     <div class="form-group">
                         <label for="slug">Slug</label>
                         <input type="text" class="form-control" id="slug" name="slug" required value="{{old('slug')}}">
                     </div>
                     <div class="form-group">
-                        <label for="description">Description</label>
+                        <label for="title">Seo Title</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Seo Description</label>
                         <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
                     </div>
 

@@ -29,7 +29,7 @@
                             <path d="M18 4H14C12 4 11 5 11 7V17C11 19 12 20 14 20H18" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                             </g>
                         </svg>
-                        <span class="nav-text">Projects</span></a> </li>
+                        <span class="nav-text text-dark">Projects</span></a> </li>
                    @endif
                    @if (!Auth::user()->employees)
                         @if ($hasEmployeePermissions)

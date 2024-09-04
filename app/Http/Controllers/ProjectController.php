@@ -305,12 +305,20 @@ class ProjectController extends Controller
         $project = Project::find($request->project_id);
         $updateMemebers = implode(',', $request->updateMember);
         $project->member_id =  $project->member_id . ',' .$updateMemebers;
-
         $project->save();
+        flash()->options(['position' => 'bottom-right'])-> success('Member Added successfully!');
         return back();
     }
 
     public function employee_delete(Request $request,$id){
-        dd($id);
+
+        $project = Project::find($request->project_id);
+        $memberIds = explode(',', $project->member_id);
+        $key = array_search($id, $memberIds);
+        unset($memberIds[$key]);
+        $project->member_id = implode(',', $memberIds);
+        $project->save();
+        flash()->options(['position' => 'bottom-right'])-> success('Member Deleted successfully!');
+        return back();
     }
 }
