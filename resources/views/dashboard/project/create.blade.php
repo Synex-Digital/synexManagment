@@ -176,7 +176,7 @@
                         <div class="form-row mb-3">
                             <div class="form-group  col-lg-6">
                                 <label for="inputPassword4" class="font-weight-bold">Team Leader :</label>
-                                <select class="multi-select" name="leader"  required value={{old('leader')}}>
+                                <select id="leader" class="multi-select" name="leader"  required value={{old('leader')}}>
                                     <option value=""> SELECT LEADER</option>
                                     @foreach ($employees as $id => $name  )
                                         <option value="{{ $id }}">{{$name}}</option>
@@ -186,11 +186,11 @@
                             <div class="form-group col-lg-6">
                                 <label for="inputPassword4" class="font-weight-bold">Team Member :</label>
                                 <a href="{{ route('employee.index') }}" class="btn btn-outline-primary float-right" style="height:18px; width:30px;"><i class="fa fa-plus" style="top: -9px; left: -2px; position: relative; font-size:10px;"></i></a>
-                                <select class="multi-select" name="member[]" multiple="multiple" required value="{{old('member[]')}}">
-
-                                    @foreach ($employees as $id => $name  )
+                                <select id="member" class="multi-select" name="member[]" multiple="multiple" required value="{{old('member[]')}}">
+                                    <option value=""> SELECT MEMBER</option>
+                                    {{-- @foreach ($employees as $id => $name  )
                                         <option value="{{ $id }}">{{$name}}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                         </div>
@@ -233,8 +233,33 @@
 <script src="{{asset('dashboard_assets/js/plugins-init/select2-init.js')}}"></script>
 <script>
     $(document).ready(function() {
-
         $('.hamburger').trigger('click');
+
+
+        $('#leader').change(function(){
+            var leader = $(this).val();
+
+            $.ajax({
+                url: "/get-project-members/"+leader,
+                type: "GET",
+                data: {
+                    leader_id: leader
+                },
+                success: function (data) {
+
+
+                    if(data){
+                            $("#member").empty();
+                            $.each(data,function(key,value){
+                                $("#member").append('<option value="'+key+'">'+value+'</option>');
+                            });
+                        }else{
+                            $("#member").empty();
+                        }
+                }
+            });
+        });
+
     });
 </script>
 

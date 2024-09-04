@@ -321,4 +321,10 @@ class ProjectController extends Controller
         flash()->options(['position' => 'bottom-right'])-> success('Member Deleted successfully!');
         return back();
     }
+
+    public function getMemebers($id){
+        $members = User::has('employees')->where('id', '!=', $id)->pluck('name', 'id')->toArray();
+        return response()->json($members);
+
+    }
 }

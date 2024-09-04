@@ -40,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/search/client', [ClientController::class, 'searchClient'])->name('searchClient');
  //jquery
     Route::get('/get-designations/{departmentId}', [EmployeeController::class, 'getDesignations']);
+    Route::get('/get-project-members/{id}',[ProjectController::class, 'getMemebers'])->name('project_members');
 //project file delete and downoad
     Route::get('project/file/delete/{id}/{key}', [ProjectController::class, 'fileDelete'])->name('projectFile.delete');
     Route::get('/download/{filename}', [ProjectController::class, 'downloadFile'])->name('download');
