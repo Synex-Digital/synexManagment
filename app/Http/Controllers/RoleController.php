@@ -139,9 +139,8 @@ class RoleController extends Controller
     }
     public function userRole_delete($id){
         $user = User::find($id);
-        $user->syncRoles([]);
-        $user->syncPermissions([]);
-        $user->delete();
+        $user->roles()->detach();
+        $user->permissions()->detach();
         flash()->options(['position' => 'bottom-right'])->success('User(Role) Deleted Successfully');
         return back();
     }
