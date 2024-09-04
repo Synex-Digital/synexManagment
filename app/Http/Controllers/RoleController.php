@@ -19,7 +19,7 @@ class RoleController extends Controller
         $roles = Role::all();
         $all_permissions = Permission::all();
         $permission_groups = User::getpermissionGroups();
-        $users = User::whereDoesntHave('employees')->get();
+        $users = User::get();
         return view('dashboard.role.index',[
             'roles' => $roles,
             'all_permissions' => $all_permissions,

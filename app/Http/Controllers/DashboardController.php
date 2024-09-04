@@ -16,7 +16,7 @@ use Intervention\Image\Facades\Image;
 class DashboardController extends Controller
 {
     public function index(){
-        if(!Auth::user()->employees){
+        if(auth()->user()->can('project.edit')){
             $start_month = Carbon::now()->startOfMonth();
             $end_month = Carbon::now()->endOfMonth();
             $current_month_budget = DB::table('projects')->whereBetween('created_at',[$start_month, $end_month])->sum('budget');

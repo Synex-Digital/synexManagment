@@ -23,7 +23,7 @@ class ProjectController extends Controller
     {
 
         $projects = Project::orderBy('id', 'desc')->get();
-        if(!Auth::user()->employees){
+        if(Auth::user()->employees){
             return view('dashboard.project.projectlist',[
                 'projects' => $projects,
             ]);
@@ -44,7 +44,7 @@ class ProjectController extends Controller
     {
         $employees = User::has('employees')->pluck('name', 'id')->toArray();
         $client = Client::all();
-        if(!Auth::user()->employees){
+        if(!Auth::user()->can('project.create')){
             return view('dashboard.project.create',[
                 'client' => $client,
                 'employees' => $employees,

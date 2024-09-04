@@ -104,7 +104,7 @@
 @endsection
 @section('content')
 @if (!Auth::user()->employees)
-<div class="row ">
+<div class="row">
     <div class="col-lg-6">
         <h3 class="display-5"> Project Overview</h3>
     </div>

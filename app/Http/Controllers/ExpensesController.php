@@ -17,7 +17,7 @@ class ExpensesController extends Controller
     {
         $employees =  User::has('employees')->pluck('name', 'id')->toArray();
         $expenses = Expenses::orderBy('id', 'desc')->get();
-        if(!Auth::user()->employees){
+        if(Auth::user()->can('expenses.view')){
             return view('dashboard.expenses.index',[
                 'employees' => $employees,
                 'expenses' => $expenses,
@@ -90,7 +90,7 @@ class ExpensesController extends Controller
     {
         $employees = User::has('employees')->pluck('name', 'id')->toArray();
         $expenses = expenses::find($id);
-        if(!Auth::user()->employees){
+        if(Auth::user()->can('expenses.edit')){
             return view('dashboard.expenses.edit',[
                 'expenses' => $expenses,
                 'employees' => $employees,

@@ -18,13 +18,13 @@ class ClientController extends Controller
     public function index()
     {
         $clients = Client::all();
-        if(!Auth::user()->employees){
+
             if(Auth::user()->can('client.view')){
-            return view('dashboard.client.index',[
-                'clients' => $clients,
-            ]);
-            }else{return back();}
-        }else{return redirect(route('dashboard'));  }
+                return view('dashboard.client.index',[
+                    'clients' => $clients,
+                ]);
+            }else{return redirect(route('dashboard'));}
+
 
 
 
@@ -91,15 +91,13 @@ class ClientController extends Controller
     public function show(string $id)
     {
         $client = Client::find($id);
-         if(!Auth::user()->employees){
+
             if(Auth::user()->can('client.profile')){
                 return view('dashboard.client.profile',[
                     'client' => $client,
                 ]);
-            }else{return back();}
-        }else{
-            return redirect(route('dashboard'));
-        }
+            }else{return redirect(route('dashboard'));}
+
 
     }
 
@@ -109,15 +107,13 @@ class ClientController extends Controller
     public function edit(string $id)
     {
         $client = Client::find($id);
-         if(!Auth::user()->employees){
+
             if(Auth::user()->can('client.edit')){
                 return view('dashboard.client.edit',[
                     'client' => $client,
                 ]);
-            }else{return back();}
-        }else{
-            return redirect(route('dashboard'));
-        }
+            }else{return redirect(route('dashboard'));}
+
 
     }
 

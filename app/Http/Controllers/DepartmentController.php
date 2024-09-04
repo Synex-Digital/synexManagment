@@ -18,13 +18,11 @@ class DepartmentController extends Controller
     {
         $departments = Department::aLL();
         $designations = Designation::all();
-        if(!Auth::user()->employees){
+
             if(Auth::user()->can('department.view')){
             return view('dashboard.department.index',['departments' => $departments,'designations' => $designations,]);
-            }else{return back() ;}
-        }else{
-            return redirect(route('dashboard'));
-        }
+            }else{return redirect(route('dashboard')) ;}
+
 
     }
 
