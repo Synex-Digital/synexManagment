@@ -64,7 +64,7 @@
                                         <div class="mb-3 col-md-6">
                                             <label for="formFile" class="form-label">Image</label>
                                              <div class="custom-file">
-                                                <input class="custom-file-input" type="file" id="formFile" name="image" required>
+                                                <input class="custom-file-input" type="file" id="formFile" name="image" >
                                                 <label class="custom-file-label">Upload Image  </label>
                                             </div>
                                         </div>

@@ -25,7 +25,7 @@
                         <h2>{{ $blog->title }}</h2>
                         <h4>{{ $blog->category->name ?? Unknown }}</h4>
 
-                        <b>Published in</b> {{ \Carbon\Carbon::parse($blog->updated_at)->format('d/m/Y') }} — by <b>{{ $blog->author }}</b>
+                        <b>Published in</b> {{ \Carbon\Carbon::parse($blog->updated_at)->format('d/m/Y') }} — by <b>{{ $blog->employee->user->name ?? 'Unknown' }}</b>
                         <p>{!! $blog->content !!}</p>
                         <a href="{{ route('blog.index') }}" class="btn btn-primary">Back</a>
                     </div>

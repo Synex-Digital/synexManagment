@@ -129,7 +129,7 @@
                                 @foreach ($projects as $project)
                                     <tr>
                                         <td><img src="{{ $project->thumbnail_image }}" alt="Thumbnail" width="50"></td>
-                                        <td>{{ $project->category->name ?? 'Unknown' }}</td>
+                                        <td>{{ $project->servicecategory->name ?? 'Unknown' }}</td>
                                         <td>{{ $project->title }}</td>
                                         <td>{{ $project->company_name }}</td>
                                         <td><a href="{{ $project->project_url?? '#' }}">{{ Str::limit($project->project_url) ?? "N/A" }}</a></td>

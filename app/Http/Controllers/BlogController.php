@@ -169,7 +169,7 @@ class BlogController extends Controller
 
         $blog->save();
         flash()->options([ 'position' => 'bottom-right', ])->success('Blog updated successfully');
-        return back();
+        return redirect()->route('blog.index');
     }
 
     /**
