@@ -38,6 +38,7 @@ class BlogController extends Controller
      */
     public function create()
     {
+
         $blog = Blog::all();
         $category = Category::all();
         $employee = Employee::all();
@@ -53,7 +54,8 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        if(auth()->user()->can('blog.create')){
+            $validator = Validator::make($request->all(), [
             'category_id'       => 'required',
             'employee_id'       => 'required',
             'title'             => 'required',
@@ -108,6 +110,10 @@ class BlogController extends Controller
         $blog->save();
         flash()->options([ 'position' => 'bottom-right', ])->success('Blog Created successfully');
         return back();
+        }else{
+            return redirect()->route('dashboard');
+        }
+
     }
 
     /**
@@ -115,7 +121,8 @@ class BlogController extends Controller
      */
     public function show(string $id)
     {
-        $blog = Blog::find($id);
+        if(auth()->user()->can('blog.view')){
+            $blog = Blog::find($id);
         $category = Category::all();
         $employee = Employee::all();
         return view('dashboard.blog.show', [
@@ -123,6 +130,10 @@ class BlogController extends Controller
             'categories'    => $category,
             'employees' =>$employee,
         ]);
+        }else{
+            return redirect()->route('dashboard');
+        }
+
     }
 
     /**
@@ -130,7 +141,8 @@ class BlogController extends Controller
      */
     public function edit(string $id)
     {
-        $blog = Blog::find($id);
+        if(auth()->user()->can('blog.edit')){
+            $blog = Blog::find($id);
         $category = Category::all();
         $employee = Employee::all();
         return view('dashboard.blog.blog_edit', [
@@ -138,6 +150,10 @@ class BlogController extends Controller
             'categories'    => $category,
             'employees' =>$employee,
         ]);
+        }else{
+            return redirect()->route('dashboard');
+        }
+
 
     }
 
@@ -146,7 +162,8 @@ class BlogController extends Controller
      */
     public function update(Request $request, Blog $blog)
     {
-        $request->validate([
+        if(auth()->user()->can('blog.edit')){
+            $request->validate([
             'title'             => 'required',
             'content'           => 'required',
             'slug'              => 'required',
@@ -175,6 +192,10 @@ class BlogController extends Controller
         $blog->save();
         flash()->options([ 'position' => 'bottom-right', ])->success('Blog updated successfully');
         return redirect()->route('blog.index');
+        }else{
+            return redirect()->route('dashboard');
+        }
+
     }
 
     /**
@@ -182,10 +203,15 @@ class BlogController extends Controller
      */
     public function destroy(string $id)
     {
-        $blog = Blog::find($id);
-        Photo::delete($blog->image);
-        $blog->delete();
-        flash()->options([ 'position' => 'bottom-right', ])->success('Blog deleted successfully');
-        return back();
+        if(auth()->user()->can('blog.delete')){
+            $blog = Blog::find($id);
+            Photo::delete($blog->image);
+            $blog->delete();
+            flash()->options([ 'position' => 'bottom-right', ])->success('Blog deleted successfully');
+            return back();
+        }else{
+            return redirect()->route('dashboard');
+        }
+
     }
 }

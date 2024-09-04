@@ -20,6 +20,7 @@
         </ol>
     </div>
 </div>
+
 {{-- category --}}
 <div class="row">
     <div class="col-lg-12">
@@ -88,65 +89,6 @@
         </div>
     </div>
 </div>
-{{-- blog --}}
-<div class="row mb-3">
-    <div class="col-lg-6 col-md-5 col-sm-5">
-        <h3 class="display-5">Blog</h3>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-12">
-        <button type="button" id="addBlogBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#blogCreateModal">
-            <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Blog</button>
-
-    </div>
-    <div class="col-lg-12 mt-5">
-        <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Blog Lists</h4>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="example2" class=" display " style="min-width: 845px">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Image</th>
-                                    <th>Blog Title</th>
-                                    <th>Category Name</th>
-                                    <th>Employee Name</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($blog as $blogs)
-                                    <tr>
-                                        <td>{{$loop->iteration}}</td>
-                                        <td><img src="{{ url('/'. $blogs->image)}}" class="rounded-lg me-2" width="50" alt=""></td>
-                                        <td>{{$blogs->title}} </td>
-                                        <td>{{$blogs->category->name ?? 'Unknown'}} </td>
-                                        <td>{{$blogs->employee->user->name ??    'Unknown'}} </td>
-                                        <td> <span class="badge   {{$blogs->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$blogs->status}}</span> </td>
-                                        <td class="d-flex justify-content-spacebetween">
-                                            <a href="{{ route('blog.show', $blogs->id) }}" class="btn btn-outline-primary  btn-sm  mr-1"><i class="fa fa-eye"></i></a>
-                                            <a href="{{route('blog.edit',$blogs->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
-                                            <form action="{{ route('blog.destroy', $blogs->id) }}" method="POST">
-                                                @method('DELETE')
-                                                @csrf
-                                                <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-        </div>
-    </div>
-</div>
-
  <!--categroy Modal -->
  <div class="modal fade" id="categoryCreateModal" >
     <div class="modal-dialog modal-lg" role="document">
@@ -235,6 +177,67 @@
         </div>
     </div>
 </div>
+
+{{-- blog --}}
+<div class="row mb-3">
+    <div class="col-lg-6 col-md-5 col-sm-5">
+        <h3 class="display-5">Blog</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <button type="button" id="addBlogBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#blogCreateModal">
+            <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Blog</button>
+
+    </div>
+    <div class="col-lg-12 mt-5">
+        <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Blog Lists</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="example2" class=" display " style="min-width: 845px">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Image</th>
+                                    <th>Blog Title</th>
+                                    <th>Category Name</th>
+                                    <th>Employee Name</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($blog as $blogs)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td><img src="{{ url('/'. $blogs->image)}}" class="rounded-lg me-2" width="50" alt=""></td>
+                                        <td>{{$blogs->title}} </td>
+                                        <td>{{$blogs->category->name ?? 'Unknown'}} </td>
+                                        <td>{{$blogs->employee->user->name ??    'Unknown'}} </td>
+                                        <td> <span class="badge   {{$blogs->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$blogs->status}}</span> </td>
+                                        <td class="d-flex justify-content-spacebetween">
+                                            <a href="{{ route('blog.show', $blogs->id) }}" class="btn btn-outline-primary  btn-sm  mr-1"><i class="fa fa-eye"></i></a>
+                                            <a href="{{route('blog.edit',$blogs->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
+                                            <form action="{{ route('blog.destroy', $blogs->id) }}" method="POST">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
  <!--blog Modal -->
  <div class="modal fade" id="blogCreateModal" >
     <div class="modal-dialog modal-xl" role="document">
