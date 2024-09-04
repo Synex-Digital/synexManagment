@@ -229,6 +229,12 @@
 @endsection
 @section('script')
 <script>
+    $(document).ready(function() {
+
+        $('.hamburger').trigger('click');
+    });
+</script>
+<script>
 
     /**
          * Check all the permissions
