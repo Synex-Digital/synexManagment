@@ -15,9 +15,11 @@ class Project extends Model
         return $this->belongsTo(User::class,'leader_id','id');
     }
 
+
     public function members(){
         return $this->belongsTo(User::class,'member_id','id');
     }
+
 
     public function client(){
         return $this->belongsTo(Client::class,'client_id','id');

@@ -12,8 +12,8 @@ class ServiceProjectController extends Controller
 {
     public function index()
     {
-        $categories = ServiceCategory::latest()->paginate(2);
-        $projects = ServiceProject::with('serviceCategory')->latest()->paginate(2);
+        $categories = ServiceCategory::latest()->get();
+        $projects = ServiceProject::with('serviceCategory')->latest()->get();
         return view('dashboard.service_project.index', compact('projects', 'categories'));
     }
 
