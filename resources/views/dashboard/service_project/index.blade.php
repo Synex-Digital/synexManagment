@@ -23,9 +23,10 @@
 {{-- category --}}
 <div class="row">
     <div class="col-lg-12">
-        <button type="button" id="addCategoryBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#categoryCreateModal">
-        <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Category</button>
-
+        @if (auth()->user()->can('service_project.create'))
+            <button type="button" id="addCategoryBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#categoryCreateModal">
+            <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Category</button>
+        @endif
 
         <div id="accordion-one" class="d-inline">
 
@@ -50,7 +51,9 @@
                                             <th>Slug</th>
                                             <th>Description</th>
                                             <th>Status</th>
+                                            @if (auth()->user()->can('service_project.create'))
                                             <th>Actions</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -66,7 +69,7 @@
                                                 </td>
 
 
-
+                                                @if (auth()->user()->can('service_project.create'))
                                                 <td class="d-flex justify-content-spacebetween">
                                                     <a href="{{route('service-categories.edit',$category->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
                                                     <form action="{{  route('service-categories.destroy', $category->id) }}" method="POST">
@@ -76,6 +79,7 @@
                                                     </form>
 
                                                 </td>
+                                                @endif
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -99,11 +103,12 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-12">
-        <button type="button" id="addProjectBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#projectCreateModal">
+    @if (auth()->user()->can('service_project.create'))
+        <div class="col-lg-12">
+            <button type="button" id="addProjectBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#projectCreateModal">
             <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Project</button>
-
-    </div>
+        </div>
+    @endif
     <div class="col-lg-12 mt-5">
         <div class="card">
                 <div class="card-header">
@@ -122,7 +127,9 @@
                                     <th>Project URL</th>
                                     <th>Description</th>
                                     <th>Status</th>
+                                    @if (auth()->user()->can('service_project.edit') || auth()->user()->can('service_project.delete'))
                                     <th>Actions</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -142,13 +149,17 @@
 
                                         <td class="d-flex justify-content-spacebetween">
                                             {{-- <a href="{{ route('service-projects.show', $project->id) }}" class="btn btn-outline-primary  btn-sm  mr-1"><i class="fa fa-eye"></i></a> --}}
+                                            @if (auth()->user()->can('service_project.edit'))
                                             <a href="{{route('service-projects.edit',$project->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
-
+                                            @endif
+                                            @if (auth()->user()->can('service_project.delete'))
                                             <form action="{{ route('service-projects.destroy', $project->id) }}" method="POST">
                                                 @method('DELETE')
                                                 @csrf
                                                 <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
                                             </form>
+
+                                            @endif
 
                                         </td>
                                     </tr>

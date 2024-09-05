@@ -12,9 +12,14 @@ class ServiceProjectController extends Controller
 {
     public function index()
     {
-        $categories = ServiceCategory::latest()->get();
-        $projects = ServiceProject::with('serviceCategory')->latest()->get();
-        return view('dashboard.service_project.index', compact('projects', 'categories'));
+        if(auth()->user()->can('service_project.view')){
+            $categories = ServiceCategory::latest()->get();
+            $projects = ServiceProject::with('serviceCategory')->latest()->get();
+            return view('dashboard.service_project.index', compact('projects', 'categories'));
+        }else{
+            return redirect()->route('dashboard');
+        }
+
     }
 
     public function create()
@@ -64,9 +69,14 @@ class ServiceProjectController extends Controller
 
     public function edit(String $id)
     {
-        $project = ServiceProject::find($id);
-        $categories = ServiceCategory::all();
-        return view('dashboard.service_project.service_project_edit', compact('project', 'categories'));
+        if(auth()->user()->can('service_project.edit')){
+            $project = ServiceProject::find($id);
+            $categories = ServiceCategory::all();
+            return view('dashboard.service_project.service_project_edit', compact('project', 'categories'));
+        }else{
+            return redirect()->route('dashboard');
+        }
+
     }
 
     public function update(Request $request, String $id)
@@ -117,21 +127,31 @@ class ServiceProjectController extends Controller
 
     public function destroy(String $id)
     {
-        $project = ServiceProject::find($id);
-        if ($project->thumbnail_image) {
-            Photo::delete($project->thumbnail_image);
+        if(auth()->user()->can('service_project.delete')){
+            $project = ServiceProject::find($id);
+            if ($project->thumbnail_image) {
+                Photo::delete($project->thumbnail_image);
+            }
+            $project->delete();
+            flash()->options([ 'position' => 'bottom-right', ])->success('Project Deleted successfully');
+            return back();
+        }else{
+            return redirect()->route('dashboard');
         }
-        $project->delete();
-        flash()->options([ 'position' => 'bottom-right', ])->success('Project Deleted successfully');
-        return back();
+
     }
     public function toggleStatus($id)
     {
-        $project = ServiceProject::findOrFail($id);
-        $project->is_active = !$project->is_active;  // Toggle the status
-        $project->save();
+        if(auth()->user()->can('service_project.edit')){
+            $project = ServiceProject::findOrFail($id);
+            $project->is_active = !$project->is_active;  // Toggle the status
+            $project->save();
 
-        // Return the new status as a JSON response
-        return response()->json(['status' => $project->is_active ? 'active' : 'inactive']);
+            // Return the new status as a JSON response
+            return response()->json(['status' => $project->is_active ? 'active' : 'inactive']);
+        }else{
+            return redirect()->route('dashboard');
+        }
+
     }
 }
