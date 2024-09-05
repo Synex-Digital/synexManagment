@@ -43,6 +43,8 @@ class RolePermissionSeeder extends Seeder
             [
                 'group_name' => 'dashboard',
                 'permissions' => [
+                    // Dashboard Permissions
+                    'dashboard.overView',
                     'dashboard.earnings',
                     'dashboard.expenses',
                     'dashboard.profit',
@@ -133,7 +135,29 @@ class RolePermissionSeeder extends Seeder
 
                 ]
             ],
-            
+            [
+                'group_name' => 'blog',
+                'permissions' => [
+                    // admin Permissions
+                    'blog.view',
+                    'blog.create',
+                    'blog.edit',
+                    'blog.delete',
+
+                ]
+            ],
+            [
+                'group_name' => 'service_project',
+                'permissions' => [
+                    // admin Permissions
+                    'service_project.view',
+                    'service_project.create',
+                    'service_project.edit',
+                    'service_project.delete',
+
+                ]
+            ],
+
 
         ];
 

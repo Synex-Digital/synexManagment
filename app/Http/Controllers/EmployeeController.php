@@ -21,7 +21,6 @@ class EmployeeController extends Controller
         $departments = Department::all();
         $users = User::all();
         $user= Auth::user();
-        if(!Auth::user()->employees){
             if($user->can('employee.view')){
                 return view('dashboard.employee.index',[
                     'departments' => $departments,
@@ -29,12 +28,10 @@ class EmployeeController extends Controller
 
                 ]);
             }else{
-                return back();
+                return redirect(route('dashboard'));
             }
 
-        }else{
-            return redirect(route('dashboard'));
-        }
+
 
     }
 
@@ -101,15 +98,12 @@ class EmployeeController extends Controller
     public function show(string $id)
     {
         $user = User::find($id);
-        if(!Auth::user()->employees){
             if(Auth::user()->can('employee.profile')){
             return view('dashboard.employee.profile',[
                 'user' => $user,
             ]);
-            }else{return back();}
-        }else{
-            return redirect(route('dashboard'));
-        }
+            }else{return redirect(route('dashboard'));}
+
 
     }
 

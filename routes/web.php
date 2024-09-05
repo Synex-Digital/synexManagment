@@ -40,12 +40,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/search/client', [ClientController::class, 'searchClient'])->name('searchClient');
  //jquery
     Route::get('/get-designations/{departmentId}', [EmployeeController::class, 'getDesignations']);
+    Route::get('/get-project-members/{id}',[ProjectController::class, 'getMemebers'])->name('project_members');
 //project file delete and downoad
     Route::get('project/file/delete/{id}/{key}', [ProjectController::class, 'fileDelete'])->name('projectFile.delete');
     Route::get('/download/{filename}', [ProjectController::class, 'downloadFile'])->name('download');
     Route::get('/project_overview/{id}',[ProjectController::class, 'employeeProjectShow'])->name('employee.project.overview');
     Route::post('/project-member-update',[ProjectController::class, 'employee_udpate'])->name('project_member_update');
     Route::post('/project-member-delete/{id}',[ProjectController::class, 'employee_delete'])->name('member_delete');
+    Route::get('/my-project-lists',[ProjectController::class, 'employee_project'])->name('my_project.index');
+
 //
     Route::get('/user/delete/{id}', [HomeController::class, 'userDelete'])->name('user.delete');
     Route::get('/users', [HomeController::class, 'users'])->name('users');

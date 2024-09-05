@@ -18,14 +18,19 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blog = Blog::all();
-        $category = Category::all();
-        $employee = Employee::all();
-        return view('dashboard.blog.index', [
-            'blog'          => $blog,
-            'category'    => $category,
-            'employees'    =>$employee,
-        ]);
+        if(auth()->user()->can('blog.view')){
+            $blog = Blog::all();
+            $category = Category::all();
+            $employee = Employee::all();
+            return view('dashboard.blog.index', [
+                'blog'          => $blog,
+                'category'    => $category,
+                'employees'    =>$employee,
+            ]);
+        }else{
+            return redirect()->route('dashboard');
+        }
+
     }
 
     /**
