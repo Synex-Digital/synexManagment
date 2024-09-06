@@ -70,11 +70,11 @@
 
                                             @if (auth()->user()->can('blog.create'))
                                             <td class="d-flex justify-content-spacebetween">
-                                                <a href="{{route('category.edit',$categories->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
+                                                <a  href="{{route('category.edit',$categories->id) }}" title="Edit" class="  btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
                                                 <form action="{{ route('category.destroy', $categories->id) }}" method="POST">
                                                     @method('DELETE')
                                                     @csrf
-                                                    <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                                    <button type="submit" title="Delete" class="  btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
                                                 </form>
 
                                             </td>
@@ -366,6 +366,8 @@
 <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
 <script>
+
+
     //color change for category add btn
     $('#addCategoryBtn').on('click',function(){
         if($(this).hasClass('btn-primary')){
@@ -401,6 +403,9 @@
             $(this).addClass('btn-primary');
         }
     });
+
+
+
 </script>
 @endsection
 @section('summernote')

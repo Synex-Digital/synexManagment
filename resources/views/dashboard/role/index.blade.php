@@ -76,7 +76,7 @@
 
                 </div>
                 <div class="mb-3 ">
-                   <button class=" float-right btn btn-primary btn-sm ">Create</button>
+                   <button class=" float-right btn btn-outline-primary " style="font-size: 11px !important;">Create</button>
                 </div>
             </form>
         </div>
@@ -116,7 +116,7 @@
                 </div>
 
                 <div class="mt-3">
-                    <button type="submit" class="btn btn-sm btn-primary float-right">Assign</button>
+                    <button type="submit" class=" float-right btn btn-outline-primary " style="font-size: 11px !important;">Assign</button>
                 </div>
             </form>
         </div>
