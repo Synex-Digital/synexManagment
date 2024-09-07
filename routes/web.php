@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\CustomerSupportController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
@@ -54,7 +55,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users', [HomeController::class, 'users'])->name('users');
     Route::post('/user/store', [HomeController::class, 'userStore'])->name('user.store');
 //customer
-    Route::get('web/support', [Customer::class, 'support'])->name('web.support');
+    Route::get('web/support', [CustomerSupportController::class, 'support'])->name('web.support');
 //dashboard
     Route::get('/index', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/app/setting',[DashboardController::class, 'showAppSetting'])->name('dashboard.showSetting');
