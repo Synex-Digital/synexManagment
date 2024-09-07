@@ -54,6 +54,7 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
+        
         if(auth()->user()->can('blog.create')){
             $validator = Validator::make($request->all(), [
             'category_id'       => 'required',

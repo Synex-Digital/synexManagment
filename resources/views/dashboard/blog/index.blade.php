@@ -316,9 +316,8 @@
                         </div>
                         <div class="form-group col-lg-6 col-md-6">
                             <label class=" form-label">Author Name</label>
-                            <select name="employee_id" class="form-control" required disabled>
-                                <option value="{{auth()->user()->id}}">{{auth()->user()->name}}</option>
-                            </select>
+                            <input type="text" class="form-control " value="{{ Auth::user()->name }}" name="" id="" readonly>
+                            <input type="hidden"  value="{{ Auth::user()->id }}" name="employee_id" >
                         </div>
 
                         <div class="form-group col-lg-6 col-md-6">
@@ -338,7 +337,7 @@
 
                         <div class="form-group col-lg-12 col-md-12">
                             <label class="col-form-label">Content</label>
-                            <textarea id="summernote" class="form-control" name="content"></textarea>
+                            <textarea id="summernote" class="form-control" name="content">{{ old('content') }}</textarea>
 
                         </div>
 
