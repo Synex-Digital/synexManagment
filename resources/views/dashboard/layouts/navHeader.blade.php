@@ -51,6 +51,8 @@
                         <ul class="navbar-nav header-right">
                             <li class="nav-item dropdown notification_dropdown text-dark">
                                {{ Auth::user()->name }}
+                               ({{ Auth::user()->roles->first()->name ?? '' }})
+
 
                             </li>
 
