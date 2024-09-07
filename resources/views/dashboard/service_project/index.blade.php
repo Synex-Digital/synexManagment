@@ -72,10 +72,11 @@
                                                 @if (auth()->user()->can('service_project.create'))
                                                 <td class="d-flex justify-content-spacebetween">
                                                     <a href="{{route('service-categories.edit',$category->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
-                                                    <form action="{{  route('service-categories.destroy', $category->id) }}" method="POST">
+                                                    <a href="{{  route('service-categories.destroy', $category->id) }}" data-toggle="modal" data-target="#deleteModal" title="Delete" class=" btn btn-outline-danger btn-sm  deleteBtn  "> <i class="fa fa-trash "></i></a>
+                                                    <form action="" method="POST">
                                                         @method('DELETE')
                                                         @csrf
-                                                        <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                                        <button type="submit" </button>
                                                     </form>
 
                                                 </td>
@@ -153,10 +154,11 @@
                                             <a href="{{route('service-projects.edit',$project->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
                                             @endif
                                             @if (auth()->user()->can('service_project.delete'))
-                                            <form action="{{ route('service-projects.destroy', $project->id) }}" method="POST">
+                                            <a href="{{ route('service-projects.destroy', $project->id) }}" data-toggle="modal" data-target="#deleteModal" title="Delete" class=" btn btn-outline-danger btn-sm  deleteBtn "> <i class="fa fa-trash "></i></a>
+                                            <form action="" method="POST">
                                                 @method('DELETE')
                                                 @csrf
-                                                <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                                <button type="submit"</button>
                                             </form>
 
                                             @endif
@@ -302,6 +304,11 @@
 <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
 <script>
+     $('body').on('click', '.deleteBtn', function () {
+        var val = $(this).attr('href');
+        $('#deleteModalForm').attr('action', val);
+
+        });
     function toggleStatus(id, element) {
 
         fetch(`/service-category/toggle-status/${id}`, {

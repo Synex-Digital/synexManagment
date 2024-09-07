@@ -208,7 +208,7 @@
                                                 @csrf
                                             </form>
                                             @else
-                                            <span class="btn btn-dark btn-sm text-dark"> <i class="fa fa-trash "></i></span>
+                                            <span class="btn btn-dark btn-sm text-white"> <i class="fa fa-trash  "></i></span>
                                         @endif
                                     @endif
                                 </td>
