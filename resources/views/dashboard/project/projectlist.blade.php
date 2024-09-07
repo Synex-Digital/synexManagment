@@ -96,9 +96,15 @@
                             <tbody>
                                 @foreach ($projects as $data )
                                     <tr>
-                                        <td>{{$loop->iteration}}</td>
-                                        <td>{{$data->name}} </td>
-                                        <td>{{$data->leader? $data->leader->name : 'UNASSIGNED'}}</td>
+                                        <td class="text-dark">{{$loop->iteration}}</td>
+                                        <td class="text-dark">{{$data->name}} </td>
+                                        <td class="text-dark">
+                                            @if($data->leader)
+                                            <a href="{{ route('employee.show', $data->leader->id)  }}">{{ $data->leader->name  }}</a>
+                                            @else
+                                            {{ 'UNASSIGNED' }}
+                                            @endif
+                                        </td>
                                         <td>
                                             <span class="badge badge-light text-primary badge-xs" style="font-size: 10px">{{dateConvert($data->dateRange)}}</span>
                                            <span class="badge badge-light text-info badge-xs"> {{ dateLeft($data->dateRange, $data->status) }}</span>

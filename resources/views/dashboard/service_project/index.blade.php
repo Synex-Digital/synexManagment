@@ -59,9 +59,9 @@
                                     <tbody>
                                         @foreach ($categories as $category)
                                             <tr>
-                                                <td>{{ $category->name }}</td>
-                                                <td>{{ $category->slug }}</td>
-                                                <td>{{ $category->description }}</td>
+                                                <td class="text-dark">{{ $category->name }}</td>
+                                                <td class="text-dark">{{ $category->slug }}</td>
+                                                <td class="text-dark">{{ $category->description }}</td>
                                                 <td id="category-status-{{ $category->id }}">
                                                     <span id='badge' class="badge   badge-outline-success" onclick="toggleStatus({{ $category->id }}, this)" style="cursor: pointer; ">
                                                         {{ $category->is_active ? 'active' : 'inactive' }}
@@ -135,12 +135,12 @@
                             <tbody>
                                 @foreach ($projects as $project)
                                     <tr>
-                                        <td><img src="{{ $project->thumbnail_image }}" alt="Thumbnail" width="50"></td>
-                                        <td>{{ $project->servicecategory->name ?? 'Unknown' }}</td>
-                                        <td>{{ $project->title }}</td>
-                                        <td>{{ $project->company_name }}</td>
-                                        <td><a href="{{ $project->project_url?? '#' }}">{{ Str::limit($project->project_url) ?? "N/A" }}</a></td>
-                                        <td>{{ Str::limit($project->short_description, 20) }}</td>
+                                        <td class="text-dark"><img src="{{ $project->thumbnail_image }}" alt="Thumbnail" width="50"></td>
+                                        <td class="text-dark">{{ $project->servicecategory->name ?? 'Unknown' }}</td>
+                                        <td class="text-dark">{{ $project->title }}</td>
+                                        <td class="text-dark">{{ $project->company_name }}</td>
+                                        <td ><a  href="{{ $project->project_url?? '#' }}">{{ Str::limit($project->project_url) ?? "N/A" }}</a></td>
+                                        <td class="text-dark">{{ Str::limit($project->short_description, 20) }}</td>
                                         <td id="project-status-{{ $project->id }}">
                                             <span class="badgeBtn badge   badge-outline-success  " onclick="toggleProjectStatus({{ $project->id }}, this)" style="cursor: pointer;">
                                                 {{ $project->is_active ? 'active' : 'inactive' }}
