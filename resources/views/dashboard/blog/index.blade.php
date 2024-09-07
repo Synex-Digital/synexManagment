@@ -24,8 +24,10 @@
 {{-- category --}}
 <div class="row">
     <div class="col-lg-12">
-        <button type="button" id="addCategoryBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#categoryCreateModal">
-        <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Category</button>
+        @if (auth()->user()->can('blog.create'))
+            <button type="button" id="addCategoryBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#categoryCreateModal">
+            <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Category</button>
+        @endif
 
 
         <div id="accordion-one" class="d-inline">
@@ -51,7 +53,9 @@
                                         <th>Image</th>
                                         <th>Name</th>
                                         <th>Status</th>
+                                        @if (auth()->user()->can('blog.create'))
                                         <th>Action</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,15 +69,17 @@
                                             <td> <span class="badge   {{$categories->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$categories->status}}</span> </td>
 
 
+                                            @if (auth()->user()->can('blog.create'))
                                             <td class="d-flex justify-content-spacebetween">
-                                                <a href="{{route('category.edit',$categories->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
+                                                <a  href="{{route('category.edit',$categories->id) }}" title="Edit" class="  btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
                                                 <form action="{{ route('category.destroy', $categories->id) }}" method="POST">
                                                     @method('DELETE')
                                                     @csrf
-                                                    <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                                    <button type="submit" title="Delete" class="  btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
                                                 </form>
 
                                             </td>
+                                            @endif
 
 
                                         </tr>
@@ -356,6 +362,8 @@
 <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
 <script>
+
+
     //color change for category add btn
     $('#addCategoryBtn').on('click',function(){
         if($(this).hasClass('btn-primary')){
@@ -391,6 +399,9 @@
             $(this).addClass('btn-primary');
         }
     });
+
+
+
 </script>
 @endsection
 @section('summernote')
