@@ -52,7 +52,7 @@ class DashboardController extends Controller
             $percentageProfit = round($percentageProfit, 2);
             //////////////
             $project_count = DB::table('projects')->count();
-            $projects = Project::orderBy('id','desc')->take(4)->get();
+            $projects = Project::orderBy('id','desc')->take(7)->get();
             $project_pending = DB::table('projects')->where('status','!=','COMPLETED')->count();
             //////////////////
             $employee = DB::table('employees')->count();

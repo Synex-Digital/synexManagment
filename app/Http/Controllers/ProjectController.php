@@ -33,7 +33,7 @@ class ProjectController extends Controller
     }
     public function employee_project()
     {
-        if(auth()->user()->employees && auth()->user()->can('project.view')){
+        if(auth()->user()->employees ){
             $projects = Project::orderBy('id', 'desc')->get();
             $user = Auth::user();
             $projects = $user->allProjects();

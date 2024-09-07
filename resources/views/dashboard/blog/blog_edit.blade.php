@@ -1,11 +1,60 @@
 @extends('dashboard.layouts.app')
 
-@section('style')
+@section('summernote-style')
     <!-- include libraries(jQuery, bootstrap) -->
 
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    <style>
+        .note-editor .note-editing-area .note-editable ul {
+            display: block !important;
+            margin-block-start: 1em !important;
+            margin-block-end:  1em !important;
+            margin-inline-start: 0px !important;
+            margin-inline-end:  0px  !important;
+            padding-inline-start: 40px !important;
+            unicode-bidi: isolate !important
+        }
+        .note-editor .note-editing-area .note-editable ul li{
+
+            display: list-item !important;
+            text-align: -webkit-match-parent !important;
+            list-style-type: disc !important;
+
+        }
+        .note-editor .note-editing-area .note-editable ul li::marker{
+            color:#3B82F6 !important;
+        }
+       .note-editor .note-editing-area .note-editable ol {
+            display: block !important;
+            margin-block-start: 1em !important;
+            margin-block-end:  1em !important;
+            margin-inline-start: 0px !important;
+            margin-inline-end:  0px  !important;
+            padding-inline-start: 40px !important;
+            unicode-bidi: isolate !important
+        }
+        .note-editor .note-editing-area .note-editable ol li{
+
+            display: list-item !important;
+            text-align: -webkit-match-parent !important;
+            list-style-type: decimal !important;
+        }
+        .note-editor .note-editing-area .note-editable ol li::marker{
+            color:#3B82F6 !important;
+        }
+        .note-editor .note-editing-area .note-editable blockquote {
+            background: #3b82f61c;
+            color: #000;
+            padding-left: 1rem;
+            padding-top: 14px;
+            padding-bottom: 1px;
+            border-left: 6px solid #3b82f6;
+            border-radius: 5px 0px 0px 5px;
+        }
+    </style>
+
 @endsection
 
 @section('content')
@@ -78,7 +127,7 @@
                                         <div class="form-group col-md-6">
                                             <label class=" col-form-label">Blog Slug</label>
 
-                                                <input type="text" class="form-control @error('slug') is-invalid @enderror" value="{{ $blog->slug }}" name="slug">
+                                                <input id="slug" type="text" class="form-control @error('slug') is-invalid @enderror" value="{{ $blog->slug }}" name="slug">
 
                                         </div>
 
@@ -148,6 +197,23 @@
 @endsection
 @section('script')
 <script>
+        $(document).ready(function() {
+        $('#slug').on('input', function() {
+            var title = $(this).val();
+            var slug = generateSlug(title);
+            $('#slug').val(slug);
+        });
+
+        function generateSlug(title) {
+            return title
+                .toLowerCase()                // Convert to lowercase
+                .replace(/ /g, '-')           // Replace spaces with dashes
+                .replace(/[^\w\-]+/g, '')     // Remove non-alphanumeric characters except dashes
+                .replace(/\-\-+/g, '-')       // Replace multiple dashes with a single dash
+                .trim();                      // Trim leading and trailing dashes
+        }
+    });
+
     $(document).ready(function() {
 
         $('.hamburger').trigger('click');
@@ -168,7 +234,21 @@
         ['table', ['table']],
         ['insert', ['link', 'picture', 'video']],
         ['view', ['fullscreen', 'codeview', 'help']]
-      ]
+      ],
+      callbacks: {
+                onPaste: function(e) {
+                    // Prevent the default paste behavior
+                    e.preventDefault();
+
+                    // Get the text content from the clipboard
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData)
+                        .getData('Text');
+
+                    // Insert plain text into the editor
+                    document.execCommand('insertText', false, bufferText);
+                }
+            }
     });
 </script>
+
 @endsection

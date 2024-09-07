@@ -216,11 +216,8 @@
                         </div>
 
                         <div class="mb-3">
-
-
-
-                            <button class="btn  btn-outline-primary float-right" style="font-size: 11px;">Create Project</button>
                         </div>
+                        <button type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Create Project</button>
                     </form>
                 </div>
             </div>

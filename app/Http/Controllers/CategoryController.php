@@ -17,7 +17,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-    
+
         return view('dashboard.category.index');
     }
 
@@ -37,37 +37,42 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-       $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'slug' => 'required',
-       ],[
-        'name' => 'Category name required',
-        'slug' => 'Category slug required',
-       ]);
-       if ($validator->fails()) {
-        $errors = $validator->errors();
-        foreach ($errors->messages() as  $messages) {
-            foreach ($messages as $message) {
-                flash()->options([
-                    'position' => 'bottom-right',
-                ])->error($message);
+        if(auth()->user()->can('blog.create')){
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'slug' => 'required',
+            ],[
+                'name' => 'Category name required',
+                'slug' => 'Category slug required',
+            ]);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            foreach ($errors->messages() as  $messages) {
+                foreach ($messages as $message) {
+                    flash()->options([
+                        'position' => 'bottom-right',
+                    ])->error($message);
+                }
             }
-        }
-        return back()->withErrors($validator)->withInput();
+            return back()->withErrors($validator)->withInput();
+            }
+
+            $category = new Category();
+            Photo::upload($request->image, 'uploads/blog/photo/category', 'CAT', [640, 480]);
+            $category->name             = $request->name;
+            $category->seo_title        = $request->seo_title;
+            $category->seo_description  = $request->seo_description;
+            $category->seo_tags         = $request->seo_tags;
+            $category->image            = Photo::$name?Photo::$name:'Null';
+            $category->status           = $request->status;
+            $category->slug             = $request->slug ;
+            $category->save();
+            flash()->options([ 'position' => 'bottom-right', ])->success('Category created successfully');
+            return back();
+        }else{
+            return redirect()->route('dashboard');
         }
 
-        $category = new Category();
-        Photo::upload($request->image, 'uploads/blog/photo/category', 'CAT', [640, 480]);
-        $category->name             = $request->name;
-        $category->seo_title        = $request->seo_title;
-        $category->seo_description  = $request->seo_description;
-        $category->seo_tags         = $request->seo_tags;
-        $category->image            = Photo::$name?Photo::$name:'Null';
-        $category->status           = $request->status;
-        $category->slug             = $request->slug ;
-        $category->save();
-        flash()->options([ 'position' => 'bottom-right', ])->success('Category created successfully');
-        return back();
     }
 
     /**
@@ -83,11 +88,16 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
+        if(auth()->user()->can('blog.create')){
+            $category = Category::find($id);
+            return view('dashboard.blog.category_edit', [
+                'category' => $category,
+            ]);
+        }else{
+            return redirect()->route('dashboard');
+        }
 
-        $category = Category::find($id);
-        return view('dashboard.blog.category_edit', [
-            'category' => $category,
-        ]);
+
     }
 
     /**
@@ -125,10 +135,15 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Category::find($id);
-        Photo::delete($category->image);
-        $category->delete();
-        flash()->options([ 'position' => 'bottom-right', ])->success('Category Deleted successfully');
-        return back();
+        if(auth()->user()->can('blog.create')){
+            $category = Category::find($id);
+            Photo::delete($category->image);
+            $category->delete();
+            flash()->options([ 'position' => 'bottom-right', ])->success('Category Deleted successfully');
+            return back();
+        }else{
+            return redirect()->route('dashboard');
+        }
+
     }
 }

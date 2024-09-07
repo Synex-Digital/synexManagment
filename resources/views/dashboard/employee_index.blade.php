@@ -1,6 +1,5 @@
 @extends('dashboard.layouts.app')
 @php
-
         function endDate($date){
         // Assuming $data->dateRange contains the date string "05/21/2024 - 05/22/2024"
         $dateRange = $date;
@@ -24,7 +23,7 @@
 <div class="row">
     <div class="col-lg-5">
         <div class="row">
-            @if (auth()->user()->can('project.view'))
+
             <div class=" col-lg-6 col-sm-6 col-md-6">
                 <div class="card">
                     <div class="card-body">
@@ -48,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            @endif
+
         </div>
         <div class="card">
             <div class="card-body">
@@ -56,7 +55,7 @@
             </div>
         </div>
     </div>
-        @if (auth()->user()->can('project.view'))
+
             <div class="col-lg-7">
                 <div class="card">
                     <div class="card-header">
@@ -166,7 +165,7 @@
 
                         <!-- /# card -->
             </div>
-        @endif
+
     </div>
 
 

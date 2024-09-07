@@ -1,6 +1,7 @@
 
 @php
-    $hasEmployeePermissions = Auth::user()->can('employee.view') && Auth::user()->can('client.view') && Auth::user()->can('project.view') && Auth::user()->can('department.view') && Auth::user()->can('blog.view') && Auth::user()->can('service_project.view');
+    $hasEmployeePermissions = Auth::user()->can('employee.view') || Auth::user()->can('client.view') || Auth::user()->can('project.view') || Auth::user()->can('department.view') || Auth::user()->can('blog.view') || Auth::user()->can('service_project.view') || Auth::user()->can('expenses.view');
+    $hrm = Auth::user()->can('employee.view') || Auth::user()->can('client.view') || Auth::user()->can('project.view') || Auth::user()->can('department.view')  || Auth::user()->can('service_project.view') || Auth::user()->can('expenses.view');
 @endphp
 
 <!--**********************************
@@ -14,11 +15,10 @@
                         {{-- <i class="fa fa-tachometer"></i> --}}
                         <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.4 3H5.6A1.6 1.6 0 0 0 4 4.6v4.8A1.6 1.6 0 0 0 5.6 11h2.8A1.6 1.6 0 0 0 10 9.4V4.6A1.6 1.6 0 0 0 8.4 3Z" fill="#ffffff" stroke="#000000" stroke-width="1.5" stroke-miterlimit="10"/><path d="M8.4 15H5.6A1.6 1.6 0 0 0 4 16.6v2.8A1.6 1.6 0 0 0 5.6 21h2.8a1.6 1.6 0 0 0 1.6-1.6v-2.8A1.6 1.6 0 0 0 8.4 15ZM18.4 3h-2.8A1.6 1.6 0 0 0 14 4.6v2.8A1.6 1.6 0 0 0 15.6 9h2.8A1.6 1.6 0 0 0 20 7.4V4.6A1.6 1.6 0 0 0 18.4 3Z" fill="#000000" fill-opacity=".16" stroke="#000000" stroke-width="1.5" stroke-miterlimit="10"/><path d="M18.4 13h-2.8a1.6 1.6 0 0 0-1.6 1.6v4.8a1.6 1.6 0 0 0 1.6 1.6h2.8a1.6 1.6 0 0 0 1.6-1.6v-4.8a1.6 1.6 0 0 0-1.6-1.6Z" fill="#ffffff" stroke="#000000" stroke-width="1.5" stroke-miterlimit="10"/></svg>
                         <span class="nav-text text-dark">Dashboard</span></a>
-                        
-                        <li class="nav-label first text-dark">WORK SPACE</li>
-                   @if (Auth::user()->employees && auth()->user()->can('project.view'))
 
-                    <li><a href="{{route('my_project.index')}}">
+                        <li class="nav-label first text-dark">WORK SPACE</li>
+                   @if (Auth::user()->employees)
+                        <li><a href="{{route('my_project.index')}}">
                         {{-- <i class="fa fa-line-chart"></i> --}}
                         <svg width="22px" height="22px" style="margin-right: 6px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M20 14C21.1046 14 22 13.1046 22 12C22 10.8954 21.1046 10 20 10C18.8954 10 18 10.8954 18 12C18 13.1046 18.8954 14 20 14Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -61,7 +61,10 @@
                             <span class="nav-text text-dark">Blogs</span></a></li>
 
                         @endif
-                            <li class="nav-label first text-dark">HRM</li>
+                        @if ($hrm)
+
+                        <li class="nav-label first text-dark">HRM</li>
+                        @endif
                             @if (Auth::user()->can('employee.view'))
                             <li><a href="{{route('employee.index')}}">
                                 <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -195,9 +198,9 @@
                         </svg>
                     <span class="nav-text text-dark">Settings</span></a>
                         <ul aria-expanded="false">
-                            @if (Auth::user()->can('user.view'))
+                            {{-- @if (Auth::user()->can('user.view'))
                                 <li><a href="{{route('users')}}">User</a></li>
-                            @endif
+                            @endif --}}
                             @if (Auth::user()->can('role.view'))
                                 <li><a href="{{route('role.index')}}">Role Management</a></li>
                             @endif

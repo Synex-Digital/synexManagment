@@ -1,9 +1,57 @@
 @extends('dashboard.layouts.app')
-@section('style')
+@section('summernote-style')
 <link href="{{asset('dashboard_assets/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<style>
+    .note-editor .note-editing-area .note-editable ul {
+        display: block !important;
+        margin-block-start: 1em !important;
+        margin-block-end:  1em !important;
+        margin-inline-start: 0px !important;
+        margin-inline-end:  0px  !important;
+        padding-inline-start: 40px !important;
+        unicode-bidi: isolate !important
+    }
+    .note-editor .note-editing-area .note-editable ul li{
+
+        display: list-item !important;
+        text-align: -webkit-match-parent !important;
+        list-style-type: disc !important;
+
+    }
+    .note-editor .note-editing-area .note-editable ul li::marker{
+        color:#3B82F6 !important;
+    }
+   .note-editor .note-editing-area .note-editable ol {
+        display: block !important;
+        margin-block-start: 1em !important;
+        margin-block-end:  1em !important;
+        margin-inline-start: 0px !important;
+        margin-inline-end:  0px  !important;
+        padding-inline-start: 40px !important;
+        unicode-bidi: isolate !important
+    }
+    .note-editor .note-editing-area .note-editable ol li{
+
+        display: list-item !important;
+        text-align: -webkit-match-parent !important;
+        list-style-type: decimal !important;
+    }
+    .note-editor .note-editing-area .note-editable ol li::marker{
+        color:#3B82F6 !important;
+    }
+    .note-editor .note-editing-area .note-editable blockquote {
+        background: #3b82f61c;
+        padding-left: 1rem;
+        color: #000;
+        padding-top: 14px;
+        padding-bottom: 1px;
+        border-left: 6px solid #3b82f6;
+        border-radius: 5px 0px 0px 5px;
+    }
+</style>
 
 
 @endsection
@@ -20,11 +68,14 @@
         </ol>
     </div>
 </div>
+
 {{-- category --}}
 <div class="row">
     <div class="col-lg-12">
-        <button type="button" id="addCategoryBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#categoryCreateModal">
-        <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Category</button>
+        @if (auth()->user()->can('blog.create'))
+            <button type="button" id="addCategoryBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#categoryCreateModal">
+            <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Category</button>
+        @endif
 
 
         <div id="accordion-one" class="d-inline">
@@ -50,7 +101,9 @@
                                         <th>Image</th>
                                         <th>Name</th>
                                         <th>Status</th>
+                                        @if (auth()->user()->can('blog.create'))
                                         <th>Action</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -64,15 +117,17 @@
                                             <td> <span class="badge   {{$categories->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$categories->status}}</span> </td>
 
 
+                                            @if (auth()->user()->can('blog.create'))
                                             <td class="d-flex justify-content-spacebetween">
-                                                <a href="{{route('category.edit',$categories->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
+                                                <a  href="{{route('category.edit',$categories->id) }}" title="Edit" class="  btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
                                                 <form action="{{ route('category.destroy', $categories->id) }}" method="POST">
                                                     @method('DELETE')
                                                     @csrf
-                                                    <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                                    <button type="submit" title="Delete" class="  btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
                                                 </form>
 
                                             </td>
+                                            @endif
 
 
                                         </tr>
@@ -88,65 +143,6 @@
         </div>
     </div>
 </div>
-{{-- blog --}}
-<div class="row mb-3">
-    <div class="col-lg-6 col-md-5 col-sm-5">
-        <h3 class="display-5">Blog</h3>
-    </div>
-</div>
-<div class="row">
-    <div class="col-lg-12">
-        <button type="button" id="addBlogBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#blogCreateModal">
-            <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Blog</button>
-
-    </div>
-    <div class="col-lg-12 mt-5">
-        <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Blog Lists</h4>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="example2" class=" display " style="min-width: 845px">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Image</th>
-                                    <th>Blog Title</th>
-                                    <th>Category Name</th>
-                                    <th>Employee Name</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($blog as $blogs)
-                                    <tr>
-                                        <td>{{$loop->iteration}}</td>
-                                        <td><img src="{{ url('/'. $blogs->image)}}" class="rounded-lg me-2" width="50" alt=""></td>
-                                        <td>{{$blogs->title}} </td>
-                                        <td>{{$blogs->category->name ?? 'Unknown'}} </td>
-                                        <td>{{$blogs->employee->user->name ??    'Unknown'}} </td>
-                                        <td> <span class="badge   {{$blogs->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$blogs->status}}</span> </td>
-                                        <td class="d-flex justify-content-spacebetween">
-                                            <a href="{{ route('blog.show', $blogs->id) }}" class="btn btn-outline-primary  btn-sm  mr-1"><i class="fa fa-eye"></i></a>
-                                            <a href="{{route('blog.edit',$blogs->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
-                                            <form action="{{ route('blog.destroy', $blogs->id) }}" method="POST">
-                                                @method('DELETE')
-                                                @csrf
-                                                <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-        </div>
-    </div>
-</div>
-
  <!--categroy Modal -->
  <div class="modal fade" id="categoryCreateModal" >
     <div class="modal-dialog modal-lg" role="document">
@@ -235,6 +231,67 @@
         </div>
     </div>
 </div>
+
+{{-- blog --}}
+<div class="row mb-3">
+    <div class="col-lg-6 col-md-5 col-sm-5">
+        <h3 class="display-5">Blog</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <button type="button" id="addBlogBtn" class="btn btn-rounded btn-primary mr-3" data-toggle="modal" data-target="#blogCreateModal">
+            <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Blog</button>
+
+    </div>
+    <div class="col-lg-12 mt-5">
+        <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Blog Lists</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="example2" class=" display " style="min-width: 845px">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Image</th>
+                                    <th>Blog Title</th>
+                                    <th>Category Name</th>
+                                    <th>Employee Name</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($blog as $blogs)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td><img src="{{ url('/'. $blogs->image)}}" class="rounded-lg me-2" width="50" alt=""></td>
+                                        <td>{{$blogs->title}} </td>
+                                        <td>{{$blogs->category->name ?? 'Unknown'}} </td>
+                                        <td>{{$blogs->employee->user->name ??    'Unknown'}} </td>
+                                        <td> <span class="badge   {{$blogs->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$blogs->status}}</span> </td>
+                                        <td class="d-flex justify-content-spacebetween">
+                                            <a href="{{ route('blog.show', $blogs->id) }}" class="btn btn-outline-primary  btn-sm  mr-1"><i class="fa fa-eye"></i></a>
+                                            <a href="{{route('blog.edit',$blogs->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
+                                            <form action="{{ route('blog.destroy', $blogs->id) }}" method="POST">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+
  <!--blog Modal -->
  <div class="modal fade" id="blogCreateModal" >
     <div class="modal-dialog modal-xl" role="document">
@@ -258,12 +315,9 @@
                             </select>
                         </div>
                         <div class="form-group col-lg-6 col-md-6">
-                            <label class=" form-label">Employee Name</label>
-                            <select name="employee_id" class="form-control" required>
-                                @foreach ($employees as $employee)
-                                    <option value="{{ $employee->id }}">{{ $employee->user ?$employee->user->name:'' }}</option>
-                                @endforeach
-                                <option value="" disabled>If employee is not in the list, than firstly add the category's information</option>
+                            <label class=" form-label">Author Name</label>
+                            <select name="employee_id" class="form-control" required disabled>
+                                <option value="{{auth()->user()->id}}">{{auth()->user()->name}}</option>
                             </select>
                         </div>
 
@@ -291,7 +345,7 @@
                         <div class="form-group col-md-6">
                             <label class="col-sm-3 col-form-label">Blog Slug</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" placeholder="Enter blog slug (Must be on small letter)" name="slug">
+                                <input id="slug" type="text" class="form-control" placeholder="Enter blog slug (Must be on small letter)" name="slug">
                             </div>
                         </div>
 
@@ -352,7 +406,25 @@
 @section('script')
 <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
+
 <script>
+    $(document).ready(function() {
+        $('#slug').on('input', function() {
+            var title = $(this).val();
+            var slug = generateSlug(title);
+            $('#slug').val(slug);
+        });
+
+        function generateSlug(title) {
+            return title
+                .toLowerCase()                // Convert to lowercase
+                .replace(/ /g, '-')           // Replace spaces with dashes
+                .replace(/[^\w\-]+/g, '')     // Remove non-alphanumeric characters except dashes
+                .replace(/\-\-+/g, '-')       // Replace multiple dashes with a single dash
+                .trim();                      // Trim leading and trailing dashes
+        }
+    });
+
     //color change for category add btn
     $('#addCategoryBtn').on('click',function(){
         if($(this).hasClass('btn-primary')){
@@ -388,6 +460,9 @@
             $(this).addClass('btn-primary');
         }
     });
+
+
+
 </script>
 @endsection
 @section('summernote')

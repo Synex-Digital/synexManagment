@@ -30,26 +30,31 @@ class ServiceCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-             'name' => 'required|unique:service_categories',
-            'title'=>'required',
-            'slug' => 'required|unique:service_categories',
-        ]);
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            foreach ($errors->messages() as  $messages) {
-                foreach ($messages as $message) {
-                    flash()->options([
-                        'position' => 'bottom-right',
-                    ])->error($message);
-                }
-            }
-            return back()->withErrors($validator)->withInput();
-            }
+        if(auth()->user()->can('service_project.create')){
+            $validator = Validator::make($request->all(), [
+                'name' => 'required|unique:service_categories',
+               'title'=>'required',
+               'slug' => 'required|unique:service_categories',
+           ]);
+           if ($validator->fails()) {
+               $errors = $validator->errors();
+               foreach ($errors->messages() as  $messages) {
+                   foreach ($messages as $message) {
+                       flash()->options([
+                           'position' => 'bottom-right',
+                       ])->error($message);
+                   }
+               }
+               return back()->withErrors($validator)->withInput();
+               }
 
-        ServiceCategory::create($request->all());
-        flash()->options([ 'position' => 'bottom-right', ])->success('Category Created successfully');
-        return back();
+           ServiceCategory::create($request->all());
+           flash()->options([ 'position' => 'bottom-right', ])->success('Category Created successfully');
+           return back();
+        }else{
+            return redirect()->route('dashboard');
+        }
+
     }
 
     /**
@@ -65,7 +70,12 @@ class ServiceCategoryController extends Controller
      */
     public function edit(ServiceCategory $serviceCategory)
     {
-        return view('dashboard.service_project.category_edit', compact('serviceCategory'));
+        if(auth()->user()->can('service_project.create')){
+            return view('dashboard.service_project.category_edit', compact('serviceCategory'));
+
+        }else{
+            return redirect()->route('dashboard');
+        }
     }
 
     /**
@@ -105,11 +115,16 @@ class ServiceCategoryController extends Controller
     }
     public function toggleStatus($id)
     {
-        $category = ServiceCategory::findOrFail($id);
-        $category->is_active = !$category->is_active;
-        $category->save();
+        if(auth()->user()->can('service_project.edit')){
+            $category = ServiceCategory::findOrFail($id);
+            $category->is_active = !$category->is_active;
+            $category->save();
 
-        return response()->json(['status' => $category->is_active ? 'active' : 'inactive']);
+            return response()->json(['status' => $category->is_active ? 'active' : 'inactive']);
+        }else{
+            return redirect()->route('dashboard');
+        }
+
     }
 
 }

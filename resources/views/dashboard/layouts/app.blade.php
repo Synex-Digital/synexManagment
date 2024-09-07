@@ -11,6 +11,7 @@
 
     @yield('style')
     @include('dashboard.layouts.headerLink')
+    @yield('summernote-style')
     <style>
         .quixnav{
             background-color: #fff!important;
@@ -102,9 +103,19 @@
     <!--**********************************
         Main wrapper end
     ***********************************-->
-        @yield('summernote')
-        @include('dashboard.layouts.scripts')
-        @yield('script')
+    @yield('summernote')
+    @include('dashboard.layouts.scripts')
+    @yield('script')
+    <script>
+        $(document).ready(function() {
+
+            $('form').on('submit', function(e) {
+                // Disable the submit button if it matches the desired classes
+                $(this).find('button.btn-outline-primary').prop('disabled', true);
+                $(this).find('button.btn-outline-danger').prop('disabled', true);
+            });
+        });
+    </script>
 </body>
 
 </html>
