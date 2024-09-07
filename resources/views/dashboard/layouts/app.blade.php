@@ -11,6 +11,7 @@
 
     @yield('style')
     @include('dashboard.layouts.headerLink')
+    @yield('summernote-style')
     <style>
         .quixnav{
             background-color: #fff!important;
@@ -102,9 +103,9 @@
     <!--**********************************
         Main wrapper end
     ***********************************-->
-        @yield('summernote')
-        @include('dashboard.layouts.scripts')
-        @yield('script')
+    @yield('summernote')
+    @include('dashboard.layouts.scripts')
+    @yield('script')
     <script>
         $(document).ready(function() {
 

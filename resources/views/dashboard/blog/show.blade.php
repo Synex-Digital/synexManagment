@@ -1,4 +1,19 @@
 @extends('dashboard.layouts.app')
+@section('summernote-style')
+<style>
+
+  blockquote {
+        background: #3b82f61c;
+        color: #000;
+        padding-left: 1rem;
+        padding-top: 14px;
+        padding-bottom: 1px;
+        border-left: 6px solid #3b82f6;
+        border-radius: 5px 0px 0px 5px;
+    }
+</style>
+
+@endsection
 @section('content')
 <div class="row ">
     <div class="col-lg-6 col-md-5 col-sm-5">

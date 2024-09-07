@@ -1,6 +1,7 @@
 
 @php
     $hasEmployeePermissions = Auth::user()->can('employee.view') || Auth::user()->can('client.view') || Auth::user()->can('project.view') || Auth::user()->can('department.view') || Auth::user()->can('blog.view') || Auth::user()->can('service_project.view') || Auth::user()->can('expenses.view');
+    $hrm = Auth::user()->can('employee.view') || Auth::user()->can('client.view') || Auth::user()->can('project.view') || Auth::user()->can('department.view')  || Auth::user()->can('service_project.view') || Auth::user()->can('expenses.view');
 @endphp
 
 <!--**********************************
@@ -60,7 +61,10 @@
                             <span class="nav-text text-dark">Blogs</span></a></li>
 
                         @endif
-                            <li class="nav-label first text-dark">HRM</li>
+                        @if ($hrm)
+
+                        <li class="nav-label first text-dark">HRM</li>
+                        @endif
                             @if (Auth::user()->can('employee.view'))
                             <li><a href="{{route('employee.index')}}">
                                 <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -194,9 +198,9 @@
                         </svg>
                     <span class="nav-text text-dark">Settings</span></a>
                         <ul aria-expanded="false">
-                            @if (Auth::user()->can('user.view'))
+                            {{-- @if (Auth::user()->can('user.view'))
                                 <li><a href="{{route('users')}}">User</a></li>
-                            @endif
+                            @endif --}}
                             @if (Auth::user()->can('role.view'))
                                 <li><a href="{{route('role.index')}}">Role Management</a></li>
                             @endif

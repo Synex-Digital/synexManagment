@@ -1,9 +1,57 @@
 @extends('dashboard.layouts.app')
-@section('style')
+@section('summernote-style')
 <link href="{{asset('dashboard_assets/vendor/datatables/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<style>
+    .note-editor .note-editing-area .note-editable ul {
+        display: block !important;
+        margin-block-start: 1em !important;
+        margin-block-end:  1em !important;
+        margin-inline-start: 0px !important;
+        margin-inline-end:  0px  !important;
+        padding-inline-start: 40px !important;
+        unicode-bidi: isolate !important
+    }
+    .note-editor .note-editing-area .note-editable ul li{
+
+        display: list-item !important;
+        text-align: -webkit-match-parent !important;
+        list-style-type: disc !important;
+
+    }
+    .note-editor .note-editing-area .note-editable ul li::marker{
+        color:#3B82F6 !important;
+    }
+   .note-editor .note-editing-area .note-editable ol {
+        display: block !important;
+        margin-block-start: 1em !important;
+        margin-block-end:  1em !important;
+        margin-inline-start: 0px !important;
+        margin-inline-end:  0px  !important;
+        padding-inline-start: 40px !important;
+        unicode-bidi: isolate !important
+    }
+    .note-editor .note-editing-area .note-editable ol li{
+
+        display: list-item !important;
+        text-align: -webkit-match-parent !important;
+        list-style-type: decimal !important;
+    }
+    .note-editor .note-editing-area .note-editable ol li::marker{
+        color:#3B82F6 !important;
+    }
+    .note-editor .note-editing-area .note-editable blockquote {
+        background: #3b82f61c;
+        padding-left: 1rem;
+        color: #000;
+        padding-top: 14px;
+        padding-bottom: 1px;
+        border-left: 6px solid #3b82f6;
+        border-radius: 5px 0px 0px 5px;
+    }
+</style>
 
 
 @endsection
@@ -267,12 +315,9 @@
                             </select>
                         </div>
                         <div class="form-group col-lg-6 col-md-6">
-                            <label class=" form-label">Employee Name</label>
-                            <select name="employee_id" class="form-control" required>
-                                @foreach ($employees as $employee)
-                                    <option value="{{ $employee->id }}">{{ $employee->user ?$employee->user->name:'' }}</option>
-                                @endforeach
-                                <option value="" disabled>If employee is not in the list, than firstly add the category's information</option>
+                            <label class=" form-label">Author Name</label>
+                            <select name="employee_id" class="form-control" required disabled>
+                                <option value="{{auth()->user()->id}}">{{auth()->user()->name}}</option>
                             </select>
                         </div>
 
@@ -300,7 +345,7 @@
                         <div class="form-group col-md-6">
                             <label class="col-sm-3 col-form-label">Blog Slug</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" placeholder="Enter blog slug (Must be on small letter)" name="slug">
+                                <input id="slug" type="text" class="form-control" placeholder="Enter blog slug (Must be on small letter)" name="slug">
                             </div>
                         </div>
 
@@ -361,8 +406,24 @@
 @section('script')
 <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
-<script>
 
+<script>
+    $(document).ready(function() {
+        $('#slug').on('input', function() {
+            var title = $(this).val();
+            var slug = generateSlug(title);
+            $('#slug').val(slug);
+        });
+
+        function generateSlug(title) {
+            return title
+                .toLowerCase()                // Convert to lowercase
+                .replace(/ /g, '-')           // Replace spaces with dashes
+                .replace(/[^\w\-]+/g, '')     // Remove non-alphanumeric characters except dashes
+                .replace(/\-\-+/g, '-')       // Replace multiple dashes with a single dash
+                .trim();                      // Trim leading and trailing dashes
+        }
+    });
 
     //color change for category add btn
     $('#addCategoryBtn').on('click',function(){

@@ -49,7 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/project-member-delete/{id}',[ProjectController::class, 'employee_delete'])->name('member_delete');
     Route::get('/my-project-lists',[ProjectController::class, 'employee_project'])->name('my_project.index');
 
-//
+//user
     Route::get('/user/delete/{id}', [HomeController::class, 'userDelete'])->name('user.delete');
     Route::get('/users', [HomeController::class, 'users'])->name('users');
     Route::post('/user/store', [HomeController::class, 'userStore'])->name('user.store');

@@ -31,45 +31,47 @@ class HomeController extends Controller
     }
     public function users()
     {
-        $users = User::whereDoesntHave('employees')->get();
-        $roles = Role::all();
-        return view('dashboard.user.index',compact('users','roles'));
+        return redirect()->route('dashboard');
+        // $users = User::whereDoesntHave('employees')->get();
+        // $roles = Role::all();
+        // return view('dashboard.user.index',compact('users','roles'));
     }
 
     public function userStore(Request $request){
+        return redirect()->route('dashboard');
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required',
+        //     'email' => 'required|email|unique:users',
+        //     'password' => 'required|confirmed |min:6',
+        //     'password_confirmation' => 'required',
+        // ]);
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed |min:6',
-            'password_confirmation' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            foreach ($errors->messages() as  $messages) {
-                foreach ($messages as $message) {
-                    flash()->options([
-                        'position' => 'bottom-right',
-                    ])->error($message);
-                }
-            }
-            return back()->withErrors($validator)->withInput();
-        }
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
-        flash()->options(['position' => 'bottom-right'])->success('User created successfully');
-        return back();
+        // if ($validator->fails()) {
+        //     $errors = $validator->errors();
+        //     foreach ($errors->messages() as  $messages) {
+        //         foreach ($messages as $message) {
+        //             flash()->options([
+        //                 'position' => 'bottom-right',
+        //             ])->error($message);
+        //         }
+        //     }
+        //     return back()->withErrors($validator)->withInput();
+        // }
+        // $user = new User();
+        // $user->name = $request->name;
+        // $user->email = $request->email;
+        // $user->password = Hash::make($request->password);
+        // $user->save();
+        // flash()->options(['position' => 'bottom-right'])->success('User created successfully');
+        // return back();
     }
 
     public function userDelete($id){
-        $user = User::find($id);
-        $user->delete();
-        flash()->options(['position' => 'bottom-right'])->success('User deleted successfully');
-        return back();
+        return redirect()->route('dashboard');
+        // $user = User::find($id);
+        // $user->delete();
+        // flash()->options(['position' => 'bottom-right'])->success('User deleted successfully');
+        // return back();
     }
 
 }
