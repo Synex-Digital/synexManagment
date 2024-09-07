@@ -21,4 +21,4 @@ Route::get('/blogs/{slug}', [BlogController::class, 'view']);
 Route::get('/category/{slug}', [CategoryController::class, 'index']);
 Route::get('/sitemap/blog', [BlogController::class, 'sitemap']);
 //customer jb
-Route::get('/customer/store',[CustomerControllerApi::class, 'store']);
+Route::post('/customer/store',[CustomerControllerApi::class, 'store']);
