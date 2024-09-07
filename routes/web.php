@@ -18,7 +18,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
 use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\ServiceProjectController;
-
+use App\Models\Customer;
 
 Auth::routes();
 
@@ -53,7 +53,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/delete/{id}', [HomeController::class, 'userDelete'])->name('user.delete');
     Route::get('/users', [HomeController::class, 'users'])->name('users');
     Route::post('/user/store', [HomeController::class, 'userStore'])->name('user.store');
-
+//customer
+    Route::get('web/support', [Customer::class, 'support'])->name('web.support');
 //dashboard
     Route::get('/index', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/app/setting',[DashboardController::class, 'showAppSetting'])->name('dashboard.showSetting');

@@ -109,22 +109,19 @@
                                 <tbody>
                                     @foreach ($category as $categories)
                                         <tr>
-                                            <td>{{$loop->iteration}}</td>
-                                            <td><img src="{{ url('/'.$categories->image)}}" class="rounded-lg me-2" width="50" alt=""> </td>
-                                            <td>{{$categories->name}} </td>
+                                            <td class="text-dark">{{$loop->iteration}}</td>
+                                            <td class="text-dark"><img src="{{ url('/'.$categories->image)}}" class="rounded-lg me-2" width="50" alt=""> </td>
+                                            <td class="text-dark">{{$categories->name}} </td>
 
 
-                                            <td> <span class="badge   {{$categories->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$categories->status}}</span> </td>
+                                            <td class="text-dark"> <span class="badge   {{$categories->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$categories->status}}</span> </td>
 
 
                                             @if (auth()->user()->can('blog.create'))
                                             <td class="d-flex justify-content-spacebetween">
-                                                <a  href="{{route('category.edit',$categories->id) }}" title="Edit" class="  btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
-                                                <form action="{{ route('category.destroy', $categories->id) }}" method="POST">
-                                                    @method('DELETE')
-                                                    @csrf
-                                                    <button type="submit" title="Delete" class="  btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
-                                                </form>
+                                                <a  href="{{route('category.edit',$categories->id) }}" title="Edit" class="  btn btn-outline-info btn-sm mr-1  " > <i class="fa fa-pencil"></i></a>
+                                                <a  href="{{ route('category.destroy', $categories->id) }}" data-toggle="modal" data-target="#deleteModal" title="delete" class="  btn btn-outline-danger btn-sm mr-1 deleteBtn  " > <i class="fa fa-trash"></i></a>
+
 
                                             </td>
                                             @endif
@@ -266,20 +263,21 @@
                             <tbody>
                                 @foreach ($blog as $blogs)
                                     <tr>
-                                        <td>{{$loop->iteration}}</td>
-                                        <td><img src="{{ url('/'. $blogs->image)}}" class="rounded-lg me-2" width="50" alt=""></td>
-                                        <td>{{$blogs->title}} </td>
-                                        <td>{{$blogs->category->name ?? 'Unknown'}} </td>
-                                        <td>{{$blogs->employee->user->name ??    'Unknown'}} </td>
-                                        <td> <span class="badge   {{$blogs->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$blogs->status}}</span> </td>
+                                        <td class="text-dark">{{$loop->iteration}}</td>
+                                        <td class="text-dark"><img src="{{ url('/'. $blogs->image)}}" class="rounded-lg me-2" width="50" alt=""></td>
+                                        <td class="text-dark">{{$blogs->title}} </td>
+                                        <td class="text-dark">{{$blogs->category->name ?? 'Unknown'}} </td>
+                                        <td class="text-dark">{{$blogs->employee->user->name ??    'Unknown'}} </td>
+                                        <td class="text-dark"> <span class="badge   {{$blogs->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$blogs->status}}</span> </td>
                                         <td class="d-flex justify-content-spacebetween">
                                             <a href="{{ route('blog.show', $blogs->id) }}" class="btn btn-outline-primary  btn-sm  mr-1"><i class="fa fa-eye"></i></a>
                                             <a href="{{route('blog.edit',$blogs->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
-                                            <form action="{{ route('blog.destroy', $blogs->id) }}" method="POST">
+                                            <a href="{{ route('blog.destroy', $blogs->id) }}"  title="Delete" data-toggle="modal" data-target="#deleteModal" class=" btn btn-outline-danger btn-sm deleteBtn  "> <i class="fa fa-trash "></i></i></a>
+                                            {{-- <form action="" method="POST">
                                                 @method('DELETE')
                                                 @csrf
-                                                <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
-                                            </form>
+                                                <button type="submit"</button>
+                                            </form> --}}
                                         </td>
                                     </tr>
                                 @endforeach
@@ -408,6 +406,14 @@
 
 <script>
     $(document).ready(function() {
+
+    $('body').on('click', '.deleteBtn', function () {
+        var val = $(this).attr('href');
+        $('#deleteModalForm').attr('action', val);
+
+    });
+
+
         $('#slug').on('input', function() {
             var title = $(this).val();
             var slug = generateSlug(title);

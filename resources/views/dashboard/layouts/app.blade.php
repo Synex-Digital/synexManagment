@@ -87,7 +87,30 @@
         <!--**********************************
             Content body end
         ***********************************-->
-
+              {{-- Modals Delete--}}
+                <div class="modal fade" id="deleteModal">
+                    <div class="modal-dialog modal-dialog-centered " role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title text-danger">WARNING !</h5>
+                                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="text-dark"> Are you sure you want to delete it?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">NO</button>
+                                <form id="deleteModalForm" action="" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">YES</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{-- Modals end --}}
 
             @include('dashboard.layouts.footer')
         <!--**********************************

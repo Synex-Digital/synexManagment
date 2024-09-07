@@ -18,6 +18,7 @@
 @section('style')
 
 <link href="{{asset('dashboard_assets/vendor/pg-calendar/css/pignose.calendar.min.css')}}" rel="stylesheet">
+
 @endsection
 @section('content')
 
@@ -173,15 +174,15 @@
                         @forelse ($projects as $data )
                             <tr>
 
-                                <td>{{ $data->name }}</td>
-                                <td>
+                                <td class="text-dark">{{ $data->name }}</td>
+                                <td >
                                     @if($data->leader)
                                     <a href="{{ route('employee.show', $data->leader->id)  }}">{{ $data->leader->name  }}</a>
                                     @else
                                     {{ 'UNASSIGNED' }}
                                     @endif
                                 </td>
-                                <td>
+                                <td class="text-dark">
                                     {{ endDate($data->dateRange) }}
                                 </td>
 
@@ -199,7 +200,7 @@
                                 </span>
                                 </td>
                                 @if ($user->can('project.overView'))
-                                <td>
+                                <td class="text-dark">
                                     <a href="{{route('project.show',$data->id) }}" title="View" class=" btn btn-outline-primary btn-sm mr-1  " style="font-size: 11px !important;"> view</a>
                                 </td>
                                 @endif
@@ -258,10 +259,10 @@
                 <table class="table student-data-table m-t-20">
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Expense Type</th>
-                            <th>Amount</th>
-                            <th>Purchased By</th>
+                            <th class="text-dark">Date</th>
+                            <th class="text-dark">Expense Type</th>
+                            <th class="text-dark">Amount</th>
+                            <th class="text-dark">Purchased By</th>
                             {{-- <th>Action</th> --}}
 
                         </tr>
@@ -269,16 +270,16 @@
                     <tbody>
                         @forelse ($expenses as $data )
                         <tr>
-                            <td>{{ \Carbon\Carbon::parse($data->date)->format('d-M-y') }}
+                            <td class="text-dark">{{ \Carbon\Carbon::parse($data->date)->format('d-M-y') }}
                             </td>
-                            <td>
+                            <td class="text-dark">
                                 {{ $data->type  }}
                             </td>
-                            <td>
+                            <td class="text-dark">
                                 ৳{{ $data->amount }}
                             </td>
 
-                            <td>
+                            <td class="text-dark">
                                {{ $data->purchase_by }}
                             </td>
                            {{--  <td>

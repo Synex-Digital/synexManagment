@@ -70,19 +70,16 @@
 
 
                                             @if (Auth::user()->can('expenses.edit'))
-                                            <a href="{{route('expenses.edit',$data->id)}}" class=" btn btn-primary btn-sm mr-2  ">
-                                                <i class="fa fa-pencil text-white "></i>
+                                            <a href="{{route('expenses.edit',$data->id)}}" class=" btn btn-outline-primary btn-sm mr-2  ">
+                                                <i class="fa fa-pencil  "></i>
                                             </a>
                                             @endif
                                             @if (Auth::user()->can('expenses.delete'))
 
-                                            <form action="{{route('expenses.destroy',$data->id)}}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button  type="submit" class=" btn btn-danger btn-sm   ">
-                                                    <i class="fa fa-trash "></i>
-                                                </button>
-                                            </form>
+                                            <a href="{{route('expenses.destroy',$data->id)}}" data-toggle="modal" data-target="#deleteModal" type="submit" class=" btn btn-outline-danger btn-sm deleteBtn  ">
+                                                <i class="fa fa-trash "></i>
+                                            </a>
+
                                             @endif
                                         </td>
                                         @endif
@@ -176,8 +173,14 @@
 @section('script')
 <script>
     $(document).ready(function(){
+        $('body').on('click', '.deleteBtn', function () {
+        var val = $(this).attr('href');
+        $('#deleteModalForm').attr('action', val);
+
+        });
         $('[data-toggle="tooltip"]').tooltip();
     });
+
 </script>
     <!-- Datatable -->
     <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>

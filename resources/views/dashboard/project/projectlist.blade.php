@@ -96,9 +96,15 @@
                             <tbody>
                                 @foreach ($projects as $data )
                                     <tr>
-                                        <td>{{$loop->iteration}}</td>
-                                        <td>{{$data->name}} </td>
-                                        <td>{{$data->leader? $data->leader->name : 'UNASSIGNED'}}</td>
+                                        <td class="text-dark">{{$loop->iteration}}</td>
+                                        <td class="text-dark">{{$data->name}} </td>
+                                        <td class="text-dark">
+                                            @if($data->leader)
+                                            <a href="{{ route('employee.show', $data->leader->id)  }}">{{ $data->leader->name  }}</a>
+                                            @else
+                                            {{ 'UNASSIGNED' }}
+                                            @endif
+                                        </td>
                                         <td>
                                             <span class="badge badge-light text-primary badge-xs" style="font-size: 10px">{{dateConvert($data->dateRange)}}</span>
                                            <span class="badge badge-light text-info badge-xs"> {{ dateLeft($data->dateRange, $data->status) }}</span>
@@ -114,13 +120,7 @@
                                             <a href="{{route('project.edit',$data->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
                                             @endif
                                             @if (Auth::user()->can('project.delete'))
-
-                                            <form action="{{route('project.destroy',$data->id)}}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-
-                                                <button title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
-                                            </form>
+                                            <a href="{{route('project.destroy',$data->id)}}" data-target="#deleteModal" data-toggle="modal" title="Delete" class=" btn btn-outline-danger btn-sm deleteBtn   "> <i class="fa fa-trash "></i></a>
                                             @endif
                                         </td>
                                         @endif
@@ -140,6 +140,14 @@
 @endsection
 
 @section('script')
+<script>
+        // delete
+        $('body').on('click', '.deleteBtn', function () {
+        var val = $(this).attr('href');
+        $('#deleteModalForm').attr('action', val);
+
+        });
+</script>
 
     <!-- Datatable -->
     <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>

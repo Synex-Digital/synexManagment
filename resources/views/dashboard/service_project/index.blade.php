@@ -59,9 +59,9 @@
                                     <tbody>
                                         @foreach ($categories as $category)
                                             <tr>
-                                                <td>{{ $category->name }}</td>
-                                                <td>{{ $category->slug }}</td>
-                                                <td>{{ $category->description }}</td>
+                                                <td class="text-dark">{{ $category->name }}</td>
+                                                <td class="text-dark">{{ $category->slug }}</td>
+                                                <td class="text-dark">{{ $category->description }}</td>
                                                 <td id="category-status-{{ $category->id }}">
                                                     <span id='badge' class="badge   badge-outline-success" onclick="toggleStatus({{ $category->id }}, this)" style="cursor: pointer; ">
                                                         {{ $category->is_active ? 'active' : 'inactive' }}
@@ -72,10 +72,11 @@
                                                 @if (auth()->user()->can('service_project.create'))
                                                 <td class="d-flex justify-content-spacebetween">
                                                     <a href="{{route('service-categories.edit',$category->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
-                                                    <form action="{{  route('service-categories.destroy', $category->id) }}" method="POST">
+                                                    <a href="{{  route('service-categories.destroy', $category->id) }}" data-toggle="modal" data-target="#deleteModal" title="Delete" class=" btn btn-outline-danger btn-sm  deleteBtn  "> <i class="fa fa-trash "></i></a>
+                                                    <form action="" method="POST">
                                                         @method('DELETE')
                                                         @csrf
-                                                        <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                                        <button type="submit" </button>
                                                     </form>
 
                                                 </td>
@@ -135,12 +136,12 @@
                             <tbody>
                                 @foreach ($projects as $project)
                                     <tr>
-                                        <td><img src="{{ $project->thumbnail_image }}" alt="Thumbnail" width="50"></td>
-                                        <td>{{ $project->servicecategory->name ?? 'Unknown' }}</td>
-                                        <td>{{ $project->title }}</td>
-                                        <td>{{ $project->company_name }}</td>
-                                        <td><a href="{{ $project->project_url?? '#' }}">{{ Str::limit($project->project_url) ?? "N/A" }}</a></td>
-                                        <td>{{ Str::limit($project->short_description, 20) }}</td>
+                                        <td class="text-dark"><img src="{{ $project->thumbnail_image }}" alt="Thumbnail" width="50"></td>
+                                        <td class="text-dark">{{ $project->servicecategory->name ?? 'Unknown' }}</td>
+                                        <td class="text-dark">{{ $project->title }}</td>
+                                        <td class="text-dark">{{ $project->company_name }}</td>
+                                        <td ><a  href="{{ $project->project_url?? '#' }}">{{ Str::limit($project->project_url) ?? "N/A" }}</a></td>
+                                        <td class="text-dark">{{ Str::limit($project->short_description, 20) }}</td>
                                         <td id="project-status-{{ $project->id }}">
                                             <span class="badgeBtn badge   badge-outline-success  " onclick="toggleProjectStatus({{ $project->id }}, this)" style="cursor: pointer;">
                                                 {{ $project->is_active ? 'active' : 'inactive' }}
@@ -153,10 +154,11 @@
                                             <a href="{{route('service-projects.edit',$project->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
                                             @endif
                                             @if (auth()->user()->can('service_project.delete'))
-                                            <form action="{{ route('service-projects.destroy', $project->id) }}" method="POST">
+                                            <a href="{{ route('service-projects.destroy', $project->id) }}" data-toggle="modal" data-target="#deleteModal" title="Delete" class=" btn btn-outline-danger btn-sm  deleteBtn "> <i class="fa fa-trash "></i></a>
+                                            <form action="" method="POST">
                                                 @method('DELETE')
                                                 @csrf
-                                                <button type="submit" title="Delete" class=" btn btn-outline-danger btn-sm   "> <i class="fa fa-trash "></i></button>
+                                                <button type="submit"</button>
                                             </form>
 
                                             @endif
@@ -302,6 +304,11 @@
 <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
 <script>
+     $('body').on('click', '.deleteBtn', function () {
+        var val = $(this).attr('href');
+        $('#deleteModalForm').attr('action', val);
+
+        });
     function toggleStatus(id, element) {
 
         fetch(`/service-category/toggle-status/${id}`, {
