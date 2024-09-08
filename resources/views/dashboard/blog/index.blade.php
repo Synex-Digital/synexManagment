@@ -172,7 +172,7 @@
                         <div class="form-group col-md-6">
                             <label class="col-lg-6 col-form-label">Category Slug</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" placeholder="Enter Category Slug (Must be on small letter)" name="slug"  value="{{old('slug')}}">
+                                <input type="text" id="category_slug" class="form-control" placeholder="Enter Category Slug (Must be on small letter)" name="slug"  value="{{old('slug')}}">
                             </div>
                         </div>
                         <div class="form-group col-md-6">
@@ -342,7 +342,7 @@
                         <div class="form-group col-md-6">
                             <label class="col-sm-3 col-form-label">Blog Slug</label>
                             <div class="col-sm-12">
-                                <input id="slug" type="text" class="form-control" placeholder="Enter blog slug (Must be on small letter)" name="slug">
+                                <input id="slug" type="text" class="slug form-control" placeholder="Enter blog slug (Must be on small letter)" name="slug">
                             </div>
                         </div>
 
@@ -418,6 +418,11 @@
             var title = $(this).val();
             var slug = generateSlug(title);
             $('#slug').val(slug);
+        });
+        $('#category_slug').on('input', function() {
+            var title = $(this).val();
+            var slug = generateSlug(title);
+            $('#category_slug').val(slug);
         });
 
         function generateSlug(title) {

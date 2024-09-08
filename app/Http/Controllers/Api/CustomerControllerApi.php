@@ -10,17 +10,22 @@ use App\Http\Controllers\Controller;
 class CustomerControllerApi extends Controller
 {
     public function store(Request $request){
+
         $request->validate([
            'name' => 'required',
-            'email' => $request->number ? '' : 'required|email',
-            'number' => $request->email ? '' : 'required|numeric',
             'category' => 'required',
             'description' => 'required',
         ]);
+        $customerQuery = Customer::query();
+        if ($request->number) {
+            $customerQuery->where('number', $request->number);
+        }
+        if ($request->email) {
+            $customerQuery->where('email', $request->email);
+        }
+        $customer = $customerQuery->first();
 
-        //customer store
-        $customer = Customer::where('email', $request->email)->orWhere('number', $request->number)->first();
-        if($customer->number == $request->number || $customer->email == $request->email){
+        if($customer){
             $supports = new Support();
             $supports->customer_id = $customer->id;
             $supports->category = $request->category;
@@ -29,24 +34,24 @@ class CustomerControllerApi extends Controller
             $supports->save();
             return response()->json([
                 'status' => 1,
-                'message' => 'success',
+                'message' => 'success1',
             ], 200);
         }else{
-            $customer = new Customer();
-            $customer->name = $request->name;
-            $customer->email = $request->email ?? null;
-            $customer->number = $request->number ?? null;
-            $customer->save();
+            $customerNew = new Customer();
+            $customerNew->name = $request->name;
+            $customerNew->email = $request->email ?? null;
+            $customerNew->number = $request->number ?? null;
+            $customerNew->save();
             //supports store
             $supports = new Support();
-            $supports->customer_id = $customer->id;
+            $supports->customer_id = $customerNew->id;
             $supports->category = $request->category;
             $supports->type = $request->type;
             $supports->description = $request->description;
             $supports->save();
             return response()->json([
                 'status' => 1,
-                'message' => 'success',
+                'message' => 'success2',
             ], 200);
         }
 

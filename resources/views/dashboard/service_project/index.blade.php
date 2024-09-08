@@ -212,7 +212,7 @@
 
                     <div class="form-group">
                         <label for="slug">Slug</label>
-                        <input type="text" class="form-control" id="slug" name="slug" required value="{{old('slug')}}">
+                        <input id="category_slug" type="text" class="form-control"  name="slug" required value="{{old('slug')}}">
                     </div>
                     <div class="form-group">
                         <label for="title">Seo Title</label>
@@ -268,7 +268,7 @@
                         </div>
                         <div class="form-group col-lg-6 col-md-6">
                             <label for="slug">Slug</label>
-                        <input type="text" class="form-control" id="slug" name="slug" required>
+                        <input id="slug" type="text" class="form-control" id="slug" name="slug" required>
                         </div>
                         <div class="form-group col-lg-6 col-md-6">
                             <label for="project_url">Project URL</label>
@@ -304,6 +304,27 @@
 <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
 <script>
+    $(document).ready(function() {
+        $('#slug').on('input', function() {
+            var title = $(this).val();
+            var slug = generateSlug(title);
+            $('#slug').val(slug);
+        });
+        $('#category_slug').on('input', function() {
+            var title = $(this).val();
+            var slug = generateSlug(title);
+            $('#category_slug').val(slug);
+        });
+
+        function generateSlug(title) {
+            return title
+                .toLowerCase()                // Convert to lowercase
+                .replace(/ /g, '-')           // Replace spaces with dashes
+                .replace(/[^\w\-]+/g, '')     // Remove non-alphanumeric characters except dashes
+                .replace(/\-\-+/g, '-')       // Replace multiple dashes with a single dash
+                .trim();                      // Trim leading and trailing dashes
+        }
+    });
      $('body').on('click', '.deleteBtn', function () {
         var val = $(this).attr('href');
         $('#deleteModalForm').attr('action', val);
