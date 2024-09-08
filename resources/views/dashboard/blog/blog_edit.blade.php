@@ -97,10 +97,11 @@
                                             <label class=" col-form-label">Author Name</label>
                                             @if (auth()->user()->roles()->first()->name == 'superadmin')
                                              <select name="employee_id" class="form-control">
+                                                @if(!$blog->author)
+                                                    <option selected value="{{$blog->employee_id}}">Unknown </option>
+                                                @endif
                                                 @foreach ($employees as $employee)
-                                                    @if(!$blog->author)
-                                                        <option selected value="{{$blog->employee_id}}">Unknown </option>
-                                                    @endif
+
                                                     <option {{ $employee->id == $blog->employee_id ? 'selected' : ''}} value="{{ $employee->id }}">{{ $employee->name ?? 'Unknown' }}</option>
                                                 @endforeach
                                                 <option value="" disabled>If category is not in the list, than firstly add the category's information</option>
