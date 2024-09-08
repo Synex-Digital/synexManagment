@@ -159,7 +159,7 @@
                     @if (auth()->user()->roles()->first()->name == 'superadmin')
 
                     <li class="nav-label first text-dark">Customer Relation</li>
-                    <li><a href="{{route('web.support')}}">
+                    <li><a href="{{route('web.customer')}}">
                         {{-- <i class="icon icon-form"></i> --}}
                         <svg width="22px" height="22px" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M52.25 24.371H50.33V42.151H52.25C53.8752 42.1491 55.4333 41.5027 56.5825 40.3535C57.7317 39.2043 58.3782 37.6462 58.38 36.021V30.511C58.3803 28.8842 57.7348 27.3238 56.5854 26.1726C55.4361 25.0213 53.8768 24.3734 52.25 24.371Z" fill="#999999"/>
