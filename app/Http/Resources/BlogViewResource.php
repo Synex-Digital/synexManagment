@@ -20,7 +20,7 @@ class BlogViewResource extends JsonResource
             'description' => $this->seo_description,
             'view' => $this->view_count,
             'category' => optional($this->category)->name ?? 'Unknown',
-            'author' => optional(optional($this->employee)->user)->name ?? 'Unknown author',
+            'author' => optional(optional($this->author))->name ?? 'Unknown author',
             'content' => $this->content,
             's_title' => $this->seo_title,
             's_description' => $this->seo_description,

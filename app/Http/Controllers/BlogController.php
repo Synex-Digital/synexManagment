@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\User;
 use App\Helpers\Photo;
 use App\Models\Category;
 use App\Models\Employee;
@@ -19,7 +20,7 @@ class BlogController extends Controller
     public function index()
     {
         if(auth()->user()->can('blog.view')){
-            $blog = Blog::all();
+            $blog = Blog::latest()->get();
             $category = Category::all();
             $employee = Employee::all();
             return view('dashboard.blog.index', [
@@ -54,7 +55,7 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         if(auth()->user()->can('blog.create')){
             $validator = Validator::make($request->all(), [
             'category_id'       => 'required',
@@ -145,7 +146,7 @@ class BlogController extends Controller
         if(auth()->user()->can('blog.edit')){
             $blog = Blog::find($id);
         $category = Category::all();
-        $employee = Employee::all();
+        $employee = User::where('id', '!=', 1)->get();
         return view('dashboard.blog.blog_edit', [
             'blog'          => $blog,
             'categories'    => $category,

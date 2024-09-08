@@ -20,7 +20,7 @@ class BlogsResource extends JsonResource
             'description' => $this->seo_description,
             'view' => $this->view_count,
             'category' => optional($this->category)->name ?? 'Unknown',
-            'author' => optional(optional($this->employee)->user)->name ?? 'Unknown author',
+            'author' => optional(optional($this->author))->name ?? 'Unknown author',
             'slug' => $this->slug,
             'date' => $this->created_at->format('d M Y'),
         ];

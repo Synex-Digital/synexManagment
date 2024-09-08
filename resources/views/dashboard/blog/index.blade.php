@@ -257,7 +257,7 @@
                                     <th>Image</th>
                                     <th>Blog Title</th>
                                     <th>Category Name</th>
-                                    <th>Employee Name</th>
+                                    <th>Author </th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -269,7 +269,7 @@
                                         <td class="text-dark"><img src="{{ url('/'. $blogs->image)}}" class="rounded-lg me-2" width="50" alt=""></td>
                                         <td class="text-dark">{{$blogs->title}} </td>
                                         <td class="text-dark">{{$blogs->category->name ?? 'Unknown'}} </td>
-                                        <td class="text-dark">{{$blogs->employee->user->name ??    'Unknown'}} </td>
+                                        <td class="text-dark">{{$blogs->author->name ??    'Unknown'}} </td>
                                         <td class="text-dark"> <span class="badge   {{$blogs->status == 'inactive' ? 'badge-outline-danger' : 'badge-outline-success'}}">{{$blogs->status}}</span> </td>
                                         <td class="d-flex justify-content-spacebetween">
                                             <a href="{{ route('blog.show', $blogs->id) }}" class="btn btn-outline-primary  btn-sm  mr-1"><i class="fa fa-eye"></i></a>

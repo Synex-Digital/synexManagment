@@ -27,8 +27,8 @@ class Blog extends Model
             'name' => 'Unknown'
         ]);
     }
-    public function employee()
+    public function author()
     {
-        return $this->belongsTo(Employee::class, 'employee_id');
+        return $this->belongsTo(User::class, 'employee_id');
     }
 }
