@@ -73,11 +73,7 @@
                                                 <td class="d-flex justify-content-spacebetween">
                                                     <a href="{{route('service-categories.edit',$category->id) }}" title="Edit" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
                                                     <a href="{{  route('service-categories.destroy', $category->id) }}" data-toggle="modal" data-target="#deleteModal" title="Delete" class=" btn btn-outline-danger btn-sm  deleteBtn  "> <i class="fa fa-trash "></i></a>
-                                                    <form action="" method="POST">
-                                                        @method('DELETE')
-                                                        @csrf
-                                                        <button type="submit" </button>
-                                                    </form>
+                                                
 
                                                 </td>
                                                 @endif
@@ -155,11 +151,7 @@
                                             @endif
                                             @if (auth()->user()->can('service_project.delete'))
                                             <a href="{{ route('service-projects.destroy', $project->id) }}" data-toggle="modal" data-target="#deleteModal" title="Delete" class=" btn btn-outline-danger btn-sm  deleteBtn "> <i class="fa fa-trash "></i></a>
-                                            <form action="" method="POST">
-                                                @method('DELETE')
-                                                @csrf
-                                                <button type="submit"</button>
-                                            </form>
+
 
                                             @endif
 
@@ -207,7 +199,7 @@
                     @csrf
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" required value="{{old('name')}}">
+                        <input  type="text" class="form-control" id="name" name="name" required value="{{old('name')}}">
                     </div>
 
                     <div class="form-group">
@@ -216,14 +208,16 @@
                     </div>
                     <div class="form-group">
                         <label for="title">Seo Title</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
+                        <input id="cat_seo_title" type="text" class="form-control" id="title" name="title" required>
+                        <span id="cat_seo_title_error" class="text text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label for="description">Seo Description</label>
-                        <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
+                        <textarea id="cat_seo_desc" class="form-control" id="description" name="description">{{ old('description') }}</textarea>
+                       <span id="cat_seo_desc_error" class="text text-danger"></span>
                     </div>
 
-                    <button type="submit" class="btn mt-3 btn-outline-primary float-right" style="font-size: 11px;">Create Category</button>
+                    <button id="categoryCreateBtn"  type="submit" class="btn mt-3 btn-outline-primary float-right" style="font-size: 11px;">Create Category</button>
                 </form>
             </div>
 
@@ -280,7 +274,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Create Project</button>
+                        <button  type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Create Project</button>
                     </div>
 
                 </form>
@@ -303,6 +297,63 @@
 
 <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
+<script>
+    //CATEGORY SEO VALIDATION
+    $(document).ready(function() {
+    // Define character limits
+    const CAT_SEO_TITLE_LIMIT = 120;
+    // const CAT_SEO_TAGS_LIMIT = 350;
+    const CAT_SEO_DESC_LIMIT = 350;
+
+    function validateFields() {
+        let isValid = true;
+
+        // Get current values and lengths
+        let seoTitle = $('#cat_seo_title').val();
+        // let seoTags = $('#cat_seo_tags').val();
+        let seoDesc = $('#cat_seo_desc').val();
+
+        let seoTitleLength = seoTitle.length;
+        // let seoTagsLength = seoTags.length;
+        let seoDescLength = seoDesc.length;
+
+        // Check SEO Title
+        if (seoTitleLength > CAT_SEO_TITLE_LIMIT) {
+            $('#cat_seo_title_error').text(`Must be less than ${CAT_SEO_TITLE_LIMIT} characters`);
+            isValid = false;
+        } else {
+            $('#cat_seo_title_error').text('');
+        }
+
+        // Check SEO Tags
+        // if (seoTagsLength > CAT_SEO_TAGS_LIMIT) {
+        //     $('#cat_seo_tags_error').text(`Must be less than ${CAT_SEO_TAGS_LIMIT} characters`);
+        //     isValid = false;
+        // } else {
+        //     $('#cat_seo_tags_error').text('');
+        // }
+
+        // Check SEO Description
+        if (seoDescLength > CAT_SEO_DESC_LIMIT) {
+            $('#cat_seo_desc_error').text(`Must be less than ${CAT_SEO_DESC_LIMIT} characters`);
+            isValid = false;
+        } else {
+            $('#cat_seo_desc_error').text('');
+        }
+
+        // Enable or disable the create button based on the validity
+        if (isValid) {
+            $('#categoryCreateBtn').removeAttr('disabled').removeClass('btn-primary').addClass('btn-outline-primary');
+        } else {
+            $('#categoryCreateBtn').attr('disabled', 'disabled').removeClass('btn-outline-primary').addClass('btn-primary');
+        }
+    }
+
+    // Attach input event handlers
+    $('#cat_seo_title, #cat_seo_desc').on('input', validateFields);
+});
+
+</script>
 <script>
     $(document).ready(function() {
         $('#slug').on('input', function() {

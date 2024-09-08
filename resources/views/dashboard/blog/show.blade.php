@@ -76,7 +76,7 @@
                         <h2>{{ $blog->title }}</h2>
                         <h4>{{ $blog->category->name ?? Unknown }}</h4>
 
-                        <b>Published in</b> {{ \Carbon\Carbon::parse($blog->updated_at)->format('d/m/Y') }} — by <b>{{ $blog->employee->user->name ?? 'Unknown' }}</b>
+                        <b>Published in</b> {{ \Carbon\Carbon::parse($blog->updated_at)->format('d/m/Y') }} — by <b>{{ $blog->author->name ?? 'Unknown' }}</b>
                         <div id="summernote">
                             <p>{!! $blog->content !!}</p>
                         </div>

@@ -94,13 +94,18 @@
                                         </div>
 
                                         <div class="form-group col-md-6">
-                                            <label class=" col-form-label">Employee Name</label>
-                                            <select name="employee_id" class="form-control">
-                                                    @foreach ($employees as $employee)
-                                                        <option value="{{ $employee->id }}">{{ $employee->user->name ?? 'Unknown' }}</option>
-                                                    @endforeach
-                                                    <option value="" disabled>If category is not in the list, than firstly add the category's information</option>
+                                            <label class=" col-form-label">Author Name</label>
+                                            @if (auth()->user()->roles()->first()->name == 'superadmin')
+                                             <select name="employee_id" class="form-control">
+                                                @foreach ($employees as $employee)
+                                                    <option {{ $employee->id == $blog->author->id ? 'selected' : ''}} value="{{ $employee->id }}">{{ $employee->name ?? 'Unknown' }}</option>
+                                                @endforeach
+                                                <option value="" disabled>If category is not in the list, than firstly add the category's information</option>
                                             </select>
+                                            @else
+                                            <input type="text" class="form-control" value="{{ $blog->author->name }}" readonly >
+                                            <input type="hidden" name="employee_id" value="{{ $blog->author->id }}">
+                                            @endif
                                         </div>
 
                                         <div class="form-group col-md-6">
