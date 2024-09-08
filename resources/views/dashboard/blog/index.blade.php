@@ -200,27 +200,29 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label class="col-form-label">SEO Title</label>
+                                    <label class="col-form-label">SEO Title </label>
                                     <div class="">
-                                        <input type="text" class="form-control " placeholder="Enter SEO title" name="seo_title" value="{{old('seo_title')}}">
+                                        <input id="cat_seo_title" type="text" class="form-control  " placeholder="Enter SEO title" name="seo_title" value="{{old('seo_title')}}">
+                                        <span id="cat_seo_title_error" class="text text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class="col-form-label">SEO Tags</label>
                                     <div class="">
-                                        <input type="text" class="form-control" placeholder="Enter SEO tags" name="seo_tags" value="{{old('seo_tags')}}">
+                                        <input id="cat_seo_tags" type="text" class="form-control " placeholder="Enter SEO tags" name="seo_tags" value="{{old('seo_tags')}}">
+                                        <span id="cat_seo_tags_error" class="text text-danger"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="">
                                 <label class="form-label">SEO Description</label>
-                                <textarea class="form-control " rows="5" name="seo_description"> {{old('seo_description')}} </textarea >
-
+                                <textarea id="cat_seo_desc" class="form-control  " rows="5" name="seo_description"> {{old('seo_description')}} </textarea >
+                                    <span id="cat_seo_desc_error" class="text text-danger"></span>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Create Category</button>
+                        <button id="categoryCreateBtn" type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Create Category</button>
                     </div>
                 </form>
             </div>
@@ -372,22 +374,25 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class=" col-form-label">SEO Title</label>
-                                    <input type="text" class="form-control " placeholder="Enter SEO title" name="seo_title" required>
+                                    <input id="seo_title" type="text" class="form-control " placeholder="Enter SEO title" name="seo_title" required>
+                                    <span id="seo_title_error" class="text text-danger"></span>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label class=" col-form-label">SEO Tags</label>
-                                    <input type="text" class="form-control " placeholder="Enter SEO tags" name="seo_tags" required>
+                                    <input id="seo_tags" type="text" class="form-control " placeholder="Enter SEO tags" name="seo_tags" required>
+                                    <span id="seo_tags_error" class="text text-danger"></span>
                                 </div>
                             </div>
 
                             <div class="form-group ">
                                 <label class="col-form-label">SEO Description</label>
-                                <textarea class="form-control" rows="5"  name="seo_description" required></textarea>
+                                <textarea id="seo_desc" class="form-control " rows="5"  name="seo_description" required></textarea>
+                                <span id="seo_desc_error" class="text text-danger"></span>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Create Blog</button>
+                        <button id="BlogCreateBtn" type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Create Blog</button>
                     </div>
 
                 </form>
@@ -404,6 +409,116 @@
 <script src="{{asset('dashboard_assets/vendor/datatables/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/datatables.init.js')}}"></script>
 
+<script>
+    //CATEGORY SEO VALIDATION
+    $(document).ready(function() {
+    // Define character limits
+    const CAT_SEO_TITLE_LIMIT = 120;
+    const CAT_SEO_TAGS_LIMIT = 350;
+    const CAT_SEO_DESC_LIMIT = 350;
+
+    function validateFields() {
+        let isValid = true;
+
+        // Get current values and lengths
+        let seoTitle = $('#cat_seo_title').val();
+        let seoTags = $('#cat_seo_tags').val();
+        let seoDesc = $('#cat_seo_desc').val();
+
+        let seoTitleLength = seoTitle.length;
+        let seoTagsLength = seoTags.length;
+        let seoDescLength = seoDesc.length;
+
+        // Check SEO Title
+        if (seoTitleLength > CAT_SEO_TITLE_LIMIT) {
+            $('#cat_seo_title_error').text(`Must be less than ${CAT_SEO_TITLE_LIMIT} characters`);
+            isValid = false;
+        } else {
+            $('#cat_seo_title_error').text('');
+        }
+
+        // Check SEO Tags
+        if (seoTagsLength > CAT_SEO_TAGS_LIMIT) {
+            $('#cat_seo_tags_error').text(`Must be less than ${CAT_SEO_TAGS_LIMIT} characters`);
+            isValid = false;
+        } else {
+            $('#cat_seo_tags_error').text('');
+        }
+
+        // Check SEO Description
+        if (seoDescLength > CAT_SEO_DESC_LIMIT) {
+            $('#cat_seo_desc_error').text(`Must be less than ${CAT_SEO_DESC_LIMIT} characters`);
+            isValid = false;
+        } else {
+            $('#cat_seo_desc_error').text('');
+        }
+
+        // Enable or disable the create button based on the validity
+        if (isValid) {
+            $('#categoryCreateBtn').removeAttr('disabled').removeClass('btn-primary').addClass('btn-outline-primary');
+        } else {
+            $('#categoryCreateBtn').attr('disabled', 'disabled').removeClass('btn-outline-primary').addClass('btn-primary');
+        }
+    }
+
+    // Attach input event handlers
+    $('#cat_seo_title, #cat_seo_tags, #cat_seo_desc').on('input', validateFields);
+});
+ //BLOG SEO VALIDATION
+ $(document).ready(function() {
+        // Define character limits
+        const SEO_TITLE_LIMIT = 120;
+        const SEO_TAGS_LIMIT = 350;
+        const SEO_DESC_LIMIT = 350;
+
+        function validateFields() {
+            let isValid = true;
+
+            // Get current values and lengths
+            let seoTitle = $('#seo_title').val();
+            let seoTags = $('#seo_tags').val();
+            let seoDesc = $('#seo_desc').val();
+
+            let seoTitleLength = seoTitle.length;
+            let seoTagsLength = seoTags.length;
+            let seoDescLength = seoDesc.length;
+
+            // Check SEO Title
+            if (seoTitleLength > SEO_TITLE_LIMIT) {
+                $('#seo_title_error').text(`Must be less than ${SEO_TITLE_LIMIT} characters`);
+                isValid = false;
+            } else {
+                $('#seo_title_error').text('');
+            }
+
+            // Check SEO Tags
+            if (seoTagsLength > SEO_TAGS_LIMIT) {
+                $('#seo_tags_error').text(`Must be less than ${SEO_TAGS_LIMIT} characters`);
+                isValid = false;
+            } else {
+                $('#seo_tags_error').text('');
+            }
+
+            // Check SEO Description
+            if (seoDescLength > SEO_DESC_LIMIT) {
+                $('#seo_desc_error').text(`Must be less than ${SEO_DESC_LIMIT} characters`);
+                isValid = false;
+            } else {
+                $('#seo_desc_error').text('');
+            }
+
+            // Enable or disable the create button based on the validity
+            if (isValid) {
+                $('#BlogCreateBtn').removeAttr('disabled').removeClass('btn-primary').addClass('btn-outline-primary');
+            } else {
+                $('#BlogCreateBtn').attr('disabled', 'disabled').removeClass('btn-outline-primary').addClass('btn-primary');
+            }
+        }
+
+        // Attach input event handlers
+        $('#seo_title, #seo_tags, #seo_desc').on('input', validateFields);
+    });
+</script>
 <script>
     $(document).ready(function() {
 

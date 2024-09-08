@@ -22,7 +22,7 @@ class ProjectResource extends JsonResource
             'description'   => $this->short_description,
             'name'          => $this->company_name,
             'slug'          => $this->slug,
-            'category'      => $this->category ? $this->category->name : 'TrustedMember',
+            'category'      => $this->serviceCategory->name ??  'TrustedMember',
             'date'          => $this->created_at->format('d M Y'),
         ];
     }
