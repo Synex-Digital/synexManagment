@@ -16,6 +16,7 @@
             padding-inline-start: 40px !important;
             unicode-bidi: isolate !important
         }
+        
         .note-editor .note-editing-area .note-editable ul li{
 
             display: list-item !important;
