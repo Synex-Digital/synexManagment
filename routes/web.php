@@ -57,6 +57,8 @@ Route::middleware(['auth'])->group(function () {
 //customer
     Route::get('web/customer', [CustomerSupportController::class, 'customer'])->name('web.customer');
     Route::get('web/supports/{id}', [CustomerSupportController::class, 'support'])->name('web.support');
+    Route::post('web/supports/merge', [CustomerSupportController::class, 'merge'])->name('web.customer.merge');
+    Route::post('web/supports/update', [CustomerSupportController::class, 'update'])->name('web.customer.update');
 //dashboard
     Route::get('/index', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/app/setting',[DashboardController::class, 'showAppSetting'])->name('dashboard.showSetting');
