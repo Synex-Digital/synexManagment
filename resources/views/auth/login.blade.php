@@ -75,14 +75,16 @@
       transform: translate(-50%, -50%);
       display: block;
       width: 100%;
-      max-width: 400px;
-      background-color: #fff;
+      max-width: 510px;
+      background: rgb(255 255 255 / 22%); /* Semi-transparent background */
+
       margin: 0;
       padding: 2.25em;
       box-sizing: border-box;
       border: solid 1px #ddd;
       border-radius: 0.5em;
       font-family: "Source Sans Pro", sans-serif;
+      backdrop-filter: blur(4px);
     }
     form .svgContainer {
       position: relative;
@@ -131,7 +133,7 @@
     form label {
       margin: 0 0 12px;
       display: block;
-      font-size: 1.25em;
+      font-size: 1rem;
       color: #217093;
       font-weight: 700;
       font-family: inherit;
@@ -146,18 +148,20 @@
       margin: 0;
       padding: 0 1em 0;
       padding: 0.875em 1em 0;
-      background-color: #f3fafd;
-      border: solid 2px #217093;
+      background: rgb(255 255 255 / 22%);
+      border: none;
+      border-bottom: solid 2px #217093;
       border-radius: 4px;
       -webkit-appearance: none;
       box-sizing: border-box;
       width: 100%;
-      height: 65px;
-      font-size: 1.55em;
+      height: 50px;
+      font-size: 15px;
       color: #353538;
-      font-weight: 600;
+      /* font-weight: 600; */
       font-family: inherit;
       transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
+      backdrop-filter: blur(4px);
     }
     form input[type=email]:focus,
     form input[type=text]:focus,
@@ -167,12 +171,12 @@
     form input[type=password]:focus {
       outline: none;
       box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-      border: solid 2px #4eb8dd;
+      border-bottom: solid 2px #4eb8dd;
     }
     form button {
       display: block;
       margin: 0;
-      padding: 0.65em 1em 1em;
+      padding:  1em 1em;
       background-color: #4eb8dd;
       border: none;
       border-radius: 4px;
@@ -180,7 +184,7 @@
       box-shadow: none;
       width: 100%;
       height: 65px;
-      font-size: 1.55em;
+      font-size: 1em;
       color: #fff;
       font-weight: 600;
       font-family: inherit;
@@ -195,14 +199,14 @@
       font-family: inherit;
     }
     form .inputGroup1 .helper1 {
-      top: 0;
+      top: 17px;
       left: 0;
       transform: translate(1em, 2.2em) scale(1);
       transform-origin: 0 0;
       color: #217093;
-      font-size: 1.55em;
+      font-size: 1rem;
       font-weight: 400;
-      opacity: 0.65;
+      opacity: 0.55;
       pointer-events: none;
       transition: transform 0.2s ease-out, opacity 0.2s linear;
     }
@@ -272,58 +276,10 @@
     <div class="authincation h-100">
         <div class="container-fluid h-100">
             <div class="row justify-content-center h-100 align-items-center">
-                <div class="col-md-6">
-                    <div class="">
-                        <div class="row no-gutters">
-                            <div class="col-xl-5">
-                                <div class="auth-form border rounded shadow-sm">
-                                    <h4 class="text-center mb-4">Sign in your account</h4>
-                                    <form method="POST" action="{{ route('login') }}">
-                                        @csrf
-                                        <div class="form-group">
-                                            <label><strong>Email</strong></label>
-                                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                                            @error('email')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                        </div>
-                                        <div class="form-group">
-                                            <label><strong>Password</strong></label>
-                                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
-                                            @error('password')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        </div>
-                                        {{-- <div class="form-row d-flex justify-content-between mt-4 mb-2">
-                                            <div class="form-group">
-                                                <div class="form-check ml-2">
-                                                    <input class="form-check-input" type="checkbox" id="basic_checkbox_1">
-                                                    <label class="form-check-label" for="basic_checkbox_1">Remember me</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <a href="page-forgot-password.html">Forgot Password?</a>
-                                            </div>
-                                        </div> --}}
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary btn-block">Sign me in</button>
-                                        </div>
-                                    </form>
-                                    {{-- <div class="new-account mt-3">
-                                        <p>Don't have an account? <a class="text-primary" href="./page-register.html">Sign up</a></p>
-                                    </div> --}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="col-lg-6">
-                    <form>
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
                         <div class="svgContainer">
                           <div>
                             <svg class="mySVG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200">
@@ -429,12 +385,15 @@
 
                         <div class="inputGroup inputGroup1">
                           <label for="loginEmail" id="loginEmailLabel">Email</label>
-                          <input type="email" id="loginEmail" maxlength="254" />
+                          <input type="email" id="loginEmail" maxlength="254" name="email"  required  />
                           <p class="helper helper1">email@domain.com</p>
+                          @error('email')
+                              <span class="text text-danger"><strong>{{ $message }}</strong></span>
+                          @enderror
                         </div>
                         <div class="inputGroup inputGroup2">
                           <label for="loginPassword" id="loginPasswordLabel">Password</label>
-                          <input type="password" id="loginPassword" />
+                          <input type="password" id="loginPassword"  name="password" required autocomplete="current-password"/>
                           <label id="showPasswordToggle" for="showPasswordCheck">Show
                             <input id="showPasswordCheck" type="checkbox" />
                             <div class="indicator"></div>
@@ -443,7 +402,7 @@
                         <div class="inputGroup inputGroup3">
                           <button id="login">Log in</button>
                         </div>
-                      </form>
+                    </form>
 
                 </div>
             </div>
