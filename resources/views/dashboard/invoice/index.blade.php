@@ -165,7 +165,7 @@
                         <div id="item-holder" class="items-table-header rounded-1   mb-1" style="background: #3b82f6;">
                             <div class="amount">
                                 <div class="theme-label bordered">
-                                    <input type="text" class="input-label input-label-custom form-control form-control-sm text-light amount" value="Amount" name="amount_header" />
+                                    <input type="text" class="input-label input-label-custom form-control form-control-sm text-light " value="Amount" name="amount_header" />
                                 </div>
                             </div>
                             <div class="unit_cost">
@@ -352,55 +352,15 @@
 
 @section('script')
 <script>
+$(document).ready(function() {
+    var currentCurrencySymbol = '$'; // Initialize with the default currency symbol
 
-$(document).ready(function() {
-    $('#addLineItemBtn').click(function() {
-        const newItemHtml = `
-            <div class="item-row pb-1">
-                <div class="main-row">
-                    <div class="delete">
-                        <button class="btn btn-outline-danger btn-sm delete-btn"> <i class="fa fa-times"></i></button>
-                    </div>
-                    <div class="amount value">
-                        <span class="currency-symbol">$</span>0
-                    </div>
-                    <div class="unit_cost">
-                        <div class="input-group input-group-sm">
-                            <span class="input-group-text pe-2 ps-2 currency-sign currency-symbol">$</span>
-                            <input class="item-calc form-control form-control-sm border-start-0 ps-2" type="number" step="any" autocomplete="off" name="unit_cost" value="0" />
-                        </div>
-                    </div>
-                    <div class="quantity">
-                        <input type="number" step="any" class="item-calc form-control form-control-sm" autocomplete="off" name="quantity" value="0" />
-                    </div>
-                    <div class="name">
-                        <textarea class="item-calc form-control form-control-sm" rows="1" name="name" placeholder="Description of item/service..."></textarea>
-                    </div>
-                </div>
-            </div>`;
-        $('#items').append(newItemHtml);
-    });
-
-    // Delegate the click event for dynamic elements
-    $('#items').on('click', '.delete-btn', function() {
-        $(this).closest('.item-row').remove();
-    });
-});
-$(document).ready(function() {
-    $('#exchange').click(function() {
-        var discountDiv = $('#discount');
-        if (discountDiv.text() === '%') {
-            discountDiv.text('$');
-        } else {
-            discountDiv.text('%');
-        }
-    });
-});
-$(document).ready(function() {
     // Function to update currency symbols based on selection
     function updateCurrencySymbols(currency) {
-        var symbol = currency === "USD" ? '$' : '৳';
-        $('.currency-symbol').text(symbol);
+        currentCurrencySymbol = currency === "USD" ? '$' : '৳';
+        $('.currency-symbol').each(function() {
+            $(this).text(currentCurrencySymbol);
+        });
     }
 
     // Handle currency change
@@ -411,7 +371,53 @@ $(document).ready(function() {
 
     // Initialize with the default value
     updateCurrencySymbols($('select[name="currency"]').val());
+
+    // Add new line item with the current currency symbol
+    $('#addLineItemBtn').click(function() {
+        const newItemHtml = `
+          <div class="item-row pb-1">
+                 <div class="main-row">
+                     <div class="delete">
+                         <button class="btn btn-outline-danger btn-sm delete-btn"> <i class="fa fa-times"></i></button>
+                     </div>
+                     <div class="amount value">
+                         <span class="currency-symbol">${currentCurrencySymbol}</span>0
+                     </div>
+                     <div class="unit_cost">
+                         <div class="input-group input-group-sm">
+                             <span class="input-group-text pe-2 ps-2 currency-sign currency-symbol">${currentCurrencySymbol}</span>
+                             <input class="item-calc form-control form-control-sm border-start-0 ps-2" type="number" step="any" autocomplete="off" name="unit_cost" value="0" />
+                         </div>
+                     </div>
+                     <div class="quantity">
+                         <input type="number" step="any" class="item-calc form-control form-control-sm" autocomplete="off" name="quantity" value="0" />
+                     </div>
+                     <div class="name">
+                         <textarea class="item-calc form-control form-control-sm" rows="1" name="name" placeholder="Description of item/service..."></textarea>
+                     </div>
+                 </div>
+             </div>`;
+        $('#items').append(newItemHtml);
+    });
+
+    // Delegate the click event for dynamic elements
+    $('#items').on('click', '.delete-btn', function() {
+        $(this).closest('.item-row').remove();
+    });
 });
+
+
+$(document).ready(function() {
+    $('#exchange').click(function() {
+        var discountDiv = $('#discount');
+        if (discountDiv.text() === '%') {
+            discountDiv.text('$');
+        } else {
+            discountDiv.text('%');
+        }
+    });
+});
+
 $(document).ready(function() {
     function calculateInvoice() {
         var subtotal = 0;
