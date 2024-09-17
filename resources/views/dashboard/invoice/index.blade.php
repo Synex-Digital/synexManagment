@@ -33,7 +33,7 @@
     transition: .3s;
 }
 .custom-input:focus + .percent-custom{
-    transition: 0.5s;
+    transition:  5s;
     border: #aa96ff 1px solid !important;
 }
 </style>
