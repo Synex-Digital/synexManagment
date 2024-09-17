@@ -30,10 +30,10 @@
 
 }
 .percent-custom{
-    transition: .3s;
+    transition: .1s;
 }
 .custom-input:focus + .percent-custom{
-    transition:  5s;
+    transition:  .1s;
     border: #aa96ff 1px solid !important;
 }
 </style>
@@ -188,17 +188,19 @@
                             <div class="item-row pb-1">
                                 <div class="main-row">
                                     <div class="delete"></div>
-                                    <div class="amount value">
-                                        <span class="currency-symbol">$</span>0
+                                    <div  class="amount value amount_div">
+                                        <span class="currency-symbol">$</span>
+                                        0
+
                                     </div>
                                     <div class="unit_cost">
                                         <div class="input-group input-group-sm">
                                             <span  class="input-group-text pe-2 ps-2 currency-sign currency-symbol">$</span>
-                                            <input class="item-calc form-control form-control-sm border-start-0 ps-2" type="number" step="any" autocomplete="off" name="items[0][unit_cost]" value="0" />
+                                            <input  class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="items[0][unit_cost]" value="0" />
                                         </div>
                                     </div>
                                     <div class="quantity">
-                                        <input type="number" step="any" class="item-calc form-control form-control-sm" autocomplete="off" name="items[0][quantity]" value="0" />
+                                        <input  type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="items[0][quantity]" value="0" />
                                     </div>
                                     <div class="name">
                                         <textarea class="item-calc form-control form-control-sm" rows="1" name="items[0][name]" placeholder="Description of item/service..."></textarea>
@@ -239,7 +241,7 @@
                         <div class="col-md-6">
                             <div class="input-group addon-input">
                                 <input class="input-label form-control form-control-sm " type="text" name="subtotal_title" value="Subtotal" />
-                                <div class="input-group-addon value pr-5"><span class="currency-symbol">$</span>0</div>
+                                <div id="subtotal_div" class="input-group-addon value pr-5"><span class="currency-symbol">$</span>0</div>
                             </div>
 
 
@@ -248,8 +250,8 @@
                                 <input class="input-label form-control form-control-sm" type="text" name="tax_title" value="Discount" />
                                 <div class="input-group-addon">
                                     <div class="input-group input-group-sm">
-                                        <input class="item-calc form-control  custom-input form-control-sm  ps-2" type="number" step="any" autocomplete="off" name="items[0][unit_cost]" value="0" style="border-right: none;" />
-                                        <div id="discount" class="percent-custom  " style="margin-right: 1px;">%</div>
+                                        <input id="discount_input" class="item-calc form-control  custom-input form-control-sm  ps-2" type="number"   value="22" style="border-right: none;" />
+                                        <div id="discount" class="percent-custom   " style="margin-right: 1px;">%</div>
                                         <button id="exchange" type="button" class="btn btn-square btn-light " >
                                             <span  class="fa fa-repeat"></span>
                                         </button>
@@ -260,8 +262,8 @@
                                 <input class="input-label form-control form-control-sm" type="text" name="tax_title" value="Tax" />
                                 <div class="input-group-addon">
                                     <div class="input-group input-group-sm">
-                                        <input class="item-calc form-control form-control-sm ps-2" type="number" step="any" autocomplete="off" name="items[0][unit_cost]" value="0" />
-                                        <span class="input-group-text pe-2 ps-2 currency-sign">%</span>
+                                        <input id="tax_input" class="item-calc form-control form-control-sm ps-2" type="number" step="any" autocomplete="off" name="items[0][unit_cost]" value="0" />
+                                        <span class="input-group-text pe-2 ps-2 currency-sign curre">%</span>
                                     </div>
                                 </div>
                             </div>
@@ -269,14 +271,11 @@
 
                             <div class="input-group addon-input">
                                 <input class="input-label form-control form-control-sm" type="text" name="total_title" value="Total" />
-                                <div class="input-group-addon value pr-5"><span class="currency-symbol">$</span>0</div>
+                                <div id="total_div" class="input-group-addon value pr-5 "><span class="currency-symbol">$</span>0</div>
                             </div>
 
 
-                                <div class="input-group addon-input ">
-                                    <input class="input-label form-control form-control-sm" type="text" name="balance_title" value="Balance Due" />
-                                    <div class="input-group-addon value pr-5"><span class="currency-symbol">$</span>0</div>
-                                </div>
+
                         </div>
                     </div>
                 </div>
@@ -352,17 +351,139 @@
 
 @section('script')
 <script>
+// $(document).ready(function() {
+//     var currentCurrencySymbol = '$'; // Initialize with the default currency symbol
+
+//     // Function to update currency symbols based on selection
+//     function updateCurrencySymbols(currency) {
+//         currentCurrencySymbol = currency === "USD" ? '$' : '৳';
+//         $('.currency-symbol').each(function() {
+//             $(this).text(currentCurrencySymbol);
+//         });
+//     }
+
+//     // Handle currency change
+//     $('select[name="currency"]').change(function() {
+//         var selectedCurrency = $(this).val();
+//         updateCurrencySymbols(selectedCurrency);
+//     });
+
+//     // Initialize with the default value
+//     updateCurrencySymbols($('select[name="currency"]').val());
+
+//     // Add new line item with the current currency symbol
+//     $('#addLineItemBtn').click(function() {
+//         const newItemHtml = `
+//           <div class="item-row pb-1">
+//                  <div class="main-row">
+//                      <div class="delete">
+//                          <button class="btn btn-outline-danger btn-sm delete-btn"> <i class="fa fa-times"></i></button>
+//                      </div>
+//                      <div class="amount value amount_div">
+//                          <span class="currency-symbol">${currentCurrencySymbol}</span>
+//                          0
+//                      </div>
+//                      <div class="unit_cost">
+//                          <div class="input-group input-group-sm">
+//                              <span class="input-group-text pe-2 ps-2 currency-sign currency-symbol">${currentCurrencySymbol}</span>
+//                              <input class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="unit_cost" value="0" />
+//                          </div>
+//                      </div>
+//                      <div class="quantity">
+//                          <input type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="quantity" value="0" />
+//                      </div>
+//                      <div class="name">
+//                          <textarea class="item-calc form-control form-control-sm" rows="1" name="name" placeholder="Description of item/service..."></textarea>
+//                      </div>
+//                  </div>
+//              </div>`;
+//         $('#items').append(newItemHtml);
+//     });
+
+//     // Delegate the click event for dynamic elements
+//     $('#items').on('click', '.delete-btn', function() {
+//         $(this).closest('.item-row').remove();
+//     });
+// });
+
+
+
+
+// $(document).ready(function() {
+//     // Function to calculate the amount
+//     function calculateAmount() {
+//         var rate = $('.rate_input').val(); // Get the value of the rate input
+//         var quantity = $('.quantity_input').val(); // Get the value of the quantity input
+//         var amount = rate * quantity; // Calculate the amount
+
+//         // Update the amount_div with the new amount
+//         $('.amount_div').text('$' + amount.toFixed(2)); // Format to 2 decimal places
+//         $('#subtotal_div').text('$' + amount.toFixed(2)); // Format to 2 decimal places
+//     }
+
+//     // Attach event listeners to the rate and quantity input fields
+//     $('.rate_input, .quantity_input').on('input', function() {
+//         calculateAmount(); // Call calculateAmount whenever any input changes
+//     });
+// });
+
+
+
 $(document).ready(function() {
     var currentCurrencySymbol = '$'; // Initialize with the default currency symbol
+
+    // Function to calculate and update the amount for each item line
+    function updateAmount(itemRow) {
+        var rate = $(itemRow).find('.rate_input').val();
+        var quantity = $(itemRow).find('.quantity_input').val();
+        var amount = (rate * quantity) || 0; // Calculate the amount or default to 0 if NaN
+        var symbol = ` <span class="currency-symbol">${currentCurrencySymbol}</span>`
+        $(itemRow).find('.amount_div').html(symbol + amount.toFixed(2)); // Update the amount in the corresponding div
+        updateSubtotal(); // Update the subtotal whenever any amount changes
+    }
+
+    let x = 0;
+    // Function to calculate and update the subtotal for all items
+    function updateSubtotal() {
+        var subtotal = 0;
+        $('.amount_div').each(function() {
+            var amountText = $(this).text(); // Get the amount text
+            var amount = parseFloat(amountText.replace(currentCurrencySymbol, '')); // Remove the currency symbol and convert to float
+            subtotal += amount; // Sum up all the amounts
+        });
+        $('#subtotal_div').text(currentCurrencySymbol + subtotal.toFixed(2)); // Update the subtotal div
+        x = subtotal;
+
+    }
+
+    // Listen to input changes for rate and quantity in any item row
+    $('#items').on('input', '.rate_input, .quantity_input', function() {
+        var itemRow = $(this).closest('.main-row'); // Find the parent row of the changed input
+        updateAmount(itemRow); // Update the amount for this specific item row
+
+    });
 
     // Function to update currency symbols based on selection
     function updateCurrencySymbols(currency) {
         currentCurrencySymbol = currency === "USD" ? '$' : '৳';
+
         $('.currency-symbol').each(function() {
             $(this).text(currentCurrencySymbol);
         });
+        //updateSubtotal(); // Update the subtotal to reflect the new currency symbol
     }
+    let y = false;
+    $('#exchange').click(function() {
+        var discountDiv = $('#discount');
+        if (discountDiv.text() === '%') {
+            discountDiv.text(currentCurrencySymbol);
+            y = !y;
+        } else {
+            discountDiv.text('%');
+            y = !y;
+        }
 
+    });
     // Handle currency change
     $('select[name="currency"]').change(function() {
         var selectedCurrency = $(this).val();
@@ -380,17 +501,18 @@ $(document).ready(function() {
                      <div class="delete">
                          <button class="btn btn-outline-danger btn-sm delete-btn"> <i class="fa fa-times"></i></button>
                      </div>
-                     <div class="amount value">
-                         <span class="currency-symbol">${currentCurrencySymbol}</span>0
+                     <div class="amount value amount_div">
+                         <span class="currency-symbol">${currentCurrencySymbol}</span>
+                         0
                      </div>
                      <div class="unit_cost">
                          <div class="input-group input-group-sm">
                              <span class="input-group-text pe-2 ps-2 currency-sign currency-symbol">${currentCurrencySymbol}</span>
-                             <input class="item-calc form-control form-control-sm border-start-0 ps-2" type="number" step="any" autocomplete="off" name="unit_cost" value="0" />
+                             <input class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="unit_cost" value="0" />
                          </div>
                      </div>
                      <div class="quantity">
-                         <input type="number" step="any" class="item-calc form-control form-control-sm" autocomplete="off" name="quantity" value="0" />
+                         <input type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="quantity" value="0" />
                      </div>
                      <div class="name">
                          <textarea class="item-calc form-control form-control-sm" rows="1" name="name" placeholder="Description of item/service..."></textarea>
@@ -398,74 +520,29 @@ $(document).ready(function() {
                  </div>
              </div>`;
         $('#items').append(newItemHtml);
+        updateSubtotal(); // Recalculate subtotal when a new item is added
     });
 
     // Delegate the click event for dynamic elements
     $('#items').on('click', '.delete-btn', function() {
         $(this).closest('.item-row').remove();
+        updateSubtotal(); // Recalculate subtotal when an item is removed
+
     });
-});
 
-
-$(document).ready(function() {
-    $('#exchange').click(function() {
-        var discountDiv = $('#discount');
-        if (discountDiv.text() === '%') {
-            discountDiv.text('$');
-        } else {
-            discountDiv.text('%');
+    $('#discount_input').on('input', function() {
+        let val = $(this).val();
+        let discount = 0;
+        if( y == true) {
+             discount = (x - val);
+            $('#total_div').text(currentCurrencySymbol + discount.toFixed(2));
+        }else{
+            discount = (x * val) / 100;
+            $('#total_div').text(currentCurrencySymbol + (x - discount).toFixed(2));
         }
     });
+
 });
-
-$(document).ready(function() {
-    function calculateInvoice() {
-        var subtotal = 0;
-
-        // Calculate each line's amount and accumulate to subtotal
-        $('#items .item-row').each(function() {
-            var quantity = parseFloat($(this).find('.quantity').val()) || 0;
-            var rate = parseFloat($(this).find('.rate').val()) || 0;
-            var amount = quantity * rate;
-            $(this).find('.amount').text(currencySymbol + amount.toFixed(2));
-            subtotal += amount;
-        });
-
-        // Display Subtotal
-        $('#subtotal').text(currencySymbol + subtotal.toFixed(2));
-
-        // Calculate and Display Discount
-        var discountType = $('#discountType').val();
-        var discountValue = parseFloat($('#discount').val()) || 0;
-        var discountAmount = discountType === 'percentage' ? (subtotal * (discountValue / 100)) : discountValue;
-        $('#discountAmount').text(currencySymbol + discountAmount.toFixed(2));
-
-        // Calculate and Display Tax
-        var taxPercentage = parseFloat($('#taxPercentage').val()) || 0;
-        var taxAmount = (subtotal - discountAmount) * (taxPercentage / 100);
-        $('#taxAmount').text(currencySymbol + taxAmount.toFixed(2));
-
-        // Calculate and Display Total
-        var total = subtotal - discountAmount + taxAmount;
-        $('#total').text(currencySymbol + total.toFixed(2));
-
-        // Balance due is the same as Total
-        $('#balanceDue').text(currencySymbol + total.toFixed(2));
-    }
-
-    // Listen for changes on input fields and recalculate
-    $(document).on('input', '.quantity, .rate, #discount, #discountType, #taxPercentage', function() {
-        calculateInvoice();
-    });
-
-    // Set currency symbol based on the currency selector
-    var currencySymbol = '$'; // Default to USD
-    $('select[name="currency"]').change(function() {
-        currencySymbol = $(this).val() === 'USD' ? '$' : '৳';
-        calculateInvoice(); // Recalculate with the new currency symbol
-    }).trigger('change'); // Trigger initially to set the correct symbol
-});
-
 
 
 </script>
