@@ -250,10 +250,10 @@
                                 <input class="input-label form-control form-control-sm" type="text" name="tax_title" value="Discount" />
                                 <div class="input-group-addon">
                                     <div class="input-group input-group-sm">
-                                        <input id="discount_input" class="item-calc form-control  custom-input form-control-sm  ps-2" type="number"   value="22" style="border-right: none;" />
+                                        <input id="discount_input" class="item-calc form-control  custom-input form-control-sm  ps-2" type="number"   value="0" style="border-right: none;" />
                                         <div id="discount" class="percent-custom   " style="margin-right: 1px;">%</div>
                                         <button id="exchange" type="button" class="btn btn-square btn-light " >
-                                            <span  class="fa fa-repeat"></span>
+                                            <span  class="fa fa-exchange"></span>
                                         </button>
                                     </div>
                                 </div>
@@ -262,7 +262,7 @@
                                 <input class="input-label form-control form-control-sm" type="text" name="tax_title" value="Tax" />
                                 <div class="input-group-addon">
                                     <div class="input-group input-group-sm">
-                                        <input id="tax_input" class="item-calc form-control form-control-sm ps-2" type="number" step="any" autocomplete="off" name="items[0][unit_cost]" value="0" />
+                                        <input id="tax_input" class="item-calc form-control form-control-sm ps-2" type="number" value="0" />
                                         <span class="input-group-text pe-2 ps-2 currency-sign curre">%</span>
                                     </div>
                                 </div>
@@ -441,7 +441,7 @@ $(document).ready(function() {
         $(itemRow).find('.amount_div').html(symbol + amount.toFixed(2)); // Update the amount in the corresponding div
         updateSubtotal(); // Update the subtotal whenever any amount changes
     }
-
+    let afterDvalue = 0;
     let x = 0;
     // Function to calculate and update the subtotal for all items
     function updateSubtotal() {
@@ -453,14 +453,14 @@ $(document).ready(function() {
         });
         $('#subtotal_div').text(currentCurrencySymbol + subtotal.toFixed(2)); // Update the subtotal div
         x = subtotal;
-
+        discountCalculate();
     }
 
     // Listen to input changes for rate and quantity in any item row
     $('#items').on('input', '.rate_input, .quantity_input', function() {
         var itemRow = $(this).closest('.main-row'); // Find the parent row of the changed input
         updateAmount(itemRow); // Update the amount for this specific item row
-
+        taxCalculate();
     });
 
     // Function to update currency symbols based on selection
@@ -470,7 +470,7 @@ $(document).ready(function() {
         $('.currency-symbol').each(function() {
             $(this).text(currentCurrencySymbol);
         });
-        //updateSubtotal(); // Update the subtotal to reflect the new currency symbol
+        updateSubtotal(); // Update the subtotal to reflect the new currency symbol
     }
     let y = false;
     $('#exchange').click(function() {
@@ -478,9 +478,11 @@ $(document).ready(function() {
         if (discountDiv.text() === '%') {
             discountDiv.text(currentCurrencySymbol);
             y = !y;
+            discountCalculate();
         } else {
             discountDiv.text('%');
             y = !y;
+            discountCalculate();
         }
 
     });
@@ -527,20 +529,41 @@ $(document).ready(function() {
     $('#items').on('click', '.delete-btn', function() {
         $(this).closest('.item-row').remove();
         updateSubtotal(); // Recalculate subtotal when an item is removed
-
+        discountCalculate();
+        taxCalculate();
     });
 
     $('#discount_input').on('input', function() {
-        let val = $(this).val();
+        discountCalculate();
+    });
+    $('#tax_input').on('input', function() {
+        taxCalculate();
+
+    });
+
+    function discountCalculate(){
+        let val = $('#discount_input').val();
         let discount = 0;
         if( y == true) {
              discount = (x - val);
-            $('#total_div').text(currentCurrencySymbol + discount.toFixed(2));
+             total(discount);
+             afterDvalue = discount;
         }else{
-            discount = (x * val) / 100;
-            $('#total_div').text(currentCurrencySymbol + (x - discount).toFixed(2));
+            discount = (x - (x * val) / 100);
+            total(discount);
+            afterDvalue = discount;
         }
-    });
+    }
+    function taxCalculate(){
+
+        let val = $('#tax_input').val();
+        let tax = 0;
+        tax = afterDvalue + (afterDvalue * val) / 100;
+        total(tax);
+    }
+    function total($value){
+        $('#total_div').text(currentCurrencySymbol + $value.toFixed(2));
+    }
 
 });
 
