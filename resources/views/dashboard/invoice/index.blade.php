@@ -3,6 +3,7 @@
 
 <link rel="stylesheet" href="https://cdn.invoice-generator.com/theme_light.9ae229e2.css" id="theme-link">
 <link rel="stylesheet" href="https://cdn.invoice-generator.com/197.655399c9.css"><link rel="stylesheet" href="https://cdn.invoice-generator.com/app.bc26e048.css">
+<link rel="stylesheet" href="{{asset('dashboard_assets/vendor/select2/css/select2.min.css')}}">
 <style>
     .header-right{
         right: 0;
@@ -87,8 +88,21 @@
                                 </select>
                             </div>
                         </div>
-
-
+                    </div>
+                    <div class="border-top border-bottom px-3 mt-5">
+                        <div class="mt-3">
+                            <label class="control-label">Client</label>
+                            <div>
+                                <select class="single-select" name="client_id">
+                                        <option value="" disabled selected>Select Client</option>
+                                        @forelse ($clients as $data  )
+                                        <option value="{{ $data->id }}">{{ $data->name }}</option>
+                                        @empty
+                                        <option disabled> No Data</option>
+                                        @endforelse
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div id="adngin-side_1-0"></div>
@@ -350,85 +364,9 @@
 @endsection
 
 @section('script')
+<script src="{{asset('dashboard_assets/vendor/select2/js/select2.full.min.js')}}"></script>
+<script src="{{asset('dashboard_assets/js/plugins-init/select2-init.js')}}"></script>
 <script>
-// $(document).ready(function() {
-//     var currentCurrencySymbol = '$'; // Initialize with the default currency symbol
-
-//     // Function to update currency symbols based on selection
-//     function updateCurrencySymbols(currency) {
-//         currentCurrencySymbol = currency === "USD" ? '$' : '৳';
-//         $('.currency-symbol').each(function() {
-//             $(this).text(currentCurrencySymbol);
-//         });
-//     }
-
-//     // Handle currency change
-//     $('select[name="currency"]').change(function() {
-//         var selectedCurrency = $(this).val();
-//         updateCurrencySymbols(selectedCurrency);
-//     });
-
-//     // Initialize with the default value
-//     updateCurrencySymbols($('select[name="currency"]').val());
-
-//     // Add new line item with the current currency symbol
-//     $('#addLineItemBtn').click(function() {
-//         const newItemHtml = `
-//           <div class="item-row pb-1">
-//                  <div class="main-row">
-//                      <div class="delete">
-//                          <button class="btn btn-outline-danger btn-sm delete-btn"> <i class="fa fa-times"></i></button>
-//                      </div>
-//                      <div class="amount value amount_div">
-//                          <span class="currency-symbol">${currentCurrencySymbol}</span>
-//                          0
-//                      </div>
-//                      <div class="unit_cost">
-//                          <div class="input-group input-group-sm">
-//                              <span class="input-group-text pe-2 ps-2 currency-sign currency-symbol">${currentCurrencySymbol}</span>
-//                              <input class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="unit_cost" value="0" />
-//                          </div>
-//                      </div>
-//                      <div class="quantity">
-//                          <input type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="quantity" value="0" />
-//                      </div>
-//                      <div class="name">
-//                          <textarea class="item-calc form-control form-control-sm" rows="1" name="name" placeholder="Description of item/service..."></textarea>
-//                      </div>
-//                  </div>
-//              </div>`;
-//         $('#items').append(newItemHtml);
-//     });
-
-//     // Delegate the click event for dynamic elements
-//     $('#items').on('click', '.delete-btn', function() {
-//         $(this).closest('.item-row').remove();
-//     });
-// });
-
-
-
-
-// $(document).ready(function() {
-//     // Function to calculate the amount
-//     function calculateAmount() {
-//         var rate = $('.rate_input').val(); // Get the value of the rate input
-//         var quantity = $('.quantity_input').val(); // Get the value of the quantity input
-//         var amount = rate * quantity; // Calculate the amount
-
-//         // Update the amount_div with the new amount
-//         $('.amount_div').text('$' + amount.toFixed(2)); // Format to 2 decimal places
-//         $('#subtotal_div').text('$' + amount.toFixed(2)); // Format to 2 decimal places
-//     }
-
-//     // Attach event listeners to the rate and quantity input fields
-//     $('.rate_input, .quantity_input').on('input', function() {
-//         calculateAmount(); // Call calculateAmount whenever any input changes
-//     });
-// });
-
-
-
 $(document).ready(function() {
     var currentCurrencySymbol = '$'; // Initialize with the default currency symbol
 
