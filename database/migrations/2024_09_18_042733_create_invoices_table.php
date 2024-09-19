@@ -13,11 +13,22 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->string('customer_name')->nullable();
-            $table->string('customer_email')->nullable();
-            $table->decimal('total', 10, 2)->default(0.00); // Total amount for the invoice
-            $table->timestamps(); // Includes created_at and updated_at
-            $table->timestamps();
+            $table->string('invoice_number')->unique();
+            $table->unsignedBigInteger('client_id')->nullable();
+            $table->unsignedBigInteger('project_id')->nullable();
+            $table->string('header');
+            $table->string('bill_to_value');
+            $table->date('date_value');
+            $table->date('payment_terms_value');
+            $table->date('due_date_value');
+            $table->text('note_value');
+            $table->text('term_value');
+            $table->decimal('subtotal_value', 10, 2);
+            $table->decimal('discount_value', 10, 2)->nullable(); // Handling possible null values
+            $table->string('discount_type')->nullable();
+            $table->decimal('tax_value', 10, 2);
+            $table->decimal('total_value', 10, 2);
+
         });
     }
 

@@ -66,6 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/app/setting/logoicon/store',[DashboardController::class, 'logoIcon_store'])->name('dashboard.logoIcon.store');
 //invoice generate
     Route::get('/invoice/generate', [InvoiceGenerateController::class, 'index'])->name('invoice.generate');
+    Route::post('/invoic/store', [InvoiceGenerateController::class, 'store'])->name('invoice.store');
 //resource routes
     Route::resources([
         'project' => ProjectController::class,
