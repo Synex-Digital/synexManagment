@@ -50,8 +50,8 @@
     <div class="col-lg-6 col-md-7 col-sm-7">
         <ol class="breadcrumb " style="float:inline-end; background-color: transparent;">
             <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a class="text-primary">Invoice</a></li>
-            {{-- <li class="breadcrumb-item " ><a class="text-primary">Project List</a></li> --}}
+            <li class="breadcrumb-item"><a href="{{ route('invoice.list') }}" class="">Invoice</a></li>
+            <li class="breadcrumb-item " ><a class="text-primary">Edit</a></li>
         </ol>
     </div>
 
@@ -76,7 +76,7 @@
                     <div class="affix-el" id="invoice-controls-affix">
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg btn-block">
-                                <span class="fas fa-arrow-to-bottom"></span> Save Invoice
+                                <span class="fas fa-arrow-to-bottom"></span> Update Invoice
                             </button>
                         </div>
 
@@ -85,8 +85,8 @@
                                 <label class="control-label">Currency</label>
                                 <div>
                                     <select class="form-select" name="currency">
-                                        <option value="USD" >USD ($)</option>
-                                        <option value="BDT" >BDT (৳) </option>
+                                        <option {{ $invoice->currency == 'USD' ? 'selected' : '' }} value="USD" >USD ($)</option>
+                                        <option {{ $invoice->currency == 'BDT' ? 'selected' : '' }} value="BDT" >BDT (৳) </option>
                                     </select>
                                 </div>
                             </div>
@@ -96,26 +96,34 @@
                                 <label class="control-label">Client</label>
                                 <div>
                                     <select class="single-select client-select" name="client_id">
-                                        <option value="none"  selected  >None</option>
-                                            @forelse ($clients as $data  )
-                                            <option value="{{ $data->id }}">{{ $data->name }}</option>
-                                            @empty
-                                            <option disabled> No Data</option>
-                                            @endforelse
+                                        <option value="none" {{ empty($invoice->client_id) ? 'selected' : '' }}>None</option>
+                                        @forelse ($clients as $data)
+                                            <option {{ $invoice->client_id == $data->id ? 'selected' : '' }} value="{{ $data->id }}">{{ $data->name }}</option>
+                                        @empty
+                                            <option disabled>No Data</option>
+                                        @endforelse
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="border-top border-bottom px-3 mt-5 project d-none">
+                        <div class="border-top border-bottom px-3 mt-5 project">
                             <div class="mt-3">
                                 <label class="control-label">Project</label>
                                 <div>
                                     <select id="project-select" class="single-select" name="project_id">
-
+                                        <option value="none" {{ empty($invoice->project_id) ? 'selected' : '' }}>None</option>
+                                        @foreach ($projects as $project)
+                                            @if ($project->client_id == $invoice->client_id)
+                                                <option value="{{ $project->id }}" {{ $invoice->project_id == $project->id ? 'selected' : '' }}>
+                                                    {{ $project->name }}
+                                                </option>
+                                            @endif
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
+
 
                         <div id="adngin-side_1-0"></div>
                     </div>
@@ -129,7 +137,7 @@
                                 <img class="float-left mt-4" width="160" height="60" src="{{ asset('uploads/synex-logo.jpg') }}" alt="">
                                 <div class="offset-md-8">
                                     <div class="title">
-                                        <input type="text" class="form-control form-control-sm input-label" name="header" value="INVOICE" />
+                                        <input type="text" class="form-control form-control-sm input-label" name="header" value="{{ $invoice->header }}" />
 
                                     </div>
                                 </div>
@@ -145,10 +153,10 @@
                                     <div class="col-md-6">
                                         <div class="contact pt-3">
                                             <div class="theme-label mb-1">
-                                                <input type="text" class="input-label form-control form-control-sm" name="bill_to_label" value="Bill To" readonly  />
+                                                <input type="text" class="input-label form-control form-control-sm" name="bill_to_label" value="{{ $invoice->labels->first()->bill_to_label }}" required  />
                                             </div>
                                             <div class="value">
-                                                <input id="to" class="form-control" type="text" placeholder="who is this to?" name="bill_to_value" required value="{{ old('bill_to_value') }}">
+                                                <input id="to" class="form-control" type="text" placeholder="who is this to?" name="bill_to_value" required value="{{ $invoice->bill_to_value }}">
                                             </div>
                                         </div>
                                     </div>
@@ -160,25 +168,25 @@
                                 <div class="invoice-details pt-3" style="margin-top: 37px;">
                                     <!-- Date -->
                                     <div class="input-group addon-input">
-                                        <input class="input-label form-control form-control-sm" type="text" name="date_label" value="Date" required value="{{ old('data_label') }}" />
+                                        <input class="input-label form-control form-control-sm" type="text" name="date_label" value="Date" required value="{{ $invoice->labels->first()->date_label  }}" />
                                         <div class="input-group-addon">
-                                            <input id="invoiceDate" class="form-control form-control-sm datepicker" type="date" name="date_value" value="{{ old('date_value') }}"  required />
+                                            <input id="invoiceDate" class="form-control form-control-sm datepicker" type="date" name="date_value" value="{{ $invoice->date_value }}"  required />
                                         </div>
                                     </div>
 
                                     <!-- Payment Terms -->
                                     <div class="input-group addon-input" ng-hide="document.type == 'credit_note'">
-                                        <input class="input-label form-control form-control-sm" type="text" name="payment_terms_label" value="Payment Terms" required  />
+                                        <input class="input-label form-control form-control-sm" type="text" name="payment_terms_label" value="{{ $invoice->labels->first()->payment_terms_label }}" required  />
                                         <div class="input-group-addon">
-                                            <input id="invoiceDueDate" class="form-control form-control-sm datepicker" type="text" name="payment_terms_value" value="{{ old('payment_terms_value') }}" required />
+                                            <input id="invoiceDueDate" class="form-control form-control-sm datepicker" type="text" name="payment_terms_value" value="{{ $invoice->payment_terms_value }}" required />
                                         </div>
                                     </div>
 
                                     <!-- Due Date -->
                                     <div class="input-group addon-input">
-                                        <input class="input-label form-control form-control-sm" type="text" name="due_date_label" value="Due Date" required />
+                                        <input class="input-label form-control form-control-sm" type="text" name="due_date_label" value="{{ $invoice->labels->first()->due_date_label }}" required />
                                         <div class="input-group-addon">
-                                            <input id="invoiceDueDate" class="form-control form-control-sm datepicker" type="date" name="due_date_value" value="{{ old('due_date_value') }}" required />
+                                            <input id="invoiceDueDate" class="form-control form-control-sm datepicker" type="date" name="due_date_value" value="{{ $invoice->due_date_value }}" required />
                                         </div>
                                     </div>
                                 </div>
@@ -189,48 +197,78 @@
                             <div id="item-holder" class="items-table-header rounded-1   mb-1" style="background: #3b82f6;">
                                 <div class="amount">
                                     <div class="theme-label bordered">
-                                        <input type="text" class="input-label input-label-custom form-control form-control-sm text-light " value="Amount" name="itemAmountLabel" />
+                                        <input type="text" class="input-label input-label-custom form-control form-control-sm text-light " value="{{ $invoice->labels->first()->item_amount_label }}" name="itemAmountLabel" />
                                     </div>
                                 </div>
                                 <div class="unit_cost">
                                     <div class="theme-label bordered">
-                                        <input type="text" class="input-label  input-label-custom form-control form-control-sm text-light" value="Rate" name="itemRatelabel"  required/>
+                                        <input type="text" class="input-label  input-label-custom form-control form-control-sm text-light" value="{{ $invoice->labels->first()->item_rate_label }}" name="itemRatelabel"  required/>
                                     </div>
                                 </div>
                                 <div class="quantity">
                                     <div class="theme-label bordered">
-                                        <input type="text" class="input-label  input-label-custom form-control form-control-sm text-light" value="Quantity" name="itemQtyLabel" required/>
+                                        <input type="text" class="input-label  input-label-custom form-control form-control-sm text-light" value="{{ $invoice->labels->first()->item_qty_label }}" name="itemQtyLabel" required/>
                                     </div>
                                 </div>
                                 <div class="name">
                                     <div class="theme-label bordered">
-                                        <input type="text" class="input-label  input-label-custom form-control form-control-sm text-light" value="Description" name="itemDescLabel"  required/>
+                                        <input type="text" class="input-label  input-label-custom form-control form-control-sm text-light" value="{{ $invoice->labels->first()->item_desc_label }}" name="itemDescLabel"  required/>
                                     </div>
                                 </div>
                             </div>
                             <div id="items" class="items-table">
+                                @forelse($invoice->items as $key => $data )
                                 <div class="item-row pb-1">
                                     <div class="main-row">
-                                        <div class="delete"></div>
-                                        <input type="hidden" name="itemAmount[]" class="amount_value">
+                                        <div class="delete">
+                                            @if($key != 0)
+                                            <button class="btn btn-outline-danger btn-sm delete-btn"> <i class="fa fa-times"></i></button>
+                                            @endif
+                                        </div>
+                                        <input type="hidden" name="itemAmount[]" class="amount_value" value="{{ $data->item_amount }}">
                                         <div  class="amount value amount_div">
-                                            <span class="currency-symbol">$</span>
-                                            0
+                                            <span class="currency-symbol">{{ $invoice->currency == 'USD' ? '$' : '৳' }}</span>
+                                            {{ $data->item_amount }}
                                         </div>
                                         <div class="unit_cost">
                                             <div class="input-group input-group-sm">
                                                 <span  class="input-group-text pe-2 ps-2 currency-sign currency-symbol">$</span>
-                                                <input  class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="itemRate[]" value="0"  required/>
+                                                <input  class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="itemRate[]" value="{{ $data->item_rate }}"  required/>
                                             </div>
                                         </div>
                                         <div class="quantity">
-                                            <input  type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="itemQty[]" value="0" required/>
+                                            <input  type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="itemQty[]" value="{{ $data->item_qty }}" required/>
                                         </div>
                                         <div class="name">
-                                            <input class="item-calc form-control form-control-sm" rows="1" name="itemDesc[]" placeholder="Description of item/service..." required>
+                                            <input class="item-calc form-control form-control-sm" rows="1" name="itemDesc[]" placeholder="Description of item/service..." value="{{ $data->item_desc }}" required>
                                         </div>
                                     </div>
                                 </div>
+                                @empty
+                                <div class="item-row pb-1">
+                                        <div class="main-row">
+                                            <div class="delete"></div>
+                                            <input type="hidden" name="itemAmount[]" class="amount_value">
+                                            <div  class="amount value amount_div">
+                                                <span class="currency-symbol">$</span>
+                                                0
+                                            </div>
+                                            <div class="unit_cost">
+                                                <div class="input-group input-group-sm">
+                                                    <span  class="input-group-text pe-2 ps-2 currency-sign currency-symbol">$</span>
+                                                    <input  class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="itemRate[]" value="0"  required/>
+                                                </div>
+                                            </div>
+                                            <div class="quantity">
+                                                <input  type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="itemQty[]" value="0" required/>
+                                            </div>
+                                            <div class="name">
+                                                <input class="item-calc form-control form-control-sm" rows="1" name="itemDesc[]" placeholder="Description of item/service..." required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforelse
+
 
                             </div>
                             <div class="new-line">
@@ -246,25 +284,25 @@
                                 <div class="invoice-footer">
                                     <div class="notes-holder">
                                         <div class="theme-label mb-1">
-                                            <input type="text" class="input-label form-control form-control-sm" name="note_label" value="Notes" required    />
+                                            <input type="text" class="input-label form-control form-control-sm" name="note_label" value="{{ $invoice->labels->first()->note_label }}" required    />
                                         </div>
                                         <div class="value">
-                                            <textarea class="notes form-control form-control-sm" placeholder="Notes - any relevant information not already covered" name="note_value" >{{ old('note_value') }}</textarea>
+                                            <textarea class="notes form-control form-control-sm" placeholder="Notes - any relevant information not already covered" name="note_value" >{{ $invoice->note_value }}</textarea>
                                         </div>
                                     </div>
                                     <div class="terms-holder mt-3">
                                         <div class="theme-label mb-1">
-                                            <input type="text" class="input-label form-control form-control-sm" name="term_label" value="Terms"  required/>
+                                            <input type="text" class="input-label form-control form-control-sm" name="term_label" value="{{$invoice->labels->first()->term_label }}"  required/>
                                         </div>
                                         <div class="value">
-                                            <textarea class="terms form-control form-control-sm" placeholder="Terms and conditions - late fees, payment methods, delivery schedule" name="term_value">{{ old('term_value') }}</textarea>
+                                            <textarea class="terms form-control form-control-sm" placeholder="Terms and conditions - late fees, payment methods, delivery schedule" name="term_value">{{ $invoice->term_value }}</textarea>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group addon-input">
-                                    <input class="input-label form-control form-control-sm " type="text" name="subtotal_label" required value="Subtotal" />
+                                    <input class="input-label form-control form-control-sm " type="text" name="subtotal_label" required value="{{ $invoice->labels->first()->subtotal_label }}" />
                                     <input type="hidden" name="subtotal_value" class="subtotal_value">
                                     <div id="subtotal_div" class="input-group-addon value pr-5"><span class="currency-symbol">$</span>0</div>
                                 </div>
@@ -272,12 +310,12 @@
 
 
                                 <div class="input-group addon-input">
-                                    <input class="input-label form-control form-control-sm" type="text" name="discount_label" value="Discount" required />
+                                    <input class="input-label form-control form-control-sm" type="text" name="discount_label" value="{{ $invoice->labels->first()->discount_label}}" required />
                                     <div class="input-group-addon">
                                         <div class="input-group input-group-sm">
-                                            <input id="discount_input" class="item-calc form-control  custom-input form-control-sm  ps-2" type="number" name="discount_value"   value="0" style="border-right: none;" />
-                                            <input type="hidden" name="discount_type" id="discount_type">
-                                            <div id="discount" class="percent-custom   " style="margin-right: 1px;">%</div>
+                                            <input id="discount_input" class="item-calc form-control  custom-input form-control-sm  ps-2" type="number" name="discount_value"   value="{{ $invoice->discount_value }}" style="border-right: none;" />
+                                            <input type="hidden" name="discount_type" id="discount_type" value={{$invoice->discount_type}}>
+                                            <div id="discount" class="percent-custom   " style="margin-right: 1px;">{{ $invoice->discount_type == 'amount' ? ($invoice->currency == 'USD' ? '$' : '৳'): '%' }}</div>
                                             <button id="exchange" type="button" class="btn btn-square btn-light " >
                                                 <span  class="fa fa-exchange"></span>
                                             </button>
@@ -285,11 +323,11 @@
                                     </div>
                                 </div>
                                 <div class="input-group addon-input">
-                                    <input class="input-label form-control form-control-sm" type="text" name="tax_label" required value="Tax" />
+                                    <input class="input-label form-control form-control-sm" type="text" name="tax_label" required value="{{ $invoice->labels->first()->tax_label }}" />
 
                                     <div class="input-group-addon">
                                         <div class="input-group input-group-sm">
-                                            <input id="tax_input" class="item-calc form-control form-control-sm ps-2" type="number" name="tax_value" value="0" />
+                                            <input id="tax_input" class="item-calc form-control form-control-sm ps-2" type="number" name="tax_value" value="{{ $invoice->tax_value  }}" />
                                             <span class="input-group-text pe-2 ps-2 currency-sign curre">%</span>
                                         </div>
                                     </div>
@@ -297,9 +335,14 @@
 
 
                                 <div class="input-group addon-input">
-                                    <input class="input-label form-control form-control-sm" type="text" name="total_label" value="Total" />
-                                    <input type="hidden" name="total_value" class="total_value">
-                                    <div id="total_div" class="input-group-addon value pr-5 "><span class="currency-symbol">$</span>0</div>
+                                    <input class="input-label form-control form-control-sm" type="text" name="total_label" value="{{ $invoice->labels->first()->total_label }}" />
+                                    <input type="hidden" name="total_value" class="total_value" value="{{ $invoice->total_value }}">
+                                    <div id="total_div" class="input-group-addon value pr-5 ">
+                                    <span class="currency-symbol">
+                                        {{ $invoice->discount_type == 'amount' ? ($invoice->currency == 'USD' ? '$' : '৳'): '%' }}
+                                    </span>
+                                    {{ $invoice->total_value }}
+                                </div>
                                 </div>
 
 
@@ -434,42 +477,35 @@
 // });
 
   // Listen for changes on the client dropdown
+
   $('select[name="client_id"]').change(function() {
-        // Get the list of all projects
         let projects = @json($projects);
-        // Get the currently selected client ID
         let selectedClientId = $(this).val();
         let name = $(this).find(':selected').text();
-        if(name == 'None'){
-            $('#to') .val('');
-        }else{
-            $('#to') .val(name);
-        }
 
-        // Clear the existing options in the project dropdown
-        $('#project-select').empty();
+        $('#to').val(name === 'None' ? '' : name);
+        $('#project-select').empty().append($('<option>', { value: 'none', text: 'None', selected: true }));
 
-        // Always add a 'None' option
-        $('#project-select').append($('<option>', {
-            value: 'none',
-            text: 'None'
-        }));
-
-        // Handle the case where 'None' is selected for the client
         if (selectedClientId == 'none') {
             $('.project').addClass('d-none');
         } else {
-            $('.project').removeClass('d-none');
-            // Filter and append projects that belong to the selected client
-            projects.filter(project => project.client_id == selectedClientId)
-                    .forEach(project => {
-                        $('#project-select').append($('<option>', {
-                            value: project.id,
-                            text: project.name
-                        }));
-                    });
+            let clientProjects = projects.filter(project => project.client_id == selectedClientId);
+            $('.project').toggleClass('d-none', clientProjects.length === 0);
+            clientProjects.forEach(project => {
+                $('#project-select').append($('<option>', {
+                    value: project.id,
+                    text: project.name,
+                    selected: @json($invoice->project_id) == project.id
+                }));
+            });
         }
     });
+
+    // Trigger the change event on page load if client_id is set
+    if ($('select[name="client_id"]').val() !== 'none') {
+        $('select[name="client_id"]').trigger('change');
+    }
+
 
 $(document).ready(function() {
     var currentCurrencySymbol = '$'; // Initialize with the default currency symbol

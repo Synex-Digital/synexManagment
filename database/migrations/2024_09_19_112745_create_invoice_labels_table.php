@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('bill_to_label');
             $table->string('date_label');
             $table->string('payment_terms_label');
-            $table->string('due_data_label');
+            $table->string('due_date_label');
             $table->string('item_amount_label');
             $table->string('item_rate_label');
             $table->string('item_qty_label');

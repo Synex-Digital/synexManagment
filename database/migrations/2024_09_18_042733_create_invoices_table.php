@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number')->unique();
+            $table->string('currency');
             $table->unsignedBigInteger('client_id')->nullable();
             $table->unsignedBigInteger('project_id')->nullable();
             $table->string('header');
             $table->string('bill_to_value');
             $table->date('date_value');
-            $table->date('payment_terms_value');
+            $table->string('payment_terms_value');
             $table->date('due_date_value');
             $table->text('note_value');
             $table->text('term_value');
@@ -28,7 +29,8 @@ return new class extends Migration
             $table->string('discount_type')->nullable();
             $table->decimal('tax_value', 10, 2);
             $table->decimal('total_value', 10, 2);
-
+            $table->integer('status')->default(0);
+            $table->timestamps();
         });
     }
 

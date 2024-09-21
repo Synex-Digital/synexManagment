@@ -67,6 +67,8 @@ Route::middleware(['auth'])->group(function () {
 //invoice generate
     Route::get('/invoice/generate', [InvoiceGenerateController::class, 'index'])->name('invoice.generate');
     Route::post('/invoic/store', [InvoiceGenerateController::class, 'store'])->name('invoice.store');
+    Route::get('/invoice/list', [InvoiceGenerateController::class, 'list'])->name('invoice.list');
+    Route::get('/invoice/edit/{id}', [InvoiceGenerateController::class, 'edit'])->name('invoice.edit');
 //resource routes
     Route::resources([
         'project' => ProjectController::class,

@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('invoice_items', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('invoice_id'); // Foreign key to the invoice_values table
-            $table->decimal('item_amount', 10, 2);
-            $table->decimal('item_rate', 10, 2);
-            $table->integer('item_qty');
             $table->string('item_desc');
+            $table->integer('item_qty');
+            $table->decimal('item_rate', 10, 2);
+            $table->decimal('item_amount', 10, 2);
             $table->timestamps();
         });
     }
