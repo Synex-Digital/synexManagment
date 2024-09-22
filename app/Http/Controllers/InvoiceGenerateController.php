@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
-use App\Models\InvoiceItems;
-use App\Models\InvoiceLabels;
-use App\Models\Invoices;
 use App\Models\Project;
+use App\Models\Invoices;
+use App\Mail\InvoiceMail;
+use App\Models\InvoiceItems;
 use Illuminate\Http\Request;
+use App\Models\InvoiceLabels;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class InvoiceGenerateController extends Controller
@@ -265,7 +267,20 @@ class InvoiceGenerateController extends Controller
 
 
     }
-    public function mail(Request $request){
-        dd($request->all());
+    public function send_mail(Request $request){
+        $invoice = Invoices::with('items', 'labels')->where('id', $request->invoice_id)->first();
+        $email = $request->client_email;
+        Mail::to($email)->send(new InvoiceMail($invoice));
+
+        flash()->options([
+            'position' => 'bottom-right',
+        ])->success('Mail send successfully!');
+        return back();
+    }
+
+
+
+    public function demo( ){
+        return view('dashboard.invoice.mail');
     }
 }

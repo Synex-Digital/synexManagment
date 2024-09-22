@@ -70,7 +70,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/invoice/list', [InvoiceGenerateController::class, 'list'])->name('invoice.list');
     Route::get('/invoice/edit/{id}', [InvoiceGenerateController::class, 'edit'])->name('invoice.edit');
     Route::post('/invoic/update', [InvoiceGenerateController::class, 'update'])->name('invoice.update');
-    Route::post('/invoic/mail/send', [InvoiceGenerateController::class, 'mail'])->name('invoice.mail');
+    Route::post('/invoic/mail/send', [InvoiceGenerateController::class, 'send_mail'])->name('invoice.mail');
+    Route::get('/mail/demo', [InvoiceGenerateController::class, 'demo'])->name('invoice.demo');
 //resource routes
     Route::resources([
         'project' => ProjectController::class,
