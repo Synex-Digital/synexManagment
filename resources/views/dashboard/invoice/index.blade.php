@@ -145,7 +145,7 @@
                                     <div class="col-md-6">
                                         <div class="contact pt-3">
                                             <div class="theme-label mb-1">
-                                                <input type="text" class="input-label form-control form-control-sm" name="bill_to_label" value="Bill To" readonly  />
+                                                <input type="text" class="input-label form-control form-control-sm" name="bill_to_label" value="Bill To" required  />
                                             </div>
                                             <div class="value">
                                                 <input id="to" class="form-control" type="text" placeholder="who is this to?" name="bill_to_value" required value="{{ old('bill_to_value') }}">

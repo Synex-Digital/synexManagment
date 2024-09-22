@@ -18,17 +18,17 @@ return new class extends Migration
             $table->unsignedBigInteger('client_id')->nullable();
             $table->unsignedBigInteger('project_id')->nullable();
             $table->string('header');
-            $table->string('bill_to_value');
+            $table->string('bill_to_value')->nullable();
             $table->date('date_value');
             $table->string('payment_terms_value');
             $table->date('due_date_value');
-            $table->text('note_value');
-            $table->text('term_value');
-            $table->decimal('subtotal_value', 10, 2);
+            $table->longText('note_value',);
+            $table->longText('term_value');
+            $table->decimal('subtotal_value', 20, 2);
             $table->decimal('discount_value', 10, 2)->nullable(); // Handling possible null values
             $table->string('discount_type')->nullable();
             $table->decimal('tax_value', 10, 2);
-            $table->decimal('total_value', 10, 2);
+            $table->decimal('total_value', 20, 2);
             $table->integer('status')->default(0);
             $table->timestamps();
         });

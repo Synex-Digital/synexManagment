@@ -51,7 +51,7 @@
         <ol class="breadcrumb " style="float:inline-end; background-color: transparent;">
             <li class="breadcrumb-item"><a href="{{route('dashboard')}}">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="{{ route('invoice.list') }}" class="">Invoice</a></li>
-            <li class="breadcrumb-item " ><a class="text-primary">Edit</a></li>
+            <li class="breadcrumb-item " ><a class="text-primary">Update</a></li>
         </ol>
     </div>
 
@@ -59,19 +59,21 @@
 <div class="row">
 
     <div class="col-lg-12">
-
+        <a href="{{ route('invoice.generate') }}" class="btn btn-rounded btn-primary mr-3 text-white" >
+            <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-plus color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Generate</a>
         <a href="{{ route('invoice.list') }}" class="btn btn-rounded btn-primary mr-3 text-white" >
             <span class="btn-icon-left text-primary mr-2" style="    margin: -4px 0px -4px -10px;"  >  <i class="fa fa-list color-info"style="    margin: 2px -3px 1px -3px;" ></i> </span>Invoice List</a>
+
         </div>
     </div>
 <div class="row m-auto">
 
     <div class="col-lg-9 m-auto " >
         <div id="" class="invoice-holder clearfix " style="margin-bottom: 5rem;">
-            <form method="post" action="{{ route('invoice.store') }}" class="form-horizontal" enctype="multipart/form-data">
+            <form method="post" action="{{ route('invoice.update') }}" class="form-horizontal" enctype="multipart/form-data">
                 @csrf
 
-
+                <input type="hidden" name="invoice_id" value="{{ $invoice->id }}">
                 <div class="invoice-controls desktop">
                     <div class="affix-el" id="invoice-controls-affix">
                         <div class="d-grid gap-2">
@@ -168,7 +170,7 @@
                                 <div class="invoice-details pt-3" style="margin-top: 37px;">
                                     <!-- Date -->
                                     <div class="input-group addon-input">
-                                        <input class="input-label form-control form-control-sm" type="text" name="date_label" value="Date" required value="{{ $invoice->labels->first()->date_label  }}" />
+                                        <input class="input-label form-control form-control-sm" type="text" name="date_label"  required value="{{ $invoice->labels->first()->date_label  }}" />
                                         <div class="input-group-addon">
                                             <input id="invoiceDate" class="form-control form-control-sm datepicker" type="date" name="date_value" value="{{ $invoice->date_value }}"  required />
                                         </div>
@@ -218,6 +220,7 @@
                             </div>
                             <div id="items" class="items-table">
                                 @forelse($invoice->items as $key => $data )
+                                <input type="hidden" name="itemId[]" value="{{ $data->id }}">
                                 <div class="item-row pb-1">
                                     <div class="main-row">
                                         <div class="delete">
@@ -303,8 +306,13 @@
                             <div class="col-md-6">
                                 <div class="input-group addon-input">
                                     <input class="input-label form-control form-control-sm " type="text" name="subtotal_label" required value="{{ $invoice->labels->first()->subtotal_label }}" />
-                                    <input type="hidden" name="subtotal_value" class="subtotal_value">
-                                    <div id="subtotal_div" class="input-group-addon value pr-5"><span class="currency-symbol">$</span>0</div>
+                                    <input type="hidden" name="subtotal_value" class="subtotal_value" value="{{ $invoice->subtotal_value }}">
+                                    <div id="subtotal_div" class="input-group-addon value pr-5">
+                                        <span class="currency-symbol">
+                                           {{ $invoice->currency == 'USD' ? '$' : '৳' }}
+                                        </span>
+                                        {{ $invoice->subtotal_value }}
+                                    </div>
                                 </div>
 
 
@@ -328,6 +336,7 @@
                                     <div class="input-group-addon">
                                         <div class="input-group input-group-sm">
                                             <input id="tax_input" class="item-calc form-control form-control-sm ps-2" type="number" name="tax_value" value="{{ $invoice->tax_value  }}" />
+
                                             <span class="input-group-text pe-2 ps-2 currency-sign curre">%</span>
                                         </div>
                                     </div>
@@ -341,6 +350,7 @@
                                     <span class="currency-symbol">
                                         {{ $invoice->discount_type == 'amount' ? ($invoice->currency == 'USD' ? '$' : '৳'): '%' }}
                                     </span>
+
                                     {{ $invoice->total_value }}
                                 </div>
                                 </div>
@@ -507,154 +517,108 @@
     }
 
 
-$(document).ready(function() {
-    var currentCurrencySymbol = '$'; // Initialize with the default currency symbol
+    $(document).ready(function() {
+    var currentCurrencySymbol = '$'; // Initialize with default currency symbol
 
-    // Function to calculate and update the amount for each item line
-    function updateAmount(itemRow) {
-        var rate = $(itemRow).find('.rate_input').val();
-        var quantity = $(itemRow).find('.quantity_input').val();
-        var amount = (rate * quantity) || 0; // Calculate the amount or default to 0 if NaN
-        var symbol = ` <span class="currency-symbol">${currentCurrencySymbol}</span>`
-        $(itemRow).find('.amount_div').html(symbol + amount.toFixed(2)); // Update the amount in the corresponding div
-        $(itemRow).find('.amount_value').val(amount); // Update the amount in the corresponding div
-        console.log(amount);
-        updateSubtotal(); // Update the subtotal whenever any amount changes
-    }
-    let afterDvalue = 0;
-    let x = 0;
-    // Function to calculate and update the subtotal for all items
-    function updateSubtotal() {
-        var subtotal = 0;
-        $('.amount_div').each(function() {
-            var amountText = $(this).text(); // Get the amount text
-            var amount = parseFloat(amountText.replace(currentCurrencySymbol, '')); // Remove the currency symbol and convert to float
-            subtotal += amount; // Sum up all the amounts
-        });
-        $('#subtotal_div').text(currentCurrencySymbol + subtotal.toFixed(2)); // Update the subtotal div
-        $('.subtotal_value').val(subtotal.toFixed(2)); // Update the subtotal value in the form
-        x = subtotal;
-        discountCalculate();
-    }
-
-    // Listen to input changes for rate and quantity in any item row
-    $('#items').on('input', '.rate_input, .quantity_input', function() {
-        var itemRow = $(this).closest('.main-row'); // Find the parent row of the changed input
-        updateAmount(itemRow); // Update the amount for this specific item row
-        taxCalculate();
-    });
-
-    // Function to update currency symbols based on selection
+    // Function to update the currency symbols based on selection
     function updateCurrencySymbols(currency) {
         currentCurrencySymbol = currency === "USD" ? '$' : '৳';
-
-        $('.currency-symbol').each(function() {
-            $(this).text(currentCurrencySymbol);
-        });
-        updateSubtotal(); // Update the subtotal to reflect the new currency symbol
+        $('.currency-symbol').text(currentCurrencySymbol);
     }
-    let y = false;
-    $('#exchange').click(function() {
-        var discountDiv = $('#discount');
-        if (discountDiv.text() === '%') {
-            discountDiv.text(currentCurrencySymbol);
-            // $('#discount_type').val(currentCurrencySymbol);
-            y = !y;
-            discountCalculate();
 
+    function updateAmount(itemRow) {
+    var rate = parseFloat($(itemRow).find('.rate_input').val()) || 0;
+    var quantity = parseFloat($(itemRow).find('.quantity_input').val()) || 0;
+    var amount = rate * quantity;
+    $(itemRow).find('.amount_div').html(`<span class="currency-symbol">${currentCurrencySymbol}</span>${amount.toFixed(2)}`);
+    $(itemRow).find('.amount_value').val(amount.toFixed(2));  // Ensure this value is being set correctly
+    updateSubtotal();
+}
+
+    function updateSubtotal() {
+    var subtotal = 0;
+    $('.amount_value').each(function() {
+        subtotal += parseFloat($(this).val()) || 0;  // Make sure you're parsing the float value correctly
+    });
+    $('#subtotal_div').html(`<span class="currency-symbol">${currentCurrencySymbol}</span>${subtotal.toFixed(2)}`);
+    $('.subtotal_value').val(subtotal.toFixed(2));  // Make sure this input exists and is being updated
+    calculateDiscountAndTax();  // Update discount and tax based on the new subtotal
+}
+
+    // Function to calculate and update the discount, tax, and total
+    function calculateDiscountAndTax() {
+        var subtotal = parseFloat($('.subtotal_value').val());
+        var discountValue = parseFloat($('#discount_input').val()) || 0;
+        var taxRate = parseFloat($('#tax_input').val()) || 0;
+        var discountAmount = 0;
+        var taxAmount = 0;
+
+        if ($('#discount').text().trim() === '%') {
+            discountAmount = subtotal * discountValue / 100;
         } else {
-            discountDiv.text('%');
-            // $('#discount_type').val(currentCurrencySymbol);
-            y = !y;
-            discountCalculate();
-
+            discountAmount = discountValue;
         }
 
+        var totalAfterDiscount = subtotal - discountAmount;
+        taxAmount = totalAfterDiscount * taxRate / 100;
+        var total = totalAfterDiscount + taxAmount;
+
+        $('#total_div').html(`<span class="currency-symbol">${currentCurrencySymbol}</span>${total.toFixed(2)}`);
+        $('.total_value').val(total.toFixed(2));
+    }
+
+    // Event listeners
+    $('#items').on('input', '.rate_input, .quantity_input', function() {
+        var itemRow = $(this).closest('.main-row');
+        updateAmount(itemRow);
     });
-    // Handle currency change
+
+    $('#discount_input, #tax_input').on('input', calculateDiscountAndTax);
+
     $('select[name="currency"]').change(function() {
-        var selectedCurrency = $(this).val();
-        updateCurrencySymbols(selectedCurrency);
+        updateCurrencySymbols($(this).val());
     });
 
-    // Initialize with the default value
-    updateCurrencySymbols($('select[name="currency"]').val());
-
-    // Add new line item with the current currency symbol
     $('#addLineItemBtn').click(function() {
-        const newItemHtml = `
-          <div class="item-row pb-1">
-                 <div class="main-row">
-                     <div class="delete">
-                         <button class="btn btn-outline-danger btn-sm delete-btn"> <i class="fa fa-times"></i></button>
-                     </div>
-                     <input type="hidden" name="itemAmount[]" class="amount_value">
-                     <div class="amount value amount_div">
-                         <span class="currency-symbol">${currentCurrencySymbol}</span>
-                         0
-                     </div>
-                     <div class="unit_cost">
-                         <div class="input-group input-group-sm">
-                             <span class="input-group-text pe-2 ps-2 currency-sign currency-symbol">${currentCurrencySymbol}</span>
-                             <input class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="itemRate[]" value="0" required/>
-                         </div>
-                     </div>
-                     <div class="quantity">
-                         <input type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="itemQty[]" value="0"  required />
-                     </div>
-                     <div class="name">
-                         <input class="item-calc form-control form-control-sm" rows="1" name="itemDesc[]" placeholder="Description of item/service..." required>
-                     </div>
-                 </div>
-             </div>`;
+        var newItemHtml = `
+            <div class="item-row pb-1">
+                <div class="main-row">
+                    <div class="delete">
+                        <button class="btn btn-outline-danger btn-sm delete-btn"><i class="fa fa-times"></i></button>
+                    </div>
+                    <input type="hidden" name="itemAmount[]" class="amount_value">
+                    <div class="amount value amount_div">
+                        <span class="currency-symbol">${currentCurrencySymbol}</span>0
+                    </div>
+                    <div class="unit_cost">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text pe-2 ps-2 currency-sign currency-symbol">${currentCurrencySymbol}</span>
+                            <input class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="itemRate[]" required/>
+                        </div>
+                    </div>
+                    <div class="quantity">
+                        <input type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="itemQty[]" required />
+                    </div>
+                    <div class="name">
+                        <input class="item-calc form-control form-control-sm" rows="1" name="itemDesc[]" placeholder="Description of item/service..." required>
+                    </div>
+                </div>
+            </div>`;
         $('#items').append(newItemHtml);
-        updateSubtotal(); // Recalculate subtotal when a new item is added
     });
 
-    // Delegate the click event for dynamic elements
     $('#items').on('click', '.delete-btn', function() {
         $(this).closest('.item-row').remove();
         updateSubtotal(); // Recalculate subtotal when an item is removed
-        discountCalculate();
-        taxCalculate();
     });
 
-    $('#discount_input').on('input', function() {
-        discountCalculate();
-    });
-    $('#tax_input').on('input', function() {
-        taxCalculate();
-
-    });
-
-    function discountCalculate(){
-        let val = $('#discount_input').val();
-        let discount = 0;
-        if( y == true) {
-            $('#discount_type').val('amount');
-             discount = (x - val);
-             total(discount);
-             afterDvalue = discount;
-        }else{
-            $('#discount_type').val('%');
-            discount = (x - (x * val) / 100);
-            total(discount);
-            afterDvalue = discount;
-        }
+    // Initialize the form with default values
+    updateCurrencySymbols($('select[name="currency"]').val());
+    if ($('select[name="client_id"]').val() !== 'none') {
+        $('select[name="client_id"]').trigger('change');
     }
-    function taxCalculate(){
-
-        let val = $('#tax_input').val();
-        let tax = 0;
-        tax = afterDvalue + (afterDvalue * val) / 100;
-        total(tax);
-    }
-    function total($value){
-        $('#total_div').text(currentCurrencySymbol + $value.toFixed(2));
-        $('.total_value').val($value.toFixed(2));
-    }
-
 });
+
 
 
 </script>

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('invoice_id'); // Foreign key to the invoice_values table
             $table->string('item_desc');
             $table->integer('item_qty');
-            $table->decimal('item_rate', 10, 2);
-            $table->decimal('item_amount', 10, 2);
+            $table->decimal('item_rate', 20, 2);
+            $table->decimal('item_amount', 20, 2);
             $table->timestamps();
         });
     }
