@@ -73,7 +73,7 @@
 
                             </tr>
                             @empty
-                            <tr> <td colspan="5" class="text-center">NO DATA FOUND</td>  </tr>
+                            <tr> <td colspan="8" class="text-center">NO DATA FOUND</td>  </tr>
                             @endforelse
                         </tbody>
                     </table>

@@ -66,7 +66,7 @@
     </div>
 <div class="row m-auto">
 
-    <div class="col-lg-9 m-auto " >
+    <div class="col-lg-10 m-auto " >
         <div id="" class="invoice-holder clearfix " style="margin-bottom: 5rem;">
             <form method="post" action="{{ route('invoice.store') }}" class="form-horizontal" enctype="multipart/form-data">
                 @csrf
@@ -384,54 +384,7 @@
 <script src="{{asset('dashboard_assets/vendor/select2/js/select2.full.min.js')}}"></script>
 <script src="{{asset('dashboard_assets/js/plugins-init/select2-init.js')}}"></script>
 <script>
-// document.addEventListener('DOMContentLoaded', function () {
-//     var oldItems = @json(old('itemDesc', []));
-//     var oldQtys = @json(old('itemQty', []));
-//     var oldRates = @json(old('itemRate', []));
-//     var oldAmounts = @json(old('itemAmount', []));
-
-//     // Function to add a line item
-//     function addLineItem(desc = '', qty = '0', rate = '0', amount = '0') {
-//         const newItemHtml = `
-//         <div class="item-row pb-1">
-//             <div class="main-row">
-//                 <div class="delete">
-//                     <button class="btn btn-outline-danger btn-sm delete-btn"><i class="fa fa-times"></i></button>
-//                 </div>
-//                 <input type="hidden" name="itemAmount[]" class="amount_value" value="${amount}">
-//                 <div class="amount value amount_div">
-//                     <span class="currency-symbol">$</span>
-//                     ${amount}
-//                 </div>
-//                 <div class="unit_cost">
-//                     <div class="input-group input-group-sm">
-//                         <span class="input-group-text pe-2 ps-2 currency-sign currency-symbol">$</span>
-//                         <input class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="itemRate[]" value="${rate}" required/>
-//                     </div>
-//                 </div>
-//                 <div class="quantity">
-//                     <input type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="itemQty[]" value="${qty}" required />
-//                 </div>
-//                 <div class="name">
-//                     <input class="item-calc form-control form-control-sm" name="itemDesc[]" placeholder="Description of item/service..." value="${desc}" required>
-//                 </div>
-//             </div>
-//         </div>`;
-//         $('#items').append(newItemHtml);
-//     }
-
-//     // Add existing old items
-//     if (oldItems.length) {
-//         oldItems.forEach((desc, index) => {
-//             addLineItem(desc, oldQtys[index], oldRates[index], oldAmounts[index]);
-//         });
-//     }
-
-//     // Button to add new blank item row
-//     $('#addLineItemBtn').click(function() {
-//         addLineItem();
-//     });
-// });
+$('.hamburger').trigger('click');
 
   // Listen for changes on the client dropdown
   $('select[name="client_id"]').change(function() {
@@ -622,6 +575,6 @@ $(document).ready(function() {
 
 
 </script>
-    <!-- Datatable -->
+
 
 @endsection
