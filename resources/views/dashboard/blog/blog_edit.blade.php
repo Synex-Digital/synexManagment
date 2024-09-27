@@ -16,7 +16,7 @@
             padding-inline-start: 40px !important;
             unicode-bidi: isolate !important
         }
-        
+
         .note-editor .note-editing-area .note-editable ul li{
 
             display: list-item !important;
@@ -88,7 +88,7 @@
                                             <label class="col-form-label">Category Name</label>
                                             <select name="category_id" class="form-control">
                                                     @foreach ($categories as $category)
-                                                        <option value="{{ $category->id }}">{{ $category->name ?? 'Unknown' }}</option>
+                                                        <option {{ $category->id == $blog->category_id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name ?? 'Unknown' }}</option>
                                                     @endforeach
                                                     <option value="" disabled>If category is not in the list, than firstly add the category's information</option>
                                             </select>

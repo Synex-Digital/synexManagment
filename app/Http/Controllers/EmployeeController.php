@@ -120,7 +120,40 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        if(Auth::user()->can('employee.create')){
+            $validator = Validator::make($request->all(), [
+                'name' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required|max:14',
+                'start_date' => 'required',
+                'department' => 'required',
+                'designation' => 'required',
+            ]);
+            if ($validator->fails()) {
+                foreach ( $validator->errors()->messages() as  $message) {
+                        flash()->options([
+                            'position' => 'bottom-right',
+                        ])->error($message);
+                }
+                return back();
+            }
+            $user = User::find($id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->save();
+            $employee = $user->employees;
+
+            $employee->phone = $request->phone;
+            $employee->start_date = $request->start_date;
+            $employee->department_id = $request->department;
+            $employee->designation_id = $request->designation;
+            $employee->save();
+            flash()->options([
+                'position' => 'bottom-right',
+            ])->success('Employee Updated Successfully!');
+            return back();
+        }else{return back();}
     }
 
     /**
