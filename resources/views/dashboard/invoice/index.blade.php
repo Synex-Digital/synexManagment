@@ -220,11 +220,11 @@
                                         <div class="unit_cost">
                                             <div class="input-group input-group-sm">
                                                 <span  class="input-group-text pe-2 ps-2 currency-sign currency-symbol">$</span>
-                                                <input  class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="itemRate[]" value="0"  required/>
+                                                <input  class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="itemRate[]" value="" placeholder="0" required/>
                                             </div>
                                         </div>
                                         <div class="quantity">
-                                            <input  type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="itemQty[]" value="0" required/>
+                                            <input  type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="itemQty[]" value=""  placeholder="0" required/>
                                         </div>
                                         <div class="name">
                                             <input class="item-calc form-control form-control-sm" rows="1" name="itemDesc[]" placeholder="Description of item/service..." required>
@@ -275,7 +275,7 @@
                                     <input class="input-label form-control form-control-sm" type="text" name="discount_label" value="Discount" required />
                                     <div class="input-group-addon">
                                         <div class="input-group input-group-sm">
-                                            <input id="discount_input" class="item-calc form-control  custom-input form-control-sm  ps-2" type="number" name="discount_value"   value="0" style="border-right: none;" />
+                                            <input id="discount_input" class="item-calc form-control  custom-input form-control-sm  ps-2" type="number" name="discount_value"   value=""  placeholder="0" style="border-right: none;" />
                                             <input type="hidden" name="discount_type" id="discount_type">
                                             <div id="discount" class="percent-custom   " style="margin-right: 1px;">%</div>
                                             <button id="exchange" type="button" class="btn btn-square btn-light " >
@@ -289,7 +289,7 @@
 
                                     <div class="input-group-addon">
                                         <div class="input-group input-group-sm">
-                                            <input id="tax_input" class="item-calc form-control form-control-sm ps-2" type="number" name="tax_value" value="0" />
+                                            <input id="tax_input" class="item-calc form-control form-control-sm ps-2" type="number" name="tax_value" value=""  placeholder="0" />
                                             <span class="input-group-text pe-2 ps-2 currency-sign curre">%</span>
                                         </div>
                                     </div>
@@ -513,11 +513,11 @@ $(document).ready(function() {
                      <div class="unit_cost">
                          <div class="input-group input-group-sm">
                              <span class="input-group-text pe-2 ps-2 currency-sign currency-symbol">${currentCurrencySymbol}</span>
-                             <input class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="itemRate[]" value="0" required/>
+                             <input class="item-calc form-control form-control-sm border-start-0 ps-2 rate_input" type="number" step="any" autocomplete="off" name="itemRate[]" value=""  placeholder="0" required/>
                          </div>
                      </div>
                      <div class="quantity">
-                         <input type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="itemQty[]" value="0"  required />
+                         <input type="number" step="any" class="item-calc form-control form-control-sm quantity_input" autocomplete="off" name="itemQty[]" value=""  placeholder="0"  required />
                      </div>
                      <div class="name">
                          <input class="item-calc form-control form-control-sm" rows="1" name="itemDesc[]" placeholder="Description of item/service..." required>
@@ -547,28 +547,26 @@ $(document).ready(function() {
     function discountCalculate(){
         let val = $('#discount_input').val();
         let discount = 0;
-        if( y == true) {
+        if (y) {
             $('#discount_type').val('amount');
-             discount = (x - val);
-             total(discount);
-             afterDvalue = discount;
-        }else{
+            discount = x - val; // Subtract fixed amount from subtotal
+        } else {
             $('#discount_type').val('%');
-            discount = (x - (x * val) / 100);
-            total(discount);
-            afterDvalue = discount;
+            discount = x * (1 - val / 100); // Apply percentage discount
         }
+        afterDvalue = discount; // Update after discount value
+        total(discount);
+        taxCalculate(); // Recalculate tax after discount update
     }
     function taxCalculate(){
 
         let val = $('#tax_input').val();
-        let tax = 0;
-        tax = afterDvalue + (afterDvalue * val) / 100;
-        total(tax);
+        let tax = afterDvalue * (1 + val / 100); // Apply tax on discounted value
+        total(tax); // Update total with tax included
     }
-    function total($value){
-        $('#total_div').text(currentCurrencySymbol + $value.toFixed(2));
-        $('.total_value').val($value.toFixed(2));
+    function total(value){
+        $('#total_div').text(currentCurrencySymbol + value.toFixed(2));
+        $('.total_value').val(value.toFixed(2));
     }
 
 });
