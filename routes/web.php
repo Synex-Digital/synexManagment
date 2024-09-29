@@ -1,25 +1,26 @@
 <?php
 
-use App\Http\Controllers\BlogController;
-use App\Http\Controllers\CategoryController;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ClientController;
-use App\Http\Controllers\CustomerSupportController;
 use App\Http\Controllers\SocialController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpensesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DesignationController;
-use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\ServiceProjectController;
-use App\Models\Customer;
+use App\Http\Controllers\CustomerSupportController;
+use App\Http\Controllers\InvoiceGenerateController;
+use App\Http\Controllers\ServiceCategoryController;
 
 Auth::routes();
 
@@ -55,11 +56,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users', [HomeController::class, 'users'])->name('users');
     Route::post('/user/store', [HomeController::class, 'userStore'])->name('user.store');
 //customer
-    Route::get('web/support', [CustomerSupportController::class, 'support'])->name('web.support');
+    Route::get('web/customer', [CustomerSupportController::class, 'customer'])->name('web.customer');
+    Route::get('web/supports/{id}', [CustomerSupportController::class, 'support'])->name('web.support');
+    Route::post('web/supports/merge', [CustomerSupportController::class, 'merge'])->name('web.customer.merge');
+    Route::post('web/supports/update', [CustomerSupportController::class, 'update'])->name('web.customer.update');
 //dashboard
     Route::get('/index', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/app/setting',[DashboardController::class, 'showAppSetting'])->name('dashboard.showSetting');
     Route::post('/app/setting/logoicon/store',[DashboardController::class, 'logoIcon_store'])->name('dashboard.logoIcon.store');
+//invoice generate
+    Route::get('/invoice/generate', [InvoiceGenerateController::class, 'index'])->name('invoice.generate');
+    Route::post('/invoic/store', [InvoiceGenerateController::class, 'store'])->name('invoice.store');
+    Route::get('/invoice/list', [InvoiceGenerateController::class, 'list'])->name('invoice.list');
+    Route::get('/invoice/edit/{id}', [InvoiceGenerateController::class, 'edit'])->name('invoice.edit');
+    Route::post('/invoic/update', [InvoiceGenerateController::class, 'update'])->name('invoice.update');
+    Route::post('/invoic/mail/send', [InvoiceGenerateController::class, 'send_mail'])->name('invoice.mail');
+    Route::get('/mail/demo', [InvoiceGenerateController::class, 'demo'])->name('invoice.demo');
 //resource routes
     Route::resources([
         'project' => ProjectController::class,
