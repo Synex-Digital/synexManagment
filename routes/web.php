@@ -66,11 +66,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/app/setting/logoicon/store',[DashboardController::class, 'logoIcon_store'])->name('dashboard.logoIcon.store');
 //invoice generate
     Route::get('/invoice/generate', [InvoiceGenerateController::class, 'index'])->name('invoice.generate');
-    Route::post('/invoic/store', [InvoiceGenerateController::class, 'store'])->name('invoice.store');
+    Route::post('/invoice/store', [InvoiceGenerateController::class, 'store'])->name('invoice.store');
     Route::get('/invoice/list', [InvoiceGenerateController::class, 'list'])->name('invoice.list');
     Route::get('/invoice/edit/{id}', [InvoiceGenerateController::class, 'edit'])->name('invoice.edit');
-    Route::post('/invoic/update', [InvoiceGenerateController::class, 'update'])->name('invoice.update');
-    Route::post('/invoic/mail/send', [InvoiceGenerateController::class, 'send_mail'])->name('invoice.mail');
+    Route::post('/invoice/update', [InvoiceGenerateController::class, 'update'])->name('invoice.update');
+    Route::post('/invoice/mail/send', [InvoiceGenerateController::class, 'send_mail'])->name('invoice.mail');
     Route::get('/mail/demo', [InvoiceGenerateController::class, 'demo'])->name('invoice.demo');
 //resource routes
     Route::resources([
