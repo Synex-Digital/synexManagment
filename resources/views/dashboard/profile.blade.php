@@ -91,7 +91,7 @@
 
                                 <li class="nav-item ml-1"><a href="#about-me" data-toggle="tab" class="nav-link">About</a>
                                 </li>
-                                <li class="nav-item"><a href="#profile-settings" data-toggle="tab" class="nav-link">Setting</a> </li>
+                                <li class="nav-item"><a href="#profile-settings" data-toggle="tab" class="nav-link">Settings</a> </li>
 
                             </ul>
                         </div>

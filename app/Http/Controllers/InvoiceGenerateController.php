@@ -133,6 +133,9 @@ class InvoiceGenerateController extends Controller
         $clients = Client::all();
         $projects = Project::all();
         $invoice = Invoices::with('items', 'labels')->where('id', $id)->first();
+        if($invoice->status == 1){
+            return back();
+        }
 
         return view('dashboard.invoice.edit',[
             'invoice' => $invoice,
@@ -270,8 +273,9 @@ class InvoiceGenerateController extends Controller
     public function send_mail(Request $request){
         $invoice = Invoices::with('items', 'labels')->where('id', $request->invoice_id)->first();
         $email = $request->client_email;
-        Mail::to($email)->send(new InvoiceMail($invoice));
-
+        Mail::to($email)->send(new InvoiceMail($invoice, $email));
+        $invoice->sent_status = 1;
+        $invoice->update();
         flash()->options([
             'position' => 'bottom-right',
         ])->success('Mail send successfully!');
@@ -282,9 +286,38 @@ class InvoiceGenerateController extends Controller
 
     public function demo( ){
         $invoice = Invoices::with('items', 'labels')->where('id', 1)->first();
-
         return view('dashboard.invoice.mail',[
             'invoice' => $invoice
         ]);
     }
+
+
+    public function download($id){
+        $invoice = Invoices::with('items', 'labels')->where('id', $id)->first();
+        return view('dashboard.invoice.mail',[
+            'invoice' => $invoice
+        ]);
+
+    }
+
+
+    public function status_update(Request $request){
+        if($request->optradio == 'unpaid'){
+            flash()->options(['position' => 'bottom-right',])->warning('Nothing to update!');
+
+        }else{
+            $invoice = Invoices::find($request->invoice_id);
+            $invoice->status = 1;
+            $invoice->update();
+            flash()->options(['position' => 'bottom-right',])->success('Status updated successfully!');
+        }
+        return back();
+    }
+
+
+
 }
+
+
+
+

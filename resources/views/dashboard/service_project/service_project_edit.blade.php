@@ -30,7 +30,7 @@
                                 <label for="service_category_id">Service Category</label>
                                 <select class="form-control" id="service_category_id" name="service_category_id" required>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        <option {{ $category->id == $project->service_category_id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                             </div>

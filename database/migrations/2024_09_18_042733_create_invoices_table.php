@@ -30,6 +30,7 @@ return new class extends Migration
             $table->decimal('tax_value', 10, 2);
             $table->decimal('total_value', 20, 2);
             $table->integer('status')->default(0);
+            $table->integer('sent_status')->default(0);
             $table->timestamps();
         });
     }
