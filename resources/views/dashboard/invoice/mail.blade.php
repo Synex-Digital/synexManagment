@@ -2727,7 +2727,7 @@
 
 </div>
 </body>
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 <script type="text/javascript">
     // Automatically generate and download the PDF when the page is loaded
     window.onload = function() {
@@ -2738,6 +2738,6 @@
             .from(element)
             .save(); // Automatically downloads the PDF
     };
-</script> --}}
+</script>
 
 </html>
