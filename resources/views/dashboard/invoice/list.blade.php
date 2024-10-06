@@ -47,6 +47,7 @@
                                 <th>Discount</th>
                                 <th>Tax</th>
                                 <th>Total</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -66,9 +67,30 @@
                                 <td class="text-dark">{{ ($data->discount_type == '%' ? $data->discount_value.'%' : ($data->currency == 'USD' ?$data->discount_value.'$' :$data->discount_value. '৳')) }}</td>
                                 <td class="text-dark">{{ $data->tax_value.'%' }}</td>
                                 <td class="text-dark">{{  ($data->currency == 'USD' ? '$' : '৳').$data->total_value }}</td>
+                                <td class="text-dark">  <span class="badge badge-pill badge-{{ $data->status == 0 ? 'warning' : 'success' }}">{{ $data->status == 0 ? 'Pending' : 'Paid' }}</span>
+
+                                </td>
                                 <td>
-                                    <a href="{{ route('invoice.edit', $data->id) }}"  title="Edit" class=" btn btn-outline-primary btn-sm mr-1  " style="font-size: 11px !important;"><i class="fa fa-pencil"></i> </a>
-                                    <button id="" data-invoice="{{ $data->id }}" data-client= "{{ $data->client }}" data-toggle="modal" data-target="#mailModal"   title="Mail" class=" {{ $data->status == 1 ? 'disabled' : '' }} mailBtn btn btn-outline-{{ $data->status == 0 ? 'warning' : 'success' }} btn-sm mr-1  " style="font-size: 11px !important;"><i class="fa fa-{{ $data->status == 0 ? 'send' : 'check' }}"></i> </button>
+                                    <a href="{{ route('invoice.edit', $data->id) }}"  title="Edit" class="{{ $data->status == 1 ? 'disabled' : '' }} btn btn-outline-primary btn-sm mr-1  " style="font-size: 11px !important;"><i class="fa fa-pencil"></i> </a>
+                                    <button  {{ $data->status == 1 ? 'disabled' : '' }}
+                                         data-invoice="{{ $data->id }}" data-client= "{{ $data->client }}" data-toggle="modal" data-target="#mailModal"   title="Mail"
+                                         class="mailBtn btn btn-outline-{{ $data->sent_status == 0 ? 'warning' : 'success' }} btn-sm mr-1  "
+                                         style="font-size: 11px !important;">
+                                         <i class="fa fa-{{ $data->sent_status == 0 ? 'send' : 'check' }}"></i>
+                                    </button>
+
+                                    <div class="dropdown custom-dropdown">
+                                        <div data-toggle="dropdown">
+                                            <a href="" class="btn"><i class="fa fa-ellipsis-v"></i></a>
+                                        </div>
+                                        <div class="dropdown-menu dropdown-menu-right" style="min-width: 113px;">
+                                            {{-- <a class="dropdown-item border-bottom py-1" href="#">Edit</a> --}}
+                                            <a href="{{ route('invoice.download', $data->id) }}" type="button" class="editBtn dropdown-item py-1" >Download</a>
+                                            <button  data-target="#statusModal" data-toggle="modal"  data-value="{{ $data->id }}" type="submit" class="  {{ $data->status == 1 ? 'disabled' : '' }} statusBtn dropdown-item py-1" >Status</button>
+
+
+                                        </div>
+                                    </div>
                                 </td>
 
                             </tr>
@@ -84,6 +106,49 @@
 
 </div>
 
+ <!--categroy Modal -->
+ <div class="modal fade" id="statusModal" >
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Change Status</h5>
+                <button type="button" class="close" data-dismiss="modal"><span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('invoice.status_update') }}" method="POST">
+                    @csrf
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <label for="" class="form-label font-weight-bold"> Status</label>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" checked name="optradio" value="unpaid"> Unpaid</label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optradio" value="paid"> Paid</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <input type="hidden" name="invoice_id" class="invoice_id">
+                    </div>
+                    <div class="modal-footer">
+                        <button id="categoryCreateBtn" type="submit" class="btn  btn-outline-primary float-right" style="font-size: 11px;">Update</button>
+                    </div>
+                </form>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
  <!--categroy Modal -->
  <div class="modal fade" id="mailModal" >
     <div class="modal-dialog modal-md" role="document">
@@ -132,6 +197,11 @@
         }else{
             $('#client_email').val('');
         }
+    });
+    $('.statusBtn').on('click', function(){
+        var data = $(this).data('value');
+        $('.invoice_id').val(data);
+
     });
 </script>
 @endsection

@@ -338,7 +338,7 @@
         transition: all 0.3s ease;
         }
         a:hover {
-        color: #007aff;
+        color: #3492f7;
         }
 
         button {
@@ -403,7 +403,7 @@
         }
 
         a:hover {
-        color: #007aff;
+        color: #3b97fa;
         }
 
         ul {
@@ -751,12 +751,12 @@
 
         .tm_accent_color,
         .tm_accent_color_hover:hover {
-        color: #007aff;
+        color: #3a81f5;
         }
 
         .tm_accent_bg,
         .tm_accent_bg_hover:hover {
-        background-color: #007aff;
+        background-color: #3a81f5;
         }
 
         .tm_accent_bg_10 {
@@ -821,7 +821,7 @@
         }
 
         .tm_accent_border {
-        border-color: #007aff;
+        border-color: #3a81f5;
         }
 
         .tm_accent_border_10 {
@@ -884,7 +884,7 @@
 
         .tm_container {
         max-width: 880px;
-        padding: 30px 15px;
+        /* padding: 30px 15px; */
         margin-left: auto;
         margin-right: auto;
         position: relative;
@@ -1239,11 +1239,12 @@
         .tm_invoice.tm_style1.tm_type1 .tm_shape_bg {
         position: absolute;
         height: 100%;
-        width: 70%;
-        -webkit-transform: skewX(35deg);
-                transform: skewX(35deg);
+        width: 700px;
+        /* -webkit-transform: skewX(35deg);
+                transform: skewX(35deg); */
+                /* clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 100% 80%, 100% 143%, 20% 223%, 0% 0%, 0% 20%); */
         top: 0px;
-        right: -100px;
+        right: -246px;
         overflow: hidden;
         }
         .tm_invoice.tm_style1.tm_type1 .tm_shape_bg img {
@@ -1264,8 +1265,9 @@
         .tm_invoice.tm_style1.tm_type1 .tm_invoice_seperator {
         margin-right: 0;
         border-radius: 0;
-        -webkit-transform: skewX(35deg);
-                transform: skewX(35deg);
+        /* -webkit-transform: skewX(35deg);
+                transform: skewX(35deg); */
+                /* clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 100% 80%, 100% 144%, 8% 131%, 0% -28%, 1% 0%); */
         position: absolute;
         height: 100%;
         width: 57.5%;
@@ -1801,7 +1803,7 @@
         }
         .tm_invoice_btn.tm_color1 {
             background-color: rgba(0, 122, 255, 0.1);
-            color: #007aff;
+            color: #3a81f5;
             border-radius: 5px 5px 0 0;
         }
         .tm_invoice_btn.tm_color1:hover {
@@ -1873,7 +1875,7 @@
         }
         .tm_invoice_btn.tm_color1 {
             background-color: rgba(0, 122, 255, 0.1);
-            color: #007aff;
+            color: #3a81f5;
         }
         .tm_invoice_btn.tm_color1:hover {
             background-color: rgba(0, 122, 255, 0.2);
@@ -2226,7 +2228,7 @@
             -webkit-print-color-adjust: exact;
         }
         .tm_accent_bg {
-            background-color: #007aff;
+            background-color: #3a81f5;
             -webkit-print-color-adjust: exact;
         }
         .tm_accent_bg_10 {
@@ -2242,7 +2244,7 @@
             -webkit-print-color-adjust: exact;
         }
         .tm_accent_color {
-            color: #007aff !important;
+            color: #3a81f5 !important;
             -webkit-print-color-adjust: exact;
         }
         .tm_ternary_color {
@@ -2551,7 +2553,7 @@
     @php
         $labels = $invoice->labels->first();
     @endphp
-  <div class="tm_container">
+  <div class="tm_container" id="tm_container">
     <div class="tm_invoice_wrap">
       <div class="tm_invoice tm_style1 tm_type1" id="tm_download_section">
         <div class="tm_invoice_in">
@@ -2580,9 +2582,12 @@
               </div>
             </div>
             <div class="tm_invoice_right tm_text_right tm_mobile_hide">
-              <div class="tm_f50 tm_text_uppercase tm_white_color">{{ $invoice->header }}</div>
+              <div class="tm_f50 tm_text_uppercase " style="color: #3A81F5" >{{ $invoice->header }}</div>
             </div>
-            <div class="tm_shape_bg tm_accent_bg tm_mobile_hide"></div>
+
+
+                {{-- <div class="tm_shape_bg tm_accent_bg tm_mobile_hide"></div> --}}
+
           </div>
           <div class="tm_invoice_info tm_mb25">
             <div class="tm_card_note tm_mobile_hide">
@@ -2644,8 +2649,8 @@
             </div>
             <div class="tm_invoice_footer tm_border_top tm_mb15 tm_m0_md">
               <div class="tm_left_footer">
-                <p class="tm_mb2"><b class="tm_primary_color">{{ $labels->note_label }}:</b></p>
-                <p class="tm_m0"> {{ $invoice->note_value }}</p>
+                <p class="tm_mb2"><b class="tm_primary_color">{{ $labels->term_label }}:</b></p>
+                <p class="tm_m0"> {{ $invoice->term_value }}</p>
               </div>
               <div class="tm_right_footer">
                 <table class="tm_mb15">
@@ -2699,41 +2704,36 @@
               <div class="tm_right_footer">
                 <div class="tm_sign tm_text_center">
                   {{-- <img src="assets/img/sign.html" alt="Sign"> --}}
-                  <p class="tm_m0 tm_ternary_color">Best regards</p>
-                  <p class="tm_m0 tm_ternary_color">Ali Imran Mehedi</p>
-                  <p class="tm_m0 tm_f16 tm_primary_color">CEO & Founder - Synex Digital</p>
+
+                  <p class="tm_m0 tm_f16 tm_primary_color"> Ali Imran Mehedi </p>
+                  <p class="tm_m0 tm_ternary_color">CEO & Founder - Synex Digital</p>
                 </div>
               </div>
             </div>
           </div>
           <div class="tm_note tm_text_center tm_font_style_normal">
             <hr class="tm_mb15">
-            <p class="tm_mb2"><b class="tm_primary_color">{{ $labels->term_label }}:</b></p>
-            <p class="tm_m0">{{ $invoice->term_value }}</p>
+            <p class="tm_mb2"><b class="tm_primary_color" style="color: #3a81f5"><a href="https://synexdigital.com">Synex Digital</a></b></p>
+            <p class="tm_m0 tm_ternary_color">BUILD | CREATE | PROLONG</p>
           </div><!-- .tm_note -->
         </div>
       </div>
-      <div class="tm_invoice_btns tm_hide_print">
-        <a href="javascript:window.print()" class="tm_invoice_btn tm_color1">
-          <span class="tm_btn_icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M384 368h24a40.12 40.12 0 0040-40V168a40.12 40.12 0 00-40-40H104a40.12 40.12 0 00-40 40v160a40.12 40.12 0 0040 40h24" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/><rect x="128" y="240" width="256" height="208" rx="24.32" ry="24.32" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/><path d="M384 128v-24a40.12 40.12 0 00-40-40H168a40.12 40.12 0 00-40 40v24" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32"/><circle cx="392" cy="184" r="24" fill='currentColor'/></svg>
-          </span>
-          <span class="tm_btn_text">Print</span>
-        </a>
-        <button id="tm_download_btn" class="tm_invoice_btn tm_color2">
-          <span class="tm_btn_icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path d="M320 336h76c55 0 100-21.21 100-75.6s-53-73.47-96-75.6C391.11 99.74 329 48 256 48c-69 0-113.44 45.79-128 91.2-60 5.7-112 35.88-112 98.4S70 336 136 336h56M192 400.1l64 63.9 64-63.9M256 224v224.03" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>
-          </span>
-          <span class="tm_btn_text">Download</span>
-        </button>
-      </div>
+
     </div>
   </div>
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/jspdf.min.js"></script>
-  <script src="assets/js/html2canvas.min.js"></script>
-  <script src="assets/js/main.js"></script>
-</body>
 
-<!-- Mirrored from html.laralink.com/invoma/general_3.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 29 Sep 2024 11:39:59 GMT -->
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script type="text/javascript">
+    // Automatically generate and download the PDF when the page is loaded
+    window.onload = function() {
+        var element = document.getElementById('tm_container'); // The content to convert to PDF
+
+        // Use html2pdf to create a PDF and download it automatically
+        html2pdf()
+            .from(element)
+            .save(); // Automatically downloads the PDF
+    };
+</script>
+
 </html>
