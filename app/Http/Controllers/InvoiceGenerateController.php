@@ -270,7 +270,7 @@ class InvoiceGenerateController extends Controller
     public function send_mail(Request $request){
         $invoice = Invoices::with('items', 'labels')->where('id', $request->invoice_id)->first();
         $email = $request->client_email;
-        Mail::to($email)->send(new InvoiceMail($invoice));
+        Mail::to($email)->send(new InvoiceMail($invoice, $email));
 
         flash()->options([
             'position' => 'bottom-right',

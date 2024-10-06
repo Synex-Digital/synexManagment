@@ -13,12 +13,14 @@ class InvoiceMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $invoice;
+    public $email;
     /**
      * Create a new message instance.
      */
-    public function __construct($invoice)
+    public function __construct($invoice, $email)
     {
        $this -> invoice = $invoice;
+       $this -> email = $email;
     }
 
     /**
@@ -39,7 +41,8 @@ class InvoiceMail extends Mailable
         return new Content(
             view: 'dashboard.invoice.mail',
             with: [
-                'invoice' => $this->invoice
+                'invoice' => $this->invoice,
+                'email' => $this->email
             ]
         );
     }
