@@ -680,7 +680,7 @@
         }
 
         .tm_width_2 {
-        width: 16.66666667%;
+        width: 7.66666667%;
         }
 
         .tm_width_3 {
@@ -2548,6 +2548,9 @@
 </head>
 
 <body>
+    @php
+        $labels = $invoice->labels->first();
+    @endphp
   <div class="tm_container">
     <div class="tm_invoice_wrap">
       <div class="tm_invoice tm_style1 tm_type1" id="tm_download_section">
@@ -2587,29 +2590,29 @@
             </div>
             <div class="tm_invoice_info_list tm_white_color">
               <p class="tm_invoice_number tm_m0">Invoice No: <b>{{ $invoice->invoice_number }}</b></p>
-              <p class="tm_invoice_date tm_m0">Date: <b>{{ $invoice->created_at->format('d/m/Y') }}</b></p>
+              <p class="tm_invoice_date tm_m0">{{ $labels->date_label }}: <b> {{ $invoice->date_value }}</b></p>
             </div>
             <div class="tm_invoice_seperator tm_accent_bg"></div>
           </div>
           <div class="tm_invoice_head tm_mb10">
             <div class="tm_invoice_left">
-              <p class="tm_mb2"><b class="tm_primary_color">Invoice To:</b></p>
+              <p class="tm_mb2"><b class="tm_primary_color">{{ $labels->bill_to_label }}:</b></p>
               <p>
                {{ $invoice->bill_to_value }}<br>
                 @if($invoice->client_id)
                     {{ $invoice->client->address }} <br>
                 @endif
-                {{ $email }}
+                {{ $email ?? '' }}
 
               </p>
             </div>
             <div class="tm_invoice_right tm_text_right">
               <p class="tm_mb2"><b class="tm_primary_color">Pay To:</b></p>
               <p>
-                Laralink Ltd <br>
-                86-90 Paul Street, London<br>
-                England EC2A 4NE <br>
-                demo@gmail.com
+                Synex Digital <br>
+                87/3, West Dhanmondi, Shankar, <br> Dhaka-1207, Bangladesh<br>
+                office@synexdigital.com
+
               </p>
             </div>
           </div>
@@ -2619,65 +2622,73 @@
                 <table>
                   <thead>
                     <tr class="tm_accent_bg">
-                      <th class="tm_width_3 tm_semi_bold tm_white_color">Item</th>
-                      <th class="tm_width_4 tm_semi_bold tm_white_color">Description</th>
-                      <th class="tm_width_2 tm_semi_bold tm_white_color">Price</th>
-                      <th class="tm_width_1 tm_semi_bold tm_white_color">Qty</th>
+
+                      <th class="tm_width_4 tm_semi_bold tm_white_color">{{ $labels->item_desc_label }}</th>
+                      <th class="tm_width_1 tm_semi_bold tm_white_color">{{ $labels->item_qty_label }}</th>
+                      <th class="tm_width_2 tm_semi_bold tm_white_color">{{ $labels->item_rate_label }}</th>
                       <th class="tm_width_2 tm_semi_bold tm_white_color tm_text_right">Total</th>
                     </tr>
                   </thead>
                   <tbody>
+                    @foreach($invoice->items as $item)
                     <tr>
-                      <td class="tm_width_3">1. Website Design</td>
-                      <td class="tm_width_4">Six web page designs and three times revision</td>
-                      <td class="tm_width_2">$350</td>
-                      <td class="tm_width_1">1</td>
-                      <td class="tm_width_2 tm_text_right">$350</td>
-                    </tr>
-                    <tr>
-                      <td class="tm_width_3">2. Web Development</td>
-                      <td class="tm_width_4">Convert pixel-perfect frontend and make it dynamic</td>
-                      <td class="tm_width_2">$600</td>
-                      <td class="tm_width_1">1</td>
-                      <td class="tm_width_2 tm_text_right">$600</td>
-                    </tr>
-                    <tr>
-                      <td class="tm_width_3">3. App Development</td>
-                      <td class="tm_width_4">Android & Ios Application Development</td>
-                      <td class="tm_width_2">$200</td>
-                      <td class="tm_width_1">2</td>
-                      <td class="tm_width_2 tm_text_right">$400</td>
-                    </tr>
-                    <tr>
-                      <td class="tm_width_3">4. Digital Marketing</td>
-                      <td class="tm_width_4">Facebook, Youtube and Google Marketing</td>
-                      <td class="tm_width_2">$100</td>
-                      <td class="tm_width_1">3</td>
-                      <td class="tm_width_2 tm_text_right">$300</td>
-                    </tr>
+                        <td class="tm_width_4">{{ $item->item_desc}}</td>
+                        <td class="tm_width_1">{{ $item->item_qty }}</td>
+                        <td class="tm_width_2">{{ ($invoice->currency == 'USD' ? '$' : '৳'). $item->item_rate }}</td>
+                        <td class="tm_width_2 tm_text_right">{{ ($invoice->currency == 'USD' ? '$' : '৳'). $item->item_amount }}</td>
+                      </tr>
+                    @endforeach
                   </tbody>
                 </table>
               </div>
             </div>
             <div class="tm_invoice_footer tm_border_top tm_mb15 tm_m0_md">
               <div class="tm_left_footer">
-                <p class="tm_mb2"><b class="tm_primary_color">Payment info:</b></p>
-                <p class="tm_m0">Credit Card - 236***********928 <br>Amount: $1732</p>
+                <p class="tm_mb2"><b class="tm_primary_color">{{ $labels->note_label }}:</b></p>
+                <p class="tm_m0"> {{ $invoice->note_value }}</p>
               </div>
               <div class="tm_right_footer">
                 <table class="tm_mb15">
                   <tbody>
                     <tr class="tm_gray_bg ">
-                      <td class="tm_width_3 tm_primary_color tm_bold">Subtoal</td>
-                      <td class="tm_width_3 tm_primary_color tm_bold tm_text_right">$1650</td>
+                      <td class="tm_width_3 tm_primary_color tm_bold">{{ $labels->subtotal_label}}</td>
+                      <td class="tm_width_3 tm_primary_color tm_bold tm_text_right">{{ ($invoice->currency == 'USD' ? '$' : '৳'). $invoice->subtotal_value }}</td>
                     </tr>
                     <tr class="tm_gray_bg">
-                      <td class="tm_width_3 tm_primary_color">Tax <span class="tm_ternary_color">(5%)</span></td>
-                      <td class="tm_width_3 tm_primary_color tm_text_right">+$82</td>
+                      <td class="tm_width_3 tm_primary_color">{{ $labels->discount_label }} <span class="tm_ternary_color">
+                        @php
+                            $disc_value = 0;
+                        @endphp
+                        @if($invoice->discount_type == '%')
+
+                            ({{ CEIL($invoice->discount_value) }}%)
+                            @php
+                                $disc_value =  $invoice->subtotal_value * $invoice->discount_value / 100;
+                            @endphp
+                        @else
+
+                            @php
+                                $disc_value = $invoice->discount_value;
+                            @endphp
+                        @endif
+                        </span>
+                    </td>
+                      <td class="tm_width_3 tm_primary_color tm_text_right">
+                        @if($invoice->discount_type == '%')
+
+                            -{{ ($invoice->currency == 'USD' ? '$' : '৳'). $disc_value }}
+                        @else
+                            -{{ ($invoice->currency == 'USD' ? '$' : '৳'). $invoice->discount_value }}
+                        @endif
+                      </td>
+                    </tr>
+                    <tr class="tm_gray_bg">
+                      <td class="tm_width_3 tm_primary_color">{{ $labels->tax_label }} <span class="tm_ternary_color">({{ $invoice->tax_value }}%)</span></td>
+                      <td class="tm_width_3 tm_primary_color tm_text_right">+{{  ($invoice->subtotal_value - $disc_value) * $invoice->tax_value / 100 }}</td>
                     </tr>
                     <tr class="tm_accent_bg">
-                      <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_white_color">Grand Total	</td>
-                      <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_white_color tm_text_right">$1732</td>
+                      <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_white_color">{{ $labels->total_label }}	</td>
+                      <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_white_color tm_text_right">{{ ($invoice->currency == 'USD' ? '$' : '৳'). $invoice->total_value }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -2687,17 +2698,18 @@
               <div class="tm_left_footer"></div>
               <div class="tm_right_footer">
                 <div class="tm_sign tm_text_center">
-                  <img src="assets/img/sign.html" alt="Sign">
-                  <p class="tm_m0 tm_ternary_color">Jhon Donate</p>
-                  <p class="tm_m0 tm_f16 tm_primary_color">Accounts Manager</p>
+                  {{-- <img src="assets/img/sign.html" alt="Sign"> --}}
+                  <p class="tm_m0 tm_ternary_color">Best regards</p>
+                  <p class="tm_m0 tm_ternary_color">Ali Imran Mehedi</p>
+                  <p class="tm_m0 tm_f16 tm_primary_color">CEO & Founder - Synex Digital</p>
                 </div>
               </div>
             </div>
           </div>
           <div class="tm_note tm_text_center tm_font_style_normal">
             <hr class="tm_mb15">
-            <p class="tm_mb2"><b class="tm_primary_color">Terms & Conditions:</b></p>
-            <p class="tm_m0">All claims relating to quantity or shipping errors shall be waived by Buyer unless made in writing to <br>Seller within thirty (30) days after delivery of goods to the address stated.</p>
+            <p class="tm_mb2"><b class="tm_primary_color">{{ $labels->term_label }}:</b></p>
+            <p class="tm_m0">{{ $invoice->term_value }}</p>
           </div><!-- .tm_note -->
         </div>
       </div>

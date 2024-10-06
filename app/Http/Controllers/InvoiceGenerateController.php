@@ -282,7 +282,7 @@ class InvoiceGenerateController extends Controller
 
     public function demo( ){
         $invoice = Invoices::with('items', 'labels')->where('id', 1)->first();
-
+        
         return view('dashboard.invoice.mail',[
             'invoice' => $invoice
         ]);

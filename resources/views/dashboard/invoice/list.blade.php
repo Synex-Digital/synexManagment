@@ -97,7 +97,7 @@
                 <form action="{{ route('invoice.mail') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <input id="client_email" name="client_email" type="email" class="form-control" placeholder="Enter Email">
+                        <input id="client_email" name="client_email" type="email" class="form-control" placeholder="Enter Email" required>
                         <input type="hidden" name="invoice_id" id="invoice_id">
                     </div>
                     <div class="modal-footer">
