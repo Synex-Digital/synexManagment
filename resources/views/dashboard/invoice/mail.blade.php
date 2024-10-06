@@ -2650,7 +2650,7 @@
             <div class="tm_invoice_footer tm_border_top tm_mb15 tm_m0_md">
               <div class="tm_left_footer">
                 <p class="tm_mb2"><b class="tm_primary_color">{{ $labels->term_label }}:</b></p>
-                <p class="tm_m0"> {{ $invoice->term_value }}</p>
+                <p class="tm_m0"> {!! nl2br(e( $invoice->term_value )) !!}</p>
               </div>
               <div class="tm_right_footer">
                 <table class="tm_mb15">
@@ -2721,9 +2721,13 @@
 
     </div>
   </div>
+<div>
 
+
+
+</div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 <script type="text/javascript">
     // Automatically generate and download the PDF when the page is loaded
     window.onload = function() {
@@ -2734,6 +2738,6 @@
             .from(element)
             .save(); // Automatically downloads the PDF
     };
-</script>
+</script> --}}
 
 </html>
