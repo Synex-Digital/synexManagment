@@ -2690,7 +2690,7 @@
                     </tr>
                     <tr class="tm_gray_bg">
                       <td class="tm_width_3 tm_primary_color">{{ $labels->tax_label }} <span class="tm_ternary_color">({{ $invoice->tax_value }}%)</span></td>
-                      <td class="tm_width_3 tm_primary_color tm_text_right">+{{  ($invoice->subtotal_value - $disc_value) * $invoice->tax_value / 100 }}</td>
+                      <td class="tm_width_3 tm_primary_color tm_text_right">+{{ ($invoice->currency == 'USD' ? '$' : '৳'). ($invoice->subtotal_value - $disc_value) * $invoice->tax_value / 100 }}</td>
                     </tr>
                     <tr class="tm_accent_bg">
                       <td class="tm_width_3 tm_border_top_0 tm_bold tm_f16 tm_white_color">{{ $labels->total_label }}	</td>
