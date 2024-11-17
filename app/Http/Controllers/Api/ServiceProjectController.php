@@ -34,7 +34,7 @@ class ServiceProjectController extends Controller
 
     public function homeitem()
     {
-        $data = ProjectResource::collection(ServiceProject::get()->take(3));
+        $data = ProjectResource::collection(ServiceProject::get()->take(8));
 
         if ($data) {
             return response()->json([
