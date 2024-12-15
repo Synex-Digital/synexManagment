@@ -34,7 +34,7 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                {{-- <th>Date</th> --}}
+                                <th>Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -45,7 +45,7 @@
                                 <td class="text-dark">{{$data->name}}</td>
                                 <td class="{{$data->email ? 'text-dark' : 'text-danger'}}">{{$data->email ?? 'NULL'}}</td>
                                 <td class="{{$data->number ? 'text-dark' : 'text-danger'}}">{{$data->number ?'+'.$data->number: 'NULL'}}</td>
-
+                                <td class="text-dark">{{$data->latestSupport->created_at->diffForHumans()}}</td>
                                 <td>
                                     <a href="{{route('web.support',$data->id) }}" title="view" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-eye"></i></a>
                                     {{-- <a
