@@ -21,9 +21,10 @@ class CustomerSupportController extends Controller
                 'customers.id',
                 'customers.name',
                 'customers.email',
+                'customers.number',
                 DB::raw('MAX(supports.created_at) as last_support_request')
             )
-            ->groupBy('customers.id', 'customers.name', 'customers.email') // Add all selected customer fields here
+            ->groupBy('customers.id', 'customers.name', 'customers.email', 'customers.number') // Add all selected customer fields here
             ->orderBy('last_support_request', 'desc')
             ->get();
 
