@@ -28,7 +28,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="example" class="display" style="min-width: 845px">
+                    <table id="" class="table table-striped" >
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -38,6 +38,7 @@
                             </tr>
                         </thead>
                         <tbody>
+
                             @forelse ($customers as $data )
                             <tr>
                                 <td class="text-dark">{{$data->name}}</td>

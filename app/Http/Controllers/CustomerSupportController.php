@@ -5,13 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Support;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerSupportController extends Controller
 {
     public function customer(){
+
+
         if(auth()->user()->hasRole('superadmin')){
-            $custromers = Customer::orderBy('created_at', 'desc')->get();
+            // $custromers = Customer::orderBy('created_at', 'desc')->get();
+            $custromers = Customer::with('support')
+            ->leftJoin('supports', 'customers.id', '=', 'supports.customer_id')
+            ->select(
+                'customers.id',
+                'customers.name',
+                'customers.email',
+                DB::raw('MAX(supports.created_at) as last_support_request')
+            )
+            ->groupBy('customers.id', 'customers.name', 'customers.email') // Add all selected customer fields here
+            ->orderBy('last_support_request', 'desc')
+            ->get();
+
             return view('dashboard.web_support.index',[
                 'customers' => $custromers
             ]);
