@@ -15,12 +15,16 @@ class CustomerSupportController extends Controller
 
         if(auth()->user()->hasRole('superadmin')){
             // $custromers = Customer::orderBy('created_at', 'desc')->get();
-           $custromers = Customer::with('support')
-    ->select('customers.*', DB::raw('(SELECT MAX(created_at) FROM supports WHERE supports.customer_id = customers.id) as last_support_request'))
-    ->orderBy('last_support_request', 'desc')
-    ->get();
-
-
+            $custromers = Customer::with('support')
+            ->select('customers.*', DB::raw('(SELECT MAX(created_at) FROM supports WHERE supports.customer_id = customers.id) as last_support_request'))
+            ->orderBy('last_support_request', 'desc')
+            ->get()
+            ->map(function ($customer) {
+                $customer->name = mb_convert_encoding($customer->name, 'UTF-8', 'UTF-8');
+                $customer->email = $customer->email ? mb_convert_encoding($customer->email, 'UTF-8', 'UTF-8') : null;
+                $customer->number = $customer->number ? mb_convert_encoding($customer->number, 'UTF-8', 'UTF-8') : null;
+                return $customer;
+            });
             return view('dashboard.web_support.index',[
                 'customers' => $custromers
             ]);
@@ -31,7 +35,7 @@ class CustomerSupportController extends Controller
     }
     public function support($id){
         if(auth()->user()->hasRole('superadmin')){
-            $supports = Support::where('customer_id', $id)->get();
+            $supports = Support::where('customer_id', $id)->orderBy('created_at', 'desc')->get();
             $customer = Customer::find($id);
             return view('dashboard.web_support.support',[
                 'supports' => $supports,
