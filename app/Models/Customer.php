@@ -11,4 +11,8 @@ class Customer extends Model
     public function support(){
         return $this->hasMany(Support::class, 'customer_id');
     }
+    public function latestSupport()
+{
+    return $this->hasOne(Support::class, 'customer_id')->latest('created_at');
+}
 }
