@@ -15,18 +15,11 @@ class CustomerSupportController extends Controller
 
         if(auth()->user()->hasRole('superadmin')){
             // $custromers = Customer::orderBy('created_at', 'desc')->get();
-            $custromers = Customer::with('support')
-            ->leftJoin('supports', 'customers.id', '=', 'supports.customer_id')
-            ->select(
-                'customers.id',
-                'customers.name',
-                'customers.email',
-                'customers.number',
-                DB::raw('MAX(supports.created_at) as last_support_request')
-            )
-            ->groupBy('customers.id', 'customers.name', 'customers.email', 'customers.number') // Add all selected customer fields here
-            ->orderBy('last_support_request', 'desc')
-            ->get();
+           $custromers = Customer::with('support')
+    ->select('customers.*', DB::raw('(SELECT MAX(created_at) FROM supports WHERE supports.customer_id = customers.id) as last_support_request'))
+    ->orderBy('last_support_request', 'desc')
+    ->get();
+
 
             return view('dashboard.web_support.index',[
                 'customers' => $custromers
