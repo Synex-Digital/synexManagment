@@ -48,9 +48,9 @@
 
                                 <td>
                                     <a href="{{route('web.support',$data->id) }}" title="view" class=" btn btn-outline-info btn-sm mr-1  "> <i class="fa fa-eye"></i></a>
-                                    <a
+                                    {{-- <a
                                     data-value="{{$data}}"
-                                    title="edti" class="editBtn btn btn-outline-primary btn-sm mr-1  "> <i class="fa fa-pencil"></i></a>
+                                    title="edit" class="editBtn btn btn-outline-primary btn-sm mr-1  "> <i class="fa fa-pencil"></i></a> --}}
                                 </td>
                             </tr>
                             @empty
@@ -166,7 +166,6 @@
 
         $('.editBtn').on('click', function () {
             let val = $(this).data('value');
-            console.log(val);
             $('#name').val(val.name);
             $('#customer_id').val(val.id);
             if(val.email){
