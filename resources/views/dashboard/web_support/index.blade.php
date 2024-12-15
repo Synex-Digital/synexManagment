@@ -164,22 +164,22 @@
             $('#deleteModalForm').attr('action', val);
         });
 
-        $('.editBtn').on('click', function () {
-            let val = $(this).data('value');
-            $('#name').val(val.name);
-            $('#customer_id').val(val.id);
-            if(val.email){
-                $('#editEmailDiv').html(' <div class="mb-3"> <label for="" class="form-label">Email</label> <input type="email" name="email" value="'+val.email+'"  class="form-control" required> </div>');
-            }else{
-                $('#editEmailDiv').html('');
-            }
-            if(val.number){
-                $('#editNumberDiv').html('<div class="mb-3"> <label for="" class="form-label">Phone</label>  <input type="number" name="phone" value="'+val.number+'" class="form-control" required> </div>')
-            }else{
-                $('#editNumberDiv').html('');
-            }
-            $('#editModal').modal('show');
-        });
+        // $('.editBtn').on('click', function () {
+        //     let val = $(this).data('value');
+        //     $('#name').val(val.name);
+        //     $('#customer_id').val(val.id);
+        //     if(val.email){
+        //         $('#editEmailDiv').html(' <div class="mb-3"> <label for="" class="form-label">Email</label> <input type="email" name="email" value="'+val.email+'"  class="form-control" required> </div>');
+        //     }else{
+        //         $('#editEmailDiv').html('');
+        //     }
+        //     if(val.number){
+        //         $('#editNumberDiv').html('<div class="mb-3"> <label for="" class="form-label">Phone</label>  <input type="number" name="phone" value="'+val.number+'" class="form-control" required> </div>')
+        //     }else{
+        //         $('#editNumberDiv').html('');
+        //     }
+        //     $('#editModal').modal('show');
+        // });
 
 </script>
 
