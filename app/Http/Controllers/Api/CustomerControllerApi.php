@@ -34,7 +34,7 @@ class CustomerControllerApi extends Controller
             $supports->save();
             return response()->json([
                 'status' => 1,
-                'message' => 'success1',
+                'message' => 'success',
             ], 200);
         }else{
             $customerNew = new Customer();
@@ -51,7 +51,7 @@ class CustomerControllerApi extends Controller
             $supports->save();
             return response()->json([
                 'status' => 1,
-                'message' => 'success2',
+                'message' => 'success',
             ], 200);
         }
 
