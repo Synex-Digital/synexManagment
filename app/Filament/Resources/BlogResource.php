@@ -124,12 +124,23 @@ class BlogResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn() => auth()->user()->can('blog.delete')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(fn() => auth()->user()->can('blog.delete')),
                 ]),
             ]);
+        // ->actions([
+        //     Tables\Actions\EditAction::make(),
+        // ])
+        // ->bulkActions([
+        //     Tables\Actions\BulkActionGroup::make([
+        //         Tables\Actions\DeleteBulkAction::make(),
+        //     ]),
+        // ]);
     }
 
     public static function getRelations(): array
