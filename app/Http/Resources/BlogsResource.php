@@ -15,7 +15,7 @@ class BlogsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'image' => $request->getSchemeAndHttpHost() . '/' . $this->image,
+            'image' => $request->getSchemeAndHttpHost() . '/storage/' . $this->image,
             'title' => $this->title,
             'description' => $this->seo_description,
             'view' => $this->view_count,
